@@ -1,0 +1,197 @@
+
+#banner{
+    width: 100%;
+    min-height: 60px;
+    min-width: 100px;
+}
+#img_banner{
+    display: block;
+    margin: auto;
+    width: 100%;
+    min-height: 100px;
+    min-width: 50px;
+}
+#img_cliente{
+   position: absolute;
+    margin-top: 0px;
+    min-height: 90px;
+    width: 200px;
+    height: 90px;
+}
+
+
+#logo_proimpo{
+    position: absolute;
+    margin-top: 10px;
+     width: 280px;
+     height: 50px;
+     min-width: 30px;
+ }
+ .contenidoMeses{
+    min-height: 500px;
+ }
+.nav-item .nav-link .item{
+    color: white;
+}
+#rectangle{
+    width:200px;
+    height:31px;
+    background-color: white;
+    border-radius: 8px;
+}
+#usuario{
+    padding-top: 3px;
+    padding-left: 13px;
+}
+#imagen_usuario{
+
+    width: 40px;
+    height: 31px;
+    padding-left: 7px;
+}
+.nav .nav-item .nav-link{
+    color: black;
+   
+}
+
+.separate-v{
+    border-left: 0.1em solid rgb(190, 190, 190);
+     height: 2em;
+     margin-left: 0.3em;
+     margin-right: 0.3em;
+ }
+.button-accordion{
+
+    border: 0.1em solid;
+}
+body{
+
+    background-image: url("/assets/images/fondo2.jpg");
+    background-repeat: no-repeat;
+   /*  background: radial-gradient(white, #f4f4f7); */
+    background: linear-gradient(to bottom, white,#f4f4f7);
+}
+#mesTitle{
+
+    background-color: #ffffff;
+    border: 0.1em solid;
+    border-radius: 9px;
+    border-color: #ffffff;
+   
+}
+ a .buttonLink{
+    background-color: white;
+
+    border-radius: 4px;
+    width: 60px;
+    height: 40px;
+    border: 1px solid;
+}
+.subirArchivo{
+
+    width: 327px;
+    height: 0px;
+    transition: display 4s;
+    transition: height 0.4s;
+    overflow:hidden;
+    background-color: #ffffff;
+    margin-top: 170px;
+    opacity: 1;
+    position: absolute;z-index:90;
+}
+.subirArchivo_button{
+  opacity: 1;
+  overflow:hidden;
+  transition: opacity 3s;
+  margin-left: 1px;
+}
+.borrarArchivo{
+
+    width: 225px;
+    height: 0px;
+    transition: display 4s;
+    transition: height 0.4s;
+    overflow:hidden;
+    background-color: #ffffff;
+    margin-top: 170px;
+    opacity: 1;
+    position: absolute;z-index:90;
+}
+.page-footer{
+
+    text-align: center;
+    background: radial-gradient(white, #f4f4f7);
+    height: 200px;
+}
+#img_footer{
+    
+    margin-top: 0px;
+    
+    width: 150px;
+    height: 60px;
+
+}
+.tipo_informe{
+    width: 300px;
+    
+}
+.div-borrar{
+
+    text-align: right;
+    padding-left: 100px;
+    background-color: red;
+    display: inline;
+    align-items: flex-start
+}
+
+.planDiv{
+     height:31px; 
+     border-radius:8px;
+     /* background: linear-gradient( rgb(240, 39, 39), rgb(179, 62, 62)); */
+     color: white;
+     text-align: center;
+     align-items: center;
+    padding-left: 8px;
+    padding-right: 8px;
+     vertical-align:middle;
+     padding-top: 4px;
+     border: 1px solid;
+    
+}
+.planDiv p {
+    font-size: 14px;
+    cursor: pointer;
+    text-decoration: none;
+}
+.buttonDiv{
+    height:40px; 
+    border-radius:8px;
+    text-align: center;
+    align-items: center;
+    padding-left: 8px;
+    padding-right: 8px;
+    vertical-align:middle;
+    padding-top: 7px;
+    background-color: white;
+    border: 1px solid;
+    width: 60px;
+    cursor: pointer;
+       
+}
+#spinner{
+
+    align-items: center;
+    text-align: center;
+}
+@media (max-width: 600px) {
+    .parrafo {
+      display: none;
+    }
+    .form-select{
+        width: 50px;
+    }
+    .card{
+        margin-left: 60px;
+    }
+}
+

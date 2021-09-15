@@ -1,0 +1,62 @@
+<div class="row">
+    <div class="col-md-2">
+       <ul class="nav flex-column mt-5 pe-5" style="width: 10rem;">
+        
+          {% for ano, meses in tiempos %}
+          <li class="nav-item">
+            <a class="nav-link" data-bs-toggle="tab" data-bs-target="#meses{{ano}}"  aria-current="meses{{ano}}" role="tablist" aria-controls="meses{{ano}}" aria-selected="true" aria-current="page" href="#">
+              <div class="buttonDiv" id="div_{{ano}}"><p>{{ano}}</p></div>
+            </a>
+          </li>
+          {% endfor %}
+        </ul>
+    </div>
+    <div class="col-md-10 col-sm-12 contenidoMeses">
+      
+        <div class="tab-content pt-4">
+            {%  for ano, meses in tiempos %}
+              <div class="tab-pane" id="meses{{ano}}" role="tabpanel" aria-labelledby="meses-tab">
+                <div class="mx-auto py-2">
+                  <div class="d-flex flex-md-row">
+                    <h1 style="margin-left: 10px;" class="me-5">{{ano}}</h1>
+                    <p class="pt-3 parrafo" style="font-size: 14px; margin-left:130px;">*Utilice los botones para proceder sobre los archivos</p>
+                  </div>
+                  <div class="d-flex flex-row justify-content-between flex-wrap">
+                      {% for mes in meses %}
+                      <div class="card  me-1 my-3" data-ano="{{ano}}" data-mes="{{mes.nombre}}"  data-plan="{{datos.carpeta_plan}}" style="width: 14rem;">
+                        <div class="card-header">
+                        <h4>{{mes.nombre}}</h4>
+                        </div>
+                          <div class="card-body" id="cardButton_{{ano}}-{{mes.nombre}}">
+                            <img src="../../assets/images/folder2.png" height ="50px" class="card-text mb-3" style="margin-left: 70px;">
+                            <div class="d-flex flex-row justify-content-center">
+                              {% if datos.id_rol == 302  or  datos.id_rol == 301 %} 
+                              <a class="btn btn-secondary btn-sm" tabindex="-1" role="button" aria-disabled="true" data-ano="{{ano}}" data-mes="{{mes.nombre}}" data-plan="{{datos.carpeta_plan}}">Subir</a>
+                              <div class="separate-v"></div>
+                              {% endif %}
+                              <a  tabindex="-1" aria-disabled="true" data-archivo="{{mes.ruta_archivo}}" id="descargar_{{ano}}-{{mes.nombre}}" data-ano="{{ano}}" data-mes="{{mes.nombre}}" data-plan="{{datos.carpeta_plan}}" onclick="showDataModal(this)"><div class="planDiv" style="padding-bottom: 28px;"><p>Descarga</p></div></a>
+                              {% if datos.id_rol == 302  or  datos.id_rol == 301 %} 
+                              <div class="separate-v"></div>
+                              <a class="btn  btn-secondary btn-sm" tabindex="-1" role="button" aria-disabled="true" data-ano="{{ano}}" data-mes="{{mes.nombre}}" data-plan="{{datos.carpeta_plan}}" data-archivo="{{mes.ruta_archivo}}" onclick="showDataModal(this)">Eliminar</a>
+                              {% endif %}
+                            </div>
+                          </div>
+                          <!--div con contenido para subir el archivo-->
+                          <div class="subirArchivo divContenido" id="subirArchivo_{{ano}}-{{mes.nombre}}">
+                            <form  action="#"  enctype="multipart/form-data" method="POST">
+                            <input class="form-control form-control-sm mt-2 ms-2" accept="application/vnd.ms-excel, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,.pptx" type="file" style="width: 19rem;" id="file_{{ano}}-{{mes.nombre}}">
+                            <div class="buttonDiv subirArchivo_button ms-2 mt-2 pt-1" id="subirButton_{{ano}}-{{mes.nombre}}" data-ano="{{ano}}" data-mes="{{mes.nombre}}" onclick="cargarArchivo(this)" style="width: 65px; height:31px; font-size: small;"><p>Cargar</p></div>
+                            
+                           
+                            </form>
+                          </div>
+                        
+                      </div>  
+                      {% endfor %} 
+                  </div>
+                </div> 
+              </div>
+            {% endfor %}
+        </div>
+    </div>
+  </div>

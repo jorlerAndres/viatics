@@ -1,0 +1,54 @@
+#img_referenciaP {
+  margin-left: auto;
+}
+
+#contendorFormularioLogin {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: auto;
+  padding: 0;
+  min-height: 100vh;
+}
+
+#contendorMenuPrincipal {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  min-height: 75vh;
+}
+
+.container {
+  width: 100%;
+  max-width: initial;
+}
+
+/* Inicio CSS para Tabs */
+.tabs .tab a{
+  color:#000;
+} /*Black color to the text*/
+
+.tabs .tab a:hover {
+  background-color:#e3f2fd;
+  color:#000;
+} /*Text color on hover*/
+
+.tabs .tab a.active {
+  background-color: transparent;
+  color:#000;
+} /*Background and text color when a tab is active*/
+
+.tabs .tab a:focus {
+  background-color: #e3f2fd
+}
+
+.tabs .tab a:focus.active {
+  background-color: #e3f2fd
+}
+
+.tabs .indicator {
+  background-color:#0d47a1;
+} /*Color of underline*/
+
+/* Fin CSS para Tabs */

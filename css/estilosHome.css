@@ -1,0 +1,132 @@
+@font-face {
+  font-family: "Urbanist thin";
+  src: url("/assets/fuentes/Urbanist-VariableFont_wght.ttf");
+} 
+:root{
+  --variable-height:100vh;
+}
+
+body{
+  margin: 0px;
+  padding: 0px;
+}
+.head{
+  
+  height: 50px;
+  box-shadow: 0px 5px 20px 0px rgb(226, 225, 225);
+  box-shadow: 0px 5px 20px 0px rgb(226, 225, 225);
+  
+}
+.sidebar {
+  position: fixed;
+  width: 15%;
+  height: 100vh;
+ box-shadow: 0px 8px 10px 5px rgb(206, 204, 204);
+  
+  background-image: linear-gradient(#ffffff, #f1f0ef);
+  float: left; 
+  min-width: 40px;
+ 
+}
+ 
+  .icono-sidenav{
+    height: 25px;
+    width: 25px;
+    margin-left: 10px;
+    text-align: center;
+    padding-top: 3px;
+    background-image: linear-gradient(to bottom,  #f6f7f8,#fefeff);
+    border-radius: 4px;
+    box-shadow: 1px 2px 2px rgb(196, 195, 195); 
+    margin-right: 10px;
+    transition: all 0.5s;
+    font-weight: bolder;
+  }
+  .tituloZonas{
+
+    /* font-family: 'Urbanist thin', sans-serif; */
+  }
+  .cuota-zona{
+    height: 100px;
+    width: 160px;
+    background-color: white;
+    border-radius: 8px;
+    border: 0px rgb(180, 177, 177) solid; 
+    margin-top: 30px;
+    margin-left: 40px;
+    box-shadow: 0 0 12px rgb(218, 219, 219);
+
+  }
+  .navbar{ 
+    width: 106%;
+    margin-top: 65px;
+  }
+  .navbar-collapse ul{
+    width: 100%;
+   }
+  .navbar-nav li{
+  border-bottom: 1px rgb(221, 218, 218) solid;
+  height: 50px;
+  background-image: linear-gradient(to bottom,  #fefeff,#f6f7f8);
+  }
+
+ .navbar-collapse ul li:hover{
+  background-image: linear-gradient(to bottom,  #fefeff,#e7f0fa);
+  color: rgb(206, 22, 22);
+ }
+ .columna1{
+  height:var(--variable-height);
+  
+}
+.columna2{
+  background-image: url('/assets/images/silueta3.jpg'); 
+  background-repeat: no-repeat; 
+  background-position: 400px 30px;
+}
+.valor-anticipo{
+  font-size: 22px;
+  color: #3b385e;
+}
+.nombre-zona{
+  font-weight: bold;
+  color: rgb(151, 155, 155);
+}
+.saldo-zona{
+  margin-bottom: 3px;
+  color: rgb(63, 104, 87);
+  font-weight: bold;
+}
+.icono-ciudad{
+  width: 35px;
+  height: 35px;
+  margin-top: 13px;
+  border-radius: 4px;
+  /* background-image: linear-gradient(to bottom,  #4e4ef5,#9bb8da); */
+  margin-left: 5px;
+  margin-right: 5px;
+   background-color: linear-gradient(to bottom,  #f50e5b,#b45959); 
+}
+
+@media (max-width: 600px) {
+
+  .contenido{
+
+    box-shadow: 0 0 12px rgb(228, 230, 230);
+    width: 300px;
+    height: 220px;
+    left: 10px;
+    transition: all 0.5s;
+   
+  }
+  .sidebar {
+    display: none;
+  }
+  .navbar{ 
+    margin-top: 6px;
+  }
+  :root{
+    --variable-height:
+  }
+ 
+
+}
