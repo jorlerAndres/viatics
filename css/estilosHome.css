@@ -20,6 +20,7 @@
 body{
   margin: 0px;
   padding: 0px;
+  /*  background-image: linear-gradient(to bottom,  #fefeff,#f6f7f8); */
 }
 .head{
  background-color: rgb(255, 255, 255);
@@ -217,6 +218,12 @@ body{
   align-items: center;
   text-shadow: 1px 1px 2px black, 0 0 1em rgb(104, 104, 105), 0 0 0.2em rgb(139, 139, 141);
 }
+.contenido-zona a{
+  color: white;
+}
+.contenido-zona a:hover{
+  color: white;
+}
 .div_zonaprueba{
   width: 200px; 
   height:90px; 
@@ -236,7 +243,8 @@ body{
   box-shadow: 1px 1px 50px 20px rgb(49, 49, 49) inset;
 }
 .categorias{
-  border: 1px rgb(253, 253, 253) solid;
+  box-shadow: 0 0 25px 1px rgb(248, 248, 248);
+   border: 1px rgb(248, 247, 247) solid;
   width: 401px; 
   height: 200px;
   
@@ -244,14 +252,55 @@ body{
 .cuadro-categoria{
   width: 133px;
   height: 100px;
-  border: 1px rgb(241, 240, 240) solid;
+  border: 1px rgb(230, 230, 231) solid;
+  /* border: 1px rgb(197, 197, 248) solid; */
   text-align: center;
   display: flex;
   justify-content: center;
-  
+  align-items: center;
+  box-shadow: 1px 1px 5px 6px rgb(247, 246, 246) inset;
+ /* box-shadow: 1px 1px 5px 6px rgba(42, 0, 250, 0.068) inset; */
+  border-radius: 6px;
+  font-family: "Urbanist thin";
+}
+.cuadro-categoria span{
+  font-family: "Urbanist thin";
+  color: rgba(93, 93, 252, 0.795);
+}
+.cuadro-categoria:hover{
+  box-shadow: 0px 0px 0px 0px rgb(250, 249, 249) ;
 }
 .text a{
   text-decoration: none;
+}
+.categorias a{
+  text-decoration: none;
+}
+.item-subcategoria{
+  width: 200px;
+  height: 40px;
+  /* background-image: linear-gradient(rgb(253, 252, 252), rgb(233, 231, 231)); */
+  background-image: linear-gradient( to bottom,rgb(253, 252, 252),rgb(244, 243, 252));
+  box-shadow: 1px 1px 5px 1px rgb(236, 235, 235);
+  border: 1px rgb(236, 234, 234) solid;
+  margin-top: 10px;
+  margin-left: 50px;
+  padding-top: 4px;
+}
+.item-subcategoria:hover{
+  box-shadow: -1px 1px 7px 0px rgb(102, 101, 101);
+}
+.absolute_registros{
+  position: absolute;
+  top:110%;
+  left: 21%
+}
+.subcategorias::-webkit-scrollbar{
+  width: 3px;
+}
+.subcategorias::-webkit-scrollbar-thumb{
+  background-color: rgb(238, 235, 235);
+  border-radius: 5px;
 }
 @media (max-width: 600px) {
 
@@ -294,10 +343,13 @@ body{
    
   }
   .categorias{
-    border: 1px black solid;
     width: 134px; 
     height: 700px;
     
   }
+/*   .absolute_registros{
+    position: absolute;
+    top: 290%;
+  } */
 
 }
