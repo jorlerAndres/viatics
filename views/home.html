@@ -16,140 +16,67 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
   </head>
   <body>
-    <div >
+    <div>
     <header>
-      <div class="border-bottom" style="background-color: rgb(255, 255, 255); height: 100px; box-shadow: 0px 5px 20px 0px rgb(226, 225, 225)">
+      <div class="border-bottom head">
         <img src="/assets/images/logo3.png" width="300px" class="ms-3">
       </div>
     </header>
     <div class="row" >
-      <div class="col-md-2 columna1" style="box-shadow: 0px 8px 10px 5px rgb(206, 204, 204);">
+      <div class="col-md-2 columna1">
+        <aside  class="sidebar">
         <nav class="navbar  navbar-expand-lg navbar-light" id="navbar" >
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
               <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse menu" id="navbarSupportedContent">
-            <ul class="navbar-nav  flex-column me-auto mb-2 mb-lg-0 mt-2">
-              <li class="nav-item">
-                <a class="nav-link d-flex flex-row" aria-current="page" href="/home">
+            <ul class=" nav navbar-nav  flex-column me-auto mb-2 mb-lg-0 mt-2" role="tablist">
+              <li class="nav-item" id="cuotasZonas-tab" role="presentation">
+                <a class="nav-link d-flex flex-row" data-bs-toggle="tab" data-bs-target="#cuotasZonas"  aria-current="cuotasZonas" role="tablist" aria-controls="cuotasZonas" aria-selected="true" href="#">
                   <div class="icono-sidenav"><i class="bi bi-person h6"></i></div>
                   <p>Registros</p>
                 </a>
               </li>
-              <li class="nav-item">
-                <a class="nav-link d-flex flex-row" aria-current="page" href="/home">
+              <li class="nav-item" id="usuariosZonas-tab" role="presentation">
+                <a class="nav-link d-flex flex-row" data-bs-toggle="tab" data-bs-target="#usuariosZonas"  aria-current="usuariosZonas" role="tablist" aria-controls="usuariosZonas" aria-selected="true" href="#">
                   <div class="icono-sidenav"><i class="bi bi-person h6"></i></div>
-                  <p>Cuotas</p>
+                  <p>Usuarios</p>
                 </a>
               </li>
-              <li class="nav-item">
-                <a class="nav-link d-flex flex-row" aria-current="page" href="/home">
+              <li class="nav-item" id="cargarcuotas-tab" role="presentation">
+                <a class="nav-link d-flex flex-row" data-bs-toggle="tab" data-bs-target="#cargarcuotas"  aria-current="cargarcuotas" role="tablist" aria-controls="cargarcuotas" aria-selected="true" href="#">
                   <div class="icono-sidenav"><i class="bi bi-person h6"></i></div>
-                  <p>Registros</p>
+                  <p>Cargar Anticipo</p>
                 </a>
               </li>
-              </ul>
-             
+              <li class="nav-item" id="registro-tab" role="presentation">
+                <a class="nav-link d-flex flex-row" data-bs-toggle="tab" data-bs-target="#registro"  aria-current="registro" role="tablist" aria-controls="registro" aria-selected="true" href="#">
+                  <div class="icono-sidenav"><i class="bi bi-person h6"></i></div>
+                  <p>Registro Compra</p>
+                </a>
+              </li>
+            </ul>
            </div>
         </nav>
+        </aside>
       </div>
-      <div class="col-md-10 columna2" >
-        <h1 class="mt-3 ms-3 tituloZonas"> Cuotas por Zona</h1>
-        <div class="row">
-          <div class="col-md-8 zonas">
-            <div class="d-flex flex-md-row flex-wrap">
-            <div class="cuota-zona">
-              <div  class="d-flex flex-row">
-              <div class="d-flex flex-column ms-3 mt-2">
-                <span class="nombre-zona">Barranquilla</span>
-                <b><span class="valor-anticipo">$23,45445</span></b>
-                <span class="saldo-zona">$200,000</span>
-              </div>
-              <div class="icono-ciudad"> </div>
-            </div>
-            </div>
-            <div class="cuota-zona">
-              <div  class="d-flex flex-row">
-              <div class="d-flex flex-column ms-3 mt-2">
-                <span class="nombre-zona">Barranquilla</span>
-                <b><span class="valor-anticipo">$23,45445</span></b>
-                <span class="saldo-zona">$200,000</span>
-              </div>
-              <div class="icono-ciudad"> </div>
-            </div>
-            </div>
-            <div class="cuota-zona">
-              <div  class="d-flex flex-row">
-              <div class="d-flex flex-column ms-3 mt-2">
-                <span class="nombre-zona">Barranquilla</span>
-                <b><span class="valor-anticipo">$23,45445</span></b>
-                <span class="saldo-zona">$200,000</span>
-              </div>
-              <div class="icono-ciudad"> </div>
-            </div>
-            </div>
-            <div class="cuota-zona">
-              <div  class="d-flex flex-row">
-              <div class="d-flex flex-column ms-3 mt-2">
-                <span class="nombre-zona">Barranquilla</span>
-                <b><span class="valor-anticipo">$23,45445</span></b>
-                <span class="saldo-zona">$200,000</span>
-              </div>
-              <div class="icono-ciudad"> </div>
-            </div>
-            </div>
-            <div class="cuota-zona">
-              <div  class="d-flex flex-row">
-              <div class="d-flex flex-column ms-3 mt-2">
-                <span class="nombre-zona">Barranquilla</span>
-                <b><span class="valor-anticipo">$23,45445</span></b>
-                <span class="saldo-zona">$200,000</span>
-              </div>
-              <div class="icono-ciudad"> </div>
-            </div>
-            </div>
-            <div class="cuota-zona">
-              <div  class="d-flex flex-row">
-              <div class="d-flex flex-column ms-3 mt-2">
-                <span class="nombre-zona">Barranquilla</span>
-                <b><span class="valor-anticipo">$23,45445</span></b>
-                <span class="saldo-zona">$200,000</span>
-              </div>
-              <div class="icono-ciudad"> </div>
-            </div>
-            </div>
-            <div class="cuota-zona">
-              <div  class="d-flex flex-row">
-              <div class="d-flex flex-column ms-3 mt-2">
-                <span class="nombre-zona">Barranquilla</span>
-                <b><span class="valor-anticipo">$23,45445</span></b>
-                <span class="saldo-zona">$200,000</span>
-              </div>
-              <div class="icono-ciudad"> </div>
-            </div>
-            </div>
-            <div class="cuota-zona">
-              <div  class="d-flex flex-row">
-              <div class="d-flex flex-column ms-3 mt-2">
-                <span class="nombre-zona">Barranquilla</span>
-                <b><span class="valor-anticipo">$23,45445</span></b>
-                <span class="saldo-zona">$2780,000</span>
-              </div>
-              <div class="icono-ciudad"><img src="/assets/images/monedas-icono.png" alt=""></div>
-            </div>
-            </div>
+      <div class=" col-md-10 " >
+        <div class="tab-content" >
+          <div class="tab-pane columna2" style="height: 100vh;" id="cuotasZonas" role="tabpanel" aria-labelledby="cuotasZonas-tab">
+            {% include "partes/cuotasZonas.html"%}
           </div>
+          <div class="tab-pane" style="height: 90vh;" id="usuariosZonas" role="tabpanel" aria-labelledby="usuariosZonas-tab">
+            {% include "partes/usuariosZonas.html"%}
           </div>
-          <div class="col-md-4 mapa" ></div>
-
-        </div>
-       
+          <div class="tab-pane" style="height: 100vh;" id="cargarcuotas" role="tabpanel" aria-labelledby="cargarcuotas-tab">
+            {% include "partes/cargarcuotas.html"%}
+          </div>
+          <div class="tab-pane active" style="height: 100vh;" id="registro" role="tabpanel" aria-labelledby="registro-tab">
+            {% include "partes/registro.html"%}
+          </div>
+       </div>
+     </div>
     </div>
-    </div>
-    
-    <aside>
-      
-    </aside>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
     <script src="{{base_url}}/scripts/home.js"></script>
   </div>
