@@ -15,58 +15,14 @@
             <h4 class="monserrat-text">2. Periodo</h4>
             <div class="ms-3 mt-2">
                 <label for="mes" class="form-label">Mes</label>
-                <div class="d-flex flex-md-row flex-wrap">
-                    <div class="div_mes me-1  ms-1 mb-1">
-                        <div class=" monserrat-text numero_mes ms-1">01</div>
-                        <div class="nombre_mes ms-1 mt-1"><h5>Enero</h5></div>
-                    </div>
-                    <div class="div_mes me-1  ms-1 mb-1">
-                        <div class=" monserrat-text numero_mes ms-1">02</div>
-                        <div class="nombre_mes mt-1 ms-1"><h5>Febrero</h5></div>
-                    </div>
-                    <div class="div_mes me-1  ms-1 mb-1">
-                        <div class=" monserrat-text numero_mes ms-1">03</div>
-                        <div class="nombre_mes form-text ms-1"><h5>Marzo</h5></div>
-                    </div>
-                    <div class="div_mes me-1  ms-1 mb-1">
-                        <div class=" monserrat-text numero_mes ms-1">04</div>
-                        <div class="nombre_mes form-text ms-1"><h5>Abril</h5></div>
-                    </div>
-                    <div class="div_mes me-1  ms-1 mb-1">
-                        <div class=" monserrat-text numero_mes ms-1">05</div>
-                        <div class="nombre_mes form-text ms-1"><h5>Enero</h5></div>
-                    </div>
-                    <div class="div_mes me-1  ms-1 mb-1">
-                        <div class=" monserrat-text numero_mes ms-1">06</div>
-                        <div class="nombre_mes form-text ms-1"><h5>Enero</h5></div>
-                    </div>
-                    <div class="div_mes me-1  ms-1 mb-1">
-                        <div class=" monserrat-text numero_mes ms-1">07</div>
-                        <div class="nombre_mes form-text ms-1"><h5>Enero</h5></div>
-                    </div>
-                   <!--  l -->
-                   <div class="div_mes me-1 border ms-1 mb-1">
-                    <div  class="form-text">01</div>
-                    <div class="form-text"><h4>Julio</h4></div>
-                </div>
-                <div class="div_mes me-1 border ms-1 mb-1">
-                    <div  class="form-text">02</div>
-                    <div class="form-text"><h4>Agosto</h4></div>
-                </div>
-                <div class="div_mes me-1 border ms-1 mb-1">
-                    <div  class="form-text">03</div>
-                    <div class="form-text"><h5>Septiembre</h5></div>
-                </div>
-                <div class="div_mes me-1 border ms-1 mb-1">
-                    <div  class="form-text">04</div>
-                    <div class="form-text"><h4>Octubre</h4></div>
-                </div>
-                <div class="div_mes me-1 border ms-1 mb-1">
-                    <div  class="form-text">05</div>
-                    <div class="form-text"><h4>Noviembre</h4></div>
-                </div>
-                
-                  <!--  m -->
+                <div class="d-flex flex-md-row flex-wrap meses">
+                  {% for mes in meses %}
+                    <div class="div_mes me-1  ms-1 mb-1" id="{{mes.id_mes}}" onclick="seleccionMes('{{mes.id_mes}}')">
+                      <div class=" monserrat-text numero_mes ms-1">{{mes.numero}}</div>
+                      <div class="nombre_mes ms-1 mt-1"><h5>{{mes.nombre}}</h5></div>
+                   </div>
+                  {% endfor %} 
+                 
                 </div>
             </div>
           </div>
@@ -77,23 +33,23 @@
     <div class="col-md-12">
       <div class="text mt-3  ms-4">
         <h4 class="monserrat-text ">3. Zona</h4>
-        <div class="d-flex flex-md-row  flex-wrap mt-5">
-            <div class="ms-3 mt-2">
-                  <div class="div_zonaprueba m-1">
-                    <div class="contenido-zona">
-                      <a href=""><p class="monserrat-text mt-3">Cali</p></a>
-                    </div>
-                  </div>
+        <div class="d-flex flex-md-row  flex-wrap mt-5" id="div_zonas">
+          {% for zona in zonas %}
+          <div class="card me-2 mb-2" style="width: 240px;">
+            <div class="card-header">
+              Zona
+            </div>
+            <div class="card-body">
+              <div class="div_zonaprueba m-1" data-imagen={{zona.imagen}} id="{{zona.id_zona}}" onclick="seleccionZona('{{zona.id_zona}}')">
+                <div class="contenido-zona">
+                  <p class="monserrat-text mt-3">{{zona.nombre}}</p>
+                </div>
               </div>
-              <div class="ms-3 mt-2">
-                
-                  <div class="div_zonaprueba m-1" style="background-image:url('/assets/images/medellin.jpg');">
-                    <div class="contenido-zona">
-                      <a href=""><p class="monserrat-text mt-3">Barranquilla</p></a>
-                    </div>
-                  </div>
-              </div>
+            </div>
           </div>
+          {% endfor %} 
+          </div>
+          <button type="button" class="btn btn-primary ms-4 mt-5 mb-5" onclick="guardarAnticipo()">Guardar</button>
     </div>
   </div>
 </div>

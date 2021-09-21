@@ -3,95 +3,58 @@
    <div class="col-md-6">
      <div class="ms-5 mt-3 mb-5">
       <label for="valor" class="form-label">Valor</label>
-      <input type="number" class="form-control" id="valor_cargarcuotas">
+      <input type="number" class="form-control" id="valor_gasto">
       <div class="form-text">Ingrese los valores sin puntos ni comas.</div>
      </div>
      <h4 class="monserrat-text mt-3 ms-5 fs-6">1. Categoria </h4>
-     <div class="categorias ms-5 mt-5 d-flex flex-md-row flex-wrap">
-        <div class="cuadro-categoria">
-            <div class="d-flex flex-column">
-            <a href="#"><img src="/assets/images/vehiculo3.jpg" width="65px"></a>
-            <span>vehículo</span>
-            </div>
+     <div class="categorias ms-5 mt-5 d-flex flex-md-row flex-wrap" id="categorias">
+      {% for categoria in categorias %}
+      <div class="cuadro-categoria" onclick="seleccionCategoria('{{categoria.id_categoria}}')" id="{{categoria.id_categoria}}">
+        <div class="d-flex flex-column">
+        <img  width="65px" data-imagen={{categoria.imagen}}>
+        <span>{{categoria.nombre}}</span>
         </div>
-        <div class="cuadro-categoria">
-          <div class="d-flex flex-column">
-                <img src="/assets/images/restaurante2.png" width="65px">
-                <span>Alimentación</span>
-          </div>
-        </div>
-         <div class="cuadro-categoria">
-            <div class="d-flex flex-column">
-                <img src="/assets/images/hospedaje.jpg" width="65px">
-                <span>Hospedaje</span>
-             </div>
-         </div>
-         <div class="cuadro-categoria">
-            <div class="d-flex flex-column">
-                <img src="/assets/images/financiero3.png" width="65px">
-                <span>Financiero</span>
-             </div>
-         </div>
-         <div class="cuadro-categoria">
-            <div class="d-flex flex-column">
-                <img src="/assets/images/trabajo2.jpg" width="65px">
-                <span>obra</span>
-             </div>
-         </div>
-         <div class="cuadro-categoria">
-            <div class="d-flex flex-column">
-                <img src="/assets/images/otros.png" width="65px">
-                <span>otros</span>
-             </div>
-         </div>
+    </div>
+      {% endfor %}
        </div>
-       
+        
    </div>
    <div class="col-md-6" style="margin-top: 140px;">
     <h4 class="monserrat-text mt-3 ms-5 fs-6 mb-5">2. Subcategoria</h4>
-       <div  class="subcategorias" style="overflow: auto; width: 260px; height: 280px">
-           <div class="item-subcategoria">
-            <img src="/assets/images/bus.png" width="35px">
-            <span style="color: rgb(122, 120, 120);">Bus Intemunicipal</span>
-           </div>
-       
-      
-        <div class="item-subcategoria" style="background-color: blue;">
-         <img src="/assets/images/taxi2.png" width="35px">
-         <span style="color: rgb(122, 120, 120);">Taxi</span>
-        </div>
-      
-        <div class="item-subcategoria">
-         <img src="/assets/images/moto.png" width="35px">
-         <span style="color: rgb(122, 120, 120);">Mototaxi</span>
-        </div>
-      
-     
-        <div class="item-subcategoria">
-         <img src="/assets/images/gasolina.png" width="35px">
-         <span style="color: rgb(122, 120, 120);">Gasolina</span>
-        </div>
-        <div class="item-subcategoria">
-            <img src="/assets/images/reparacion.png" width="35px">
-            <span style="color: rgb(122, 120, 120);">Reparacion Movil</span>
-           </div>
-           <div class="item-subcategoria">
-            <img src="/assets/images/reparacion.png" width="35px">
-            <span style="color: rgb(122, 120, 120);">Reparacion Movil</span>
-           </div>
-           <div class="item-subcategoria">
-            <img src="/assets/images/reparacion.png" width="35px">
-            <span style="color: rgb(122, 120, 120);">Reparacion Movil</span>
-           </div>
+       <div  class="subcategorias" id="subcategorias" style="overflow: auto; width: 285px; height: 280px">
+        {% for subcategoria in subcategorias %}
+          <div class="item-subcategoria" onclick="SeleccionSubcategoria('{{subcategoria.id_subcategoria}}')" id="{{subcategoria.id_subcategoria}}">
+            <img width="35px" data-imagen={{subcategoria.imagen}}>
+            <span style="color: rgb(122, 120, 120);">{{subcategoria.nombre}}</span>
+          </div>
+        {% endfor %}
+
     </div>
       
    </div>
 </div>
 <div class="row">
-    <div class="col-md-4">
+    <div class="col-md-7">
+        <div class="form-group ms-5">
+            <div class="col-md-8 inputGroupContainer">
+              <div class="input-group mb-3">
+                <span class="input-group-text" id="basic-addon1"><img src="/assets/images/ubicacion.jpg" width="25px"></span>
+                <input type="text" class="form-control" placeholder="Origen" aria-label="Username" aria-describedby="basic-addon1" id="ciudad_origen">
+              </div>
+              <div class="input-group mb-3">
+                <span class="input-group-text" id="basic-addon1"><img src="/assets/images/ubicacion.jpg" width="25px"></span>
+                <input type="text" class="form-control" placeholder="Destino" aria-label="Username" aria-describedby="basic-addon1" id="ciudad_destino">
+              </div>
+              <div class="mb-3 mt-5">
+                <label for="formFile" class="form-label">Cargar Archivo Soporte</label>
+                <input class="form-control" type="file" id="file_soporte">
+              </div>
+            </div>
+          </div>
+
         <label for="valor" class="form-label ms-5">Observacion(opcional)</label>
-        <input type="text" class="form-control ms-5" id="observvacion_registros">
-        <button type="button" class="btn btn-primary mt-4 ms-5">Guardar</button>
+        <input type="text" class="form-control ms-5" id="observacion_registros">
+        <button type="button" class="btn btn-primary mt-4 ms-5 mb-2" onclick="guardarCompra()">Guardar</button>
     </div>
 </div>
 

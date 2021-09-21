@@ -9,8 +9,10 @@ use Psr\Http\Message\ServerRequestInterface as Request;
 use Slim\Views\Twig;
 use Slim\Views\TwigMiddleware;
 use App\Models\UsuarioModel;
-use App\Models\TareasModel;
-use App\Models\InformeModel;
+use App\Models\ZonasModel;
+use App\Models\CategoriaModel;
+use App\Models\SubcategoriaModel;
+use App\Models\CuotasModel;
 
 class ViewController
 {
@@ -39,8 +41,12 @@ class ViewController
             $view = Twig::create('views', ['cache' => false]);
             return $view->render($response, 'home.html', ['vista' => 'Inicio', 
             'usuarios'=>$this->getUser(),
-            'planes'=>$this->getplanUser(),
-            'tareas'=>$this->getTareas()
+            'zonas'=>$this->getZonas(),
+            'categorias'=>$this->getCategorias(),
+            'subcategorias'=>$this->getSubcategorias(),
+            'cuotasZonas'=>$this->getCuotasZonas(),
+            'meses'=>$this->getMeses()
+            
             ])
                 ->withHeader('Content-Type', 'text/html; charset=UTF-8');
      
@@ -50,14 +56,27 @@ class ViewController
         $user=new UsuarioModel();
         return $user->getResumeUser();
     }
-    public function getplanUser(){
+    public function getZonas(){
+        $zonas=new ZonasModel();
+        return $zonas->getZonas();
+    }
+    public function getCategorias(){
+        $zonas=new CategoriaModel();
+        return $zonas->getCategorias();
+    }
+    public function getSubcategorias(){
+        $zonas=new SubcategoriaModel();
+        return $zonas->getSubcategorias();
+    }
+    public function getCuotasZonas(){
+        $cuotas=new CuotasModel();
+        return $cuotas->getCuotas();
+    }
+    public function getMeses(){
         $user=new UsuarioModel();
-        return $user->getData();
+        return $user->getMeses();
     }
-    public function getTareas(){
-        $user=new TareasModel();
-        return $user->getTareas();
-    }
+     
    
-
+    
 }

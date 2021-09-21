@@ -18,8 +18,10 @@ $app->group('', function (RouteCollectorProxy $group) {
 
 $app->group('/api', function (RouteCollectorProxy $group) {
 
-    $group->post('/tareas', 'App\Controllers\TareasController:getTareas')->setName('getTareas');
-    $group->post('/informe', 'App\Controllers\InformeController:operationExcel')->setName('operation');
+    $group->post('/cuotas/set', 'App\Controllers\CuotasController:setCuotas')->setName('setCuotas');
+    $group->post('/cuotas/get', 'App\Controllers\CuotasController:getCuotas')->setName('getCuotas'); 
+    $group->post('/compra/set', 'App\Controllers\CompraController:setCompra')->setName('setCompra');
+    $group->post('/compra/get', 'App\Controllers\CompraController:getCompra')->setName('getCompra');
    
     
 })->add('App\Middleware\LoginMiddleware');

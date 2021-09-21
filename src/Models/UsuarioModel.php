@@ -12,15 +12,12 @@ use App\Models\BaseModel;
 class UsuarioModel extends BaseModel
 {
 
-     public function getData()
+     public function getMeses()
     {   
         $sql = "
-        SELECT up.id_plan,p.nombre
-        from usuarios AS u 
-        JOIN usuario_plan as up on u.id_usuario=up.id_usuario
-        JOIN plan as p on p.id_plan=up.id_plan
-        WHERE u.id_usuario=?";
-        $resData= $this->query($sql,array($_SESSION['id_usuario']));
+        SELECT id_mes,nombre,numero
+        from meses  AS m";
+        $resData= $this->query($sql);
         
         return $resData; 
     } 
@@ -28,10 +25,8 @@ class UsuarioModel extends BaseModel
     {    
         $userResume=array(); 
         $sql = "
-        SELECT CONCAT(u.primer_nombre, ' ' , u.primer_apellido) as nombre,email,direccion,id_rol
+        SELECT CONCAT(u.primer_nombre, ' ' , u.primer_apellido) as nombre,email,direccion,id_rol,id_zona
         from usuarios AS u 
-        JOIN usuario_plan as up on u.id_usuario=up.id_usuario
-        JOIN plan as p on p.id_plan=up.id_plan
         WHERE u.id_usuario=?";
         $resUser= $this->query($sql,array($_SESSION['id_usuario']));
        
