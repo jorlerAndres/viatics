@@ -33,8 +33,8 @@ class CuotasModel extends BaseModel
             <div  class="d-flex flex-row">
             <div class="d-flex flex-column ms-3 mt-2">
               <span class="nombre-zona">'.$resData[$i]['nombre'].'</span>
-              <b><span class="valor-anticipo">'.$resData[$i]['valor'].'</span></b>
-              <span class="saldo-zona">'.$resData[$i]['saldo'].'</span>
+              <b><span class="valor-anticipo">$'.$resData[$i]['valor'].'</span></b>
+              <span class="saldo-zona">$'.$resData[$i]['saldo'].'</span>
             </div>
             <div class="icono-ciudad"><img src="/assets/images/monedas-icono.png" width="28px"></div>
           </div>

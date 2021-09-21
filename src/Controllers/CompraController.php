@@ -22,6 +22,17 @@ class CompraController
             ->withStatus(200);
     }
 
+    public function getCompra(Request $request, Response $response, $arg)
+    {   
+        $datos=(array)$request->getParsedBody();
+        $G = new CompraModel();
+        $response->getBody()->write(json_encode($G->getCompra($datos)));
+        return $response
+            ->withHeader('Access-Control-Allow-Origin', "*")
+            ->withHeader('Content-Type', 'application/json')
+            ->withStatus(200);
+    }
+
 
 
     

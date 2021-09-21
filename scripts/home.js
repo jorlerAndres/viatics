@@ -164,7 +164,9 @@ function cargarzonas(){
 }
 
 function cargartabla(){
-
+  var tbody=document.getElementById('tbody');
+  var formData = new FormData();
+ // formData.append("categoria", categoria.id); 
   fetch(host+'/api/compra/get',{
       
     method: "POST",
@@ -172,12 +174,12 @@ function cargartabla(){
   })
   .then(response => response.json())
   .then(data => {
-   
+    tbody.innerHTML=data;
 
   })
   .catch(function(error) {
     return error;
   }) 
-
+  console.log("hghgh");
 
 }
