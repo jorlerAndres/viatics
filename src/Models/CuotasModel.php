@@ -18,30 +18,27 @@ class CuotasModel extends BaseModel
     {   
         $res='';
         $sql = "
-        SELECT c.id_cuota, z.nombre, c.saldo, c.valor 
-        from cuota_anticipo c 
-        join zonas z on c.id_zona=z.id_zona
+        SELECT z.nombre,
+        coalesce((select format(saldo,0) from cuota_anticipo where id_mes=extract(month from current_date) and id_zona=z.id_zona),0.0) as saldo,
+        coalesce((select format(valor,0) from cuota_anticipo where id_mes=extract(month from current_date) and id_zona=z.id_zona),0.0) as valor
+        from zonas z
+       ";
         
-        WHERE c.id_mes=? and id_ano=?";
-        
-        $resData= $this->query($sql,array(9,2021));
+        $resData= $this->query($sql);
 
-        for ($i=0; $i <sizeof($resData) ; $i++) { 
+        for ($i=0; $i < 8 ; $i++) { 
 
             $res.='
             <div class="cuota-zona">
             <div  class="d-flex flex-row">
             <div class="d-flex flex-column ms-3 mt-2">
               <span class="nombre-zona">'.$resData[$i]['nombre'].'</span>
-              <b><span class="valor-anticipo">$'.$resData[$i]['valor'].'</span></b>
+              <b><span class="valor-anticipo ">$'.$resData[$i]['valor'].'</span></b>
               <span class="saldo-zona">$'.$resData[$i]['saldo'].'</span>
             </div>
             <div class="icono-ciudad"><img src="/assets/images/monedas-icono.png" width="28px"></div>
           </div>
-          </div>
-            
-            
-            ';
+          </div>';
         }
         return $res;
     
@@ -77,15 +74,15 @@ class CuotasModel extends BaseModel
 
     public function actualizarCuota($datos,$id_cuota)
     { 
-
         $fechaActual= new DateTime('NOW'); 
         $sql = "
         UPDATE cuota_anticipo set valor = (valor + ".$datos['valor'].") where  id_cuota=?;";
 
-         $resultado = $this->query($sql, array($id_cuota)); 
+        $resultado = $this->query($sql, array($id_cuota)); 
 
         $this->insertSaldo($datos);
     }
+
     public function insertSaldo($datos)
     {
         $saldo=$this->calcularSaldo($datos);

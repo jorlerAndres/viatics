@@ -7,6 +7,7 @@ if(!isset($_SESSION))
 } 
 use Psr\Container\ContainerInterface;
 use App\Models\BaseModel;
+use DateTime;
 
 
 class UsuarioModel extends BaseModel
@@ -31,5 +32,57 @@ class UsuarioModel extends BaseModel
         $resUser= $this->query($sql,array($_SESSION['id_usuario']));
        
         return $resUser[0]; 
+    }
+    public function getUser($datos) 
+    {    
+        $mail= strlen($datos['mail_busqueda'])>0 ? $datos['mail_busqueda']: null;
+        $cedula= strlen($datos['cedula_busqueda'])>0 ? $datos['cedula_busqueda']: null;
+        $sql = "
+        SELECT ID_USUARIO,`CEDULA`, `PRIMER_NOMBRE`, `SEGUNDO_NOMBRE`, `PRIMER_APELLIDO`, `SEGUNDO_APELLIDO`, `EMAIL`, `TELEFONO`, `IMAGEN_PERFIL`, `ID_ZONA`, `ESTADO`, `VEHICULO`, `NUMERO_TARJETA_VIATICO`, `IMAGEN_TARJETA_VIATICO`, `USUARIO`, `PASSWORD`, `ID_ROL`, `HABILITADO`, `FECHA_CREACION`, `FECHA_MODIFICACION`
+
+        FROM usuarios AS u 
+        WHERE (u.email=? or u.cedula=?)";
+
+        $resUser= $this->query($sql,array($mail,$cedula));
+       
+        return $resUser[0]; 
+    }
+    public function setUser($datos) 
+    {    
+        if(strlen(trim($datos['id_usuario']))> 0){
+            $resUser=$this->UpdateUser($datos);
+        }
+        else{
+            $resUser=$this->insertUser($datos);
+        }
+        
+        return  $resUser; 
+    }
+
+    public function insertUser($datos) 
+    {
+        $fechaActual= new DateTime('NOW');
+        $nombres=explode(' ',$datos['nombres_usuario']);
+        $segundo_nombre = sizeof($nombres) > 1 ? $nombres[1] : '';
+        $apellidos=explode(' ',$datos['apellidos_usuario']);
+        $segundo_apellido = sizeof($apellidos) > 1 ? $apellidos[1] : ''; 
+         $sql = "
+         INSERT INTO `usuarios` (ID_USUARIO,`CEDULA`, `PRIMER_NOMBRE`, `SEGUNDO_NOMBRE`, `PRIMER_APELLIDO`, `SEGUNDO_APELLIDO`, `EMAIL`, `TELEFONO`, `IMAGEN_PERFIL`, `ID_ZONA`, `ESTADO`, `VEHICULO`, `NUMERO_TARJETA_VIATICO`, `IMAGEN_TARJETA_VIATICO`, `USUARIO`, `PASSWORD`, `ID_ROL`, `HABILITADO`, `FECHA_CREACION`, `FECHA_MODIFICACION`) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+
+
+         $resUser= $this->query($sql,array( 1012,$datos['cedula_usuario'], $nombres[0],$segundo_nombre,$apellidos[0],$segundo_apellido,$datos['mail_usuario'],$datos['telefono_usuario'],'',$datos['zona_usuario'],$datos['estado_usuario'],$datos['vehiculo_usuario'],$datos['tarjeta_usuario'],'',$datos['cedula_usuario'],$datos['contrasena_usuario'],$datos['rol_usuario'],$datos['estado_usuario'],$fechaActual->format('y-m-d'),$fechaActual->format('y-m-d'))); 
+        
+        return  $resUser; 
+    }
+
+    public function UpdateUser($datos) 
+    {  
+        $fechaActual= new DateTime('NOW');
+
+        $sql = "UPDATE  `usuarios` SET `CEDULA`=?,  `EMAIL`=?, `TELEFONO`=?, `IMAGEN_PERFIL`=?, `ID_ZONA`=?, `ESTADO`=?, `VEHICULO`=?, `NUMERO_TARJETA_VIATICO`=?, `IMAGEN_TARJETA_VIATICO`=?, `PASSWORD`=?, ID_ROL=?,`FECHA_MODIFICACION`=? WHERE ID_USUARIO=?";
+
+         $resUser= $this->query($sql,array($datos['cedula_usuario'],$datos['mail_usuario'],$datos['telefono_usuario'],'',$datos['zona_usuario'],$datos['estado_usuario'],$datos['vehiculo_usuario'],$datos['tarjeta_usuario'],'',$datos['contrasena_usuario'],$datos['rol_usuario'],$fechaActual->format('y-m-d'),$datos['id_usuario'])); 
+        
+        return  $datos['telefono_usuario']; 
     }
 }

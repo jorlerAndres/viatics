@@ -1,44 +1,51 @@
 <div class="d-flex flex-row justify-content-between">
-<h3 class="mt-3 ms-5 titulo-usuarios mb-5">Registros de Gastos</h3>
-
+<h3 class="mt-5 ms-5 titulo-usuarios mb-5">Registros de Gastos</h3>
 </div>
 <div class="row">
-    <div class="col-md-4">
-      
-    </div>
+    <div class="col-md-4"></div>
 </div>
 <div class="row  ms-4 me-4">
+  <div class="me-5  ms-3 mt-3 d-flex flex-column  subtitulo-registros">
+    <div class="text mt-2  ms-4">
+      <h3 id="anticipo_global" ></h3>
+      <p class="numero-usuarios-texto fs-6">Anticipo Global</p>
+      <div class="d-flex flex-column">
+        <span class="numero-usuarios-activos ms-1 fs-6 fw-bold">
+          <span id="gasto_aprobado" ></span>  Gasto aprobado
+        </span>
+        <span class="numero-usuarios-activos ms-1 mt-3 fs-6">
+          <span style="color: rgb(75, 73, 73);" id="saldo" class=""></span> Saldo
+        </span>
+      </div>
+    </div>
+  </div>
     <div class="col-md-12">
         <div class="card card-registros">
             <div class="card-header">
-              <div class="d-flex flex-row justify-content-between">
-                <div class="col-md-4 mt-5 inputGroupContainer">
-                  <div class="input-group mb-3">
+              <div class="d-flex flex-row">
+                <div class="col-md-7 mt-3 inputGroupContainer d-flex flex-row">
+                  <div class="input-group mb-3 me-3 w-50">
                     <span class="input-group-text" id="basic-addon1"><i class="bi bi-person text-secondary"></i></span>
-                    <input type="text" class="form-control" placeholder="Zona" aria-label="Username" aria-describedby="basic-addon1">
+                    <input type="text" class="form-control w-25" placeholder="Usuario" aria-label="Username" aria-describedby="basic-addon1" id="usuario_busqueda" autocomplete="off">
                   </div>
-                  <div class="input-group mb-3">
-                    <span class="input-group-text" id="basic-addon1"><i class="bi bi-phone-landscape text-secondary"></i></span>
-                    <input type="text" class="form-control" placeholder="Usuario" aria-label="Username" aria-describedby="basic-addon1">
+                  <div class=" mb-3">
+                   <select name="" id="zona_busqueda" class=" form-control form-select" style="border-radius: 10px;">
+                     <option value="201">Barranquilla</option>
+                     <option value="202">Bogotá</option>
+                     <option value="203">Bucaramanga</option>
+                     <option value="204">Cali</option>
+                     <option value="205">Cartagena</option>
+                     <option value="206">Ibagué</option>
+                   </select>
                   </div>
                 </div>
+                <div class="mt-3" style="margin-left: 150px;">
+                  <input type="month" name="fecha_registro" id="fecha_registro" class="form-control" value="2015-07">
+                </div>
+              </div>
+               
                 <div>
-                  <div class="me-5  ms-3 mt-3 d-flex flex-column  subtitulo-registros">
-                    <div class="text mt-2  ms-4">
-                      <h3 >850000</h3>
-                      <p class="numero-usuarios-texto fs-6">Anticipo Global</p>
-                      <div class="d-flex flex-column">
-                        <span class="numero-usuarios-activos ms-1 fs-6 fw-bold">
-                          <span>900000</span>  Gasto global Total
-                        </span>
-                        <span class="numero-usuarios-activos ms-1 mt-3 fs-6">
-                          <span style="color: rgb(75, 73, 73);">300000</span>  Gastos Aprobados
-                        </span>
-                      </div>
-                    </div>
-                  </div>
                 </div>
-            </div>
             </div>
             <div class="card-body ms-3 me-3" >
                 <table class="table" style="font-size: 12px;">
@@ -58,6 +65,6 @@
                     </tbody>
                   </table>
             </div>
-          </div>
+        </div>
     </div>
 </div>

@@ -10,9 +10,10 @@
 @font-face {
   font-family: "Montserrat";
   src: url("/assets/fuentes/Montserrat-Bold.ttf");
+  
 } 
 :root{
-  --variable-height:120vh;
+  --variable-height:150vh;
   --variable-width:100vh;
   --variable-color: #88888a;
 }
@@ -25,8 +26,9 @@ body{
 .head{
  /* background-color: rgb(255, 255, 255); */
  background:linear-gradient(rgb(0, 0, 255,0.8), rgb(47, 27, 163,0.8));
- height: 80px; 
- box-shadow: 0px 6px 2px 0px rgb(185, 184, 184);
+ height: 80px;
+ /* box-shadow: 0px 6px 2px 0px rgb(185, 184, 184); */
+ 
 }
 /*  .sidebar {
   position: fixed;
@@ -43,7 +45,8 @@ body{
   .icono-sidenav{
     height: 25px;
     width: 25px;
-    margin-left: 10px;
+    margin-left: 20px;
+    margin-top: 30px;
     text-align: center;
     padding-top: 3px;
     background-image: linear-gradient(to bottom,  #f6f7f8,#fefeff);
@@ -51,15 +54,24 @@ body{
     box-shadow: 1px 2px 2px rgb(196, 195, 195); 
     margin-right: 10px;
     transition: all 0.5s;
-    font-weight: bolder;
+    
   }
   .tituloZonas{
 
-    /* font-family: 'Urbanist thin', sans-serif; */
+     font-family: 'Urbanist thin', sans-serif; 
+     letter-spacing: 0.2em;
+     text-transform: uppercase;
   }
+  .Urbanist{
+
+    font-family: 'Urbanist thin', sans-serif; 
+    letter-spacing: 0.1em;
+    text-transform:capitalize;
+    font-weight: bold;
+ }
   .cuota-zona{
     height: 100px;
-    width: 160px;
+    width: 170px;
     background-color: white;
     border-radius: 8px;
     border: 0px rgb(180, 177, 177) solid; 
@@ -69,31 +81,35 @@ body{
 
   }
   .navbar{ 
-    width: 106%;
-    margin-top: 65px;
+    width: 104%;
+    margin-top: 40px;
   }
   .navbar-collapse ul{
     width: 100%;
+    
    }
-  .navbar-nav li{
-  border-bottom: 1px rgb(221, 218, 218) solid;
-  height: 50px;
-  background-image: linear-gradient(to bottom,  #fefeff,#f6f7f8);
-  }
+   .navbar-collapse{
+    width: 80%;
+    
+   }
+ 
 
  .navbar-collapse ul li:hover{
-  background-image: linear-gradient(to bottom,  #fefeff,#e7f0fa);
-  color: rgb(206, 22, 22);
+  /* background-image: linear-gradient(to bottom,  #fefeff,#e7f0fa); */
  }
+ 
  .columna1{
   height:var(--variable-height);
   box-shadow: 0px 8px 10px 5px rgb(206, 204, 204);
-  
+  /* background-image: linear-gradient(to right,  #fefeff,#f6f7f8); */ 
+  position: absolute;
 }
 .columna2{
   background-image: url('/assets/images/silueta3.jpg'); 
   background-repeat: no-repeat; 
   background-position: 400px 0px;
+  position: relative;
+  
 }
 .valor-anticipo{
   font-size: 22px;
@@ -120,6 +136,8 @@ body{
 }
 .titulo-usuarios{
   font-family: 'Urbanist thin', sans-serif;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
 }
 .registro-usuario{
   text-align: left;
@@ -131,7 +149,7 @@ body{
    height: 700px;
    background-color: white;
    border-radius: 10px;
-   box-shadow: 0 0 25px 1px rgb(231, 230, 230);
+   box-shadow: 0 0 25px 1px rgb(218, 216, 216);
    border: 1px rgb(240, 237, 237) solid;
 
 }
@@ -143,13 +161,7 @@ body{
 .camposuser{
   margin-left: 30px;
 }
-/* input[type='text']{
-  width: 150px;
-  border:none;
-  background-color: rgb(231, 229, 229);
-  border-radius: 3px;
-  height: 50px;
-} */
+
 .subtitulo-usuarios{
   width: 300px; 
   height:200px;
@@ -184,6 +196,13 @@ body{
 
   box-shadow: 0 0 15px rgb(201, 200, 200);
 }
+#valor_gasto{
+  box-shadow: 0 0 15px rgb(201, 200, 200);
+}
+#periodo_gasto{
+  box-shadow: 0 0 15px rgb(201, 200, 200);
+  color: #a7a7a8;
+}
 .div_mes{
   width: 110px; 
   height:70px; 
@@ -192,6 +211,8 @@ body{
   border-right: 1px rgb(207, 205, 205) solid;
   border-bottom: 1px rgb(97, 16, 248) solid;
   cursor: pointer;
+  background-color: white;
+  box-shadow: 0 0 12px rgb(214, 216, 216);
 }
 .div_mes:hover{
   box-shadow: 0 0 12px rgb(214, 216, 216);
@@ -256,7 +277,7 @@ body{
   box-shadow: 1px 1px 50px 20px rgb(49, 49, 49) inset;
 }
 .categorias{
-  box-shadow: 0 0 25px 1px rgb(248, 248, 248);
+  box-shadow: 10px 10px 25px 1px rgb(248, 248, 248);
    border: 1px rgb(248, 247, 247) solid;
   width: 401px; 
   height: 200px;
@@ -265,17 +286,16 @@ body{
 .cuadro-categoria{
   width: 133px;
   height: 100px;
-  border: 1px rgb(230, 230, 231) solid;
-  /* border: 1px rgb(197, 197, 248) solid; */
+  border: 1px rgb(205, 205, 206) solid;
   text-align: center;
   display: flex;
   justify-content: center;
   align-items: center;
-  box-shadow: 1px 1px 5px 6px rgb(247, 246, 246) inset;
- /* box-shadow: 1px 1px 5px 6px rgba(42, 0, 250, 0.068) inset; */
+  box-shadow: 1px 1px 5px 6px rgb(228, 227, 227) inset;
   border-radius: 6px;
   font-family: "Urbanist thin";
   cursor: pointer;
+  background-color: white;
 }
 .cuadro-categoria span{
   font-family: "Urbanist thin";
@@ -294,7 +314,6 @@ body{
 .item-subcategoria{
   width: 230px;
   height: 40px;
-  /* background-image: linear-gradient(rgb(253, 252, 252), rgb(233, 231, 231)); */
   background-image: linear-gradient( to bottom,rgb(253, 252, 252),rgb(244, 243, 252));
   box-shadow: 1px 1px 5px 1px rgb(236, 235, 235);
   border: 1px rgb(236, 234, 234) solid;
@@ -302,9 +321,12 @@ body{
   margin-left: 50px;
   padding-top: 4px;
   cursor: pointer;
+   box-shadow: -1px 1px 7px 0px rgb(160, 158, 158); 
+  transition: all 0.5s;
 }
 .item-subcategoria:hover{
-  box-shadow: -1px 1px 7px 0px rgb(160, 158, 158);
+  
+  box-shadow: -1px 1px 7px 0px rgb(17, 17, 17);
 }
 .absolute_registros{
   position: absolute;
@@ -333,8 +355,10 @@ body{
   margin-left: 10px;
   padding-left: 10px;
   margin-bottom: 10px;
-  /* transition: transform 0.5s; */
-  /* transform:rotateX(-70deg); */
+
+}
+.contenido-registro{
+  text-decoration: none;
 }
 .datos-usuario{
   margin-top: 38px;
@@ -363,18 +387,63 @@ body{
   margin-left: 100px;
   margin-top: 10px;
 }
+
+
+.navbar-collapse ul li a p{
+  text-transform: uppercase;
+}
+.nav-link{
+  text-align: right;
+  letter-spacing: 0.2em;
+  line-height: 1em;
+  font-size: 0.65em;
+  font-weight: bold;
+ 
+}
+.segundacolumna{
+  margin-top: 144px;
+}
+.datos-registrogasto{
+  margin-left: 55px;
+}
+input[type=range]{
+  width: 30px;
+  height:1.2em;
+  -webkit-appearance: none; 
+  border-radius: 10px;
+  overflow:hidden;
+  /* background-image:linear-gradient(to right, #29f5b8, rgb(245, 23, 23) ); */
+  background-color: #d9dbda;
+  box-shadow: 1px 1px 10px 1px rgb(207, 206, 206);
+}
+.range::-webkit-slider-thumb{
+
+    -webkit-appearance: none;
+    width: 16px;
+    height: 16px;
+    border-radius: 70%;
+    background-color: rgb(241, 239, 239);
+    cursor:pointer;
+    border: 1px rgb(255, 255, 255) solid;
+   /*  box-shadow:-16px 0 0 4px rgb(3, 177, 75); */
+   box-shadow:-10px 0 0 4px rgb(3, 177, 75);
+    overflow: visible;
+
+}
+
 @media (max-width: 600px) {
 
-  .contenido{
-
-    box-shadow: 0 0 12px rgb(239, 240, 240);
-    width: 300px;
-    height: 220px;
-    left: 10px;
-    transition: all 0.5s;
-   
+  .segundacolumna{
+    margin-top: 14px;
   }
- 
+  .datos-registrogasto{
+    margin-top: 54px;
+    margin-left: 15px;
+  }
+  .item-subcategoria{
+
+    margin-left: 20px;
+  }
   .navbar{ 
     margin-top: 6px;
   }
@@ -388,7 +457,6 @@ body{
      width: 250px;
      height: 500px;
      margin-left: 1px;
-    
   
   }
   .registro-usuario h3{
@@ -408,9 +476,7 @@ body{
     height: 700px;
     
   }
-/*   .absolute_registros{
-    position: absolute;
-    top: 290%;
-  } */
+
+  
 
 }

@@ -17,44 +17,34 @@ class CompraModel extends BaseModel
 {
 
    
-    public function getCompra()
+    public function getCompra($datos)
     {   
-        $res='';
+        $data='';
+        $res=array();
+        $res['total_anticipo']=0;
+        $res['total_gasto']=0; 
+        $res['saldo']=0;
         $sql = "
         SELECT RG.ID_REGISTRO, Z.NOMBRE as ZONA, CA.SALDO, RG.VALOR,CONCAT(U.PRIMER_NOMBRE, ' ' , U.PRIMER_APELLIDO) as USUARIO,
-        C.NOMBRE as CATEGORIA,S.NOMBRE as SUBCATEGORIA,RG.FECHA_CREACION AS FECHA_COMPRA,RG.VALOR,RG.IMAGEN,
-        CASE WHEN RG.OBSERVACION IS NULL THEN 'Sin Observacion' end as OBSERVACION, M.NOMBRE as MES, EXTRACT(DAY FROM RG.FECHA_CREACION) AS DIA,EXTRACT(YEAR FROM RG.FECHA_CREACION) AS ANO
+        C.NOMBRE as CATEGORIA,S.NOMBRE as SUBCATEGORIA,RG.FECHA_CREACION AS FECHA_COMPRA,format(RG.VALOR,0)as VALOR,RG.IMAGEN,
+        CASE WHEN RG.OBSERVACION IS NULL THEN 'Sin Observacion'  ELSE RG.OBSERVACION END as OBSERVACION, M.NOMBRE as MES, EXTRACT(DAY FROM RG.FECHA_CREACION) AS DIA,EXTRACT(YEAR FROM RG.FECHA_CREACION) AS ANO,(select valor from cuota_anticipo where id_cuota=ca.id_cuota) as TOTAL_ANTICIPO
         FROM registro_gasto rg 
         JOIN zonas z           on rg.id_zona=z.id_zona
         JOIN usuarios u        on u.id_usuario=rg.id_usuario
         JOIN categorias c      on c.id_categoria=rg.id_categoria
         JOIN subcategoria s    on s.id_subcategoria=rg.id_subcategoria
         JOIN meses m           on m.id_mes=rg.id_mes
-        JOIN cuota_anticipo ca on ca.id_zona=rg.id_zona and ca.id_mes=rg.id_mes and ca.id_ano=rg.id_ano
-        
-        WHERE rg.id_mes=? and rg.id_ano=?";
-        
-        $resData= $this->query($sql,array(9,2021));
+        JOIN cuota_anticipo ca on ca.id_zona=rg.id_zona and ca.id_mes=rg.id_mes and ca.id_ano=rg.id_ano 
+        WHERE true
+        ";
 
+        $where=$this->getWhere($datos);
+       
+        $sql.=$where['where'];
+        $resData= $this->query($sql,$where['array']);
         for ($i=0; $i <sizeof($resData) ; $i++) { 
 
-           /*  $res.=' <tr>
-                    <th scope="row"><div class="d-flex flex-row"><i class="bi bi-person-circle text-secondary me-2"></i>'.$resData[$i]['USUARIO'].'</div></th>
-                    <td>'.$resData[$i]['ZONA'].'</td>
-                    <td>'.$resData[$i]['CATEGORIA'].'</td>
-                    <td>'.$resData[$i]['SUBCATEGORIA'].'</td>
-                    <td>'.$resData[$i]['FECHA_COMPRA'].'</td>
-                    <td>origen</td>
-                    <td>destino</td>
-                    <td>'.$resData[$i]['VALOR'].'</td>
-                    <td><a href="'.$resData[$i]['IMAGEN'].'">Link</a></td>
-                    <td>'.$resData[$i]['OBSERVACION'].'</td>
-                    <td>aprobacion</td>
-                    <td class="d-flex flex-row flex-wrap"><input type="text" class="form-control ms-5" id="observacion_aprobacion"></td>
-                </tr>'; */
-
-
-            $res.='<tr>
+            $data.='<tr>
             <td>
               <div class="row contenido-registro">
                 <div class="col-md-4">
@@ -80,8 +70,7 @@ class CompraModel extends BaseModel
                   <div class=" d-flex flex-column datos-gasto mt-3">
                     <span class="ms-2 mt-2 fs-6">'.$resData[$i]['SUBCATEGORIA'].'</span>
                     <div class="d-flex flex-row datos-destino">
-                      <p class=""><b> origen:</b> Cali</p>
-                      <p class="ms-2"><b> Destino:</b> Cali</p>
+                     
                     </div>
                   </div>
                 </div>
@@ -90,48 +79,52 @@ class CompraModel extends BaseModel
                     <p class="mt-3 ms-3 me-5">'.$resData[$i]['OBSERVACION'].'</p>
                     <div class="d-flex flex-column">
                       <h6>$'.$resData[$i]['VALOR'].'</h6>
-                      <p><a href="#">Link soporte</a> </p>
+                      <p><a href="#" style="text-decoration:none; color: black;">soporte</a> </p>
+                      <input type="range" min="0" max="1" class="range" id="'.$resData[$i]['ID_REGISTRO'].'"/>
                     </div>
                   </div>
                 </div>
               </div>
             </td>
           </tr>';
-
-
+          $data.="";
         }
-
+        $res['datos']=$data;
+        $res['total_anticipo']=number_format($this->getTotalAnticipo($datos));
+        $res['total_gasto']=number_format($this->getTotalAprobado($datos)); 
+        $res['saldo']=number_format($this->getTotalAnticipo($datos) - $this->getTotalAprobado($datos));
+        $res['datos']=$data;
        
         return $res;
-    
     }
     public function setCompra($datos,$datafile)
     {   
-        $user=new UsuarioModel();
-        $cuotas=new CuotasModel();
-        $dataSaldo=array();
-        $dataUser= $user->getResumeUser();
-        $extencion=$this->obtenerExtencion($datafile['file']);
-        $fechaActual= new DateTime('NOW'); 
-        $ruta="assets/soportes/";
-        $nombre=$_SESSION['id_usuario']."_".$datos['mes']."_".$datos['ano'].".".$extencion;
-       
-       
-        $sql = "
-          INSERT into registro_gasto (ID_USUARIO,ID_CATEGORIA,ID_SUBCATEGORIA,ID_ZONA,PERIODO,ID_MES,ID_ANO,VALOR,IMAGEN,APROBADO,ESTADO,FECHA_CREACION,HORA_CREACION,FECHA_MODIFICACION,HORA_MODIFICACION) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);";
+      $user=new UsuarioModel();
+      $cuotas=new CuotasModel();
+      $dataSaldo=array();
+      $dataUser= $user->getResumeUser();
+      $extencion=$this->obtenerExtencion($datafile['file']);
+      $fechaActual= new DateTime('NOW'); 
+      $ruta="assets/soportes/";
+      
+      $nombre=$_SESSION['id_usuario']."_".$datos['mes']."_".$datos['ano'].".".$extencion;
+      
+      
+      $sql = "
+        INSERT into registro_gasto (ID_USUARIO,ID_CATEGORIA,ID_SUBCATEGORIA,ID_ZONA,PERIODO,ID_MES,ID_ANO,VALOR,IMAGEN,APROBADO,ESTADO,OBSERVACION,FECHA_CREACION,HORA_CREACION,FECHA_MODIFICACION,HORA_MODIFICACION) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);";
 
-          $resultado = $this->query($sql, array($_SESSION['id_usuario'],$datos['categoria'],$datos['subcategoria'],$dataUser['id_zona'],$datos['mes'],$datos['mes'],$datos['ano'],$datos['valor'],$ruta.$nombre,'SI',1,$fechaActual->format('y-m-d'),$fechaActual->format('H:m:s'),$fechaActual->format('y-m-d'),$fechaActual->format('H:m:s')));  
+        $resultado = $this->query($sql, array($_SESSION['id_usuario'],$datos['categoria'],$datos['subcategoria'],$dataUser['id_zona'],$datos['mes'],$datos['mes'], $datos['ano'], $datos['valor'],$ruta.$nombre,'SI',1,$datos['observacion'],$fechaActual->format('y-m-d'),$fechaActual->format('H:m:s'),$fechaActual->format('y-m-d'),$fechaActual->format('H:m:s')));  
 
-          $dataSaldo['zona']=$dataUser['id_zona'];
-          $dataSaldo['ano']=$datos['ano'];
-          $dataSaldo['mes']=$datos['mes'];
-          $dataSaldo['valor']=$datos['valor'];
-        
-         $cuotas->insertSaldo($dataSaldo);
-         $sucess=$this->moveUploadedFile($ruta,$datafile['file'],$nombre);
-          
-    
+        $dataSaldo['zona']=$dataUser['id_zona'];
+        $dataSaldo['ano']=$datos['ano'];
+        $dataSaldo['mes']=$datos['mes'];
+        $dataSaldo['valor']=$datos['valor'];
+      
+        $cuotas->insertSaldo($dataSaldo);
+        $sucess=$this->moveUploadedFile($ruta,$datafile['file'],$nombre);
     }
+
+
     function moveUploadedFile(string $directory, UploadedFileInterface $uploadedFile,$file='')
     {
         if (!file_exists($directory)) {	
@@ -145,5 +138,62 @@ class CompraModel extends BaseModel
         $extension = pathinfo($uploadedFile->getClientFilename(), PATHINFO_EXTENSION);
         return $extension;
     }
-   
+    public function getWhere($datos){
+
+      
+      $array=array($datos['mes'],$datos['ano']);
+      $where=" AND rg.id_mes=? and rg.id_ano=?";
+      if( strlen(trim($datos['usuario']))> 0){
+
+        $where.=" AND U.PRIMER_NOMBRE LIKE ? ";
+        array_push($array,"".$datos['usuario']."%");
+      }
+       if( strlen(trim($datos['zona']))> 0){
+
+        $where.=" AND z.id_ZONA=?";
+        array_push($array,$datos['zona']);
+      }  
+     
+      $consulta=array();
+      $consulta['where']= $where;
+      $consulta['array']= $array;
+      return $consulta;
+    }
+  public function getTotalAprobado($datos){
+
+    $sql="select sum(rg.valor)as valor 
+          from registro_gasto rg
+          join zonas z    on z.id_zona=rg.id_zona
+          join usuarios u on u.id_usuario=rg.id_usuario 
+          WHERE true";
+
+    $where=$this->getWhere($datos);
+        
+    $sql.=$where['where'];
+    $resData= $this->query($sql,$where['array']);
+    return $resData[0]['valor'];
+  }
+
+  public function getTotalAnticipo($datos){
+
+    $sql="select SUM(VALOR) as valor
+          FROM cuota_anticipo ca
+          JOIN zonas z on z.id_zona= ca.id_zona 
+          WHERE ca.id_zona=? and ca.id_ano=? and ca.id_mes=?";
+
+    $resData= $this->query($sql,array($datos['zona'],$datos['ano'],$datos['mes']));
+
+    return $resData[0]['valor'];
+  }
+
+  public function setAprobacion($datos){
+
+    $sql="UPDATE registro_gasto set aprobado=?
+          WHERE id_registro=?";
+
+    $resData= $this->query($sql,array($datos['aprobacion'],$datos['id_registro']));
+    $cuotas=new CuotasModel();
+    $cuotas->insertSaldo($datos);
+  }
+  
 }

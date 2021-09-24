@@ -20,6 +20,27 @@ class UsuarioController
             ->withStatus(200);
     }
 
+    public function getUser(Request $request, Response $response, $arg)
+    {   
+        $datos=(array)$request->getParsedBody();
+        $U = new UsuarioModel();
+        $response->getBody()->write(json_encode($U->getUser($datos)));
+        return $response
+            ->withHeader('Access-Control-Allow-Origin', "*")
+            ->withHeader('Content-Type', 'application/json')
+            ->withStatus(200);
+    }
+    public function setUser(Request $request, Response $response, $arg)
+    {   
+        $datos=(array)$request->getParsedBody();
+        $U = new UsuarioModel();
+        $response->getBody()->write(json_encode($U->setUser($datos)));
+        return $response
+            ->withHeader('Access-Control-Allow-Origin', "*")
+            ->withHeader('Content-Type', 'application/json')
+            ->withStatus(200);
+    }
+
 
 
     

@@ -22,43 +22,48 @@
         <img src="/assets/images/proimpo_blanco.png" width="200px" class="ms-3 mt-3">
       </div>
     </header>
-    <div class="row" >
+    <div class="row">
       <div class="col-md-2 columna1">
+        <div class="icono-sidenav d-flex flex-row"> <i class="bi  bi-filter-left h6"></i><span class="ms-4 fw-bold" style="letter-spacing: 0.1em; color:rgb(192, 189, 189)">MENU</span> </div>
         <aside  class="sidebar">
         <nav class="navbar  navbar-expand-lg navbar-light" id="navbar" >
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
               <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse menu" id="navbarSupportedContent">
-            <ul class=" nav navbar-nav  flex-column me-auto mb-2 mb-lg-0 mt-2" role="tablist">
+            <ul class=" nav navbar-nav  flex-column me-auto mb-2 mb-lg-0 mt-1" role="tablist" >
               <li class="nav-item" id="cuotasZonas-tab" role="presentation" onclick="cargarzonas()">
-                <a class="nav-link d-flex flex-row" data-bs-toggle="tab" data-bs-target="#cuotasZonas"  aria-current="cuotasZonas" role="tablist" aria-controls="cuotasZonas" aria-selected="true" href="#">
-                  <div class="icono-sidenav"><i class="bi bi-person h6"></i></div>
-                  <p>Zonas</p>
+                <a class="nav-link" data-bs-toggle="tab" data-bs-target="#cuotasZonas"  aria-current="cuotasZonas" role="tablist" aria-controls="cuotasZonas" aria-selected="true" href="#" style="text-align: right;">
+                  <p style="margin-right: 20px;">Total de Anticipos por Zonas</p>
+                  <div style="width: 79%; height: 0.2em; background-image: linear-gradient(to right, #5310fd, #dfd8f7);  right: 0; margin-left: 20px;" class="mb-5"></div>
                 </a>
               </li>
               <li class="nav-item" id="usuariosZonas-tab" role="presentation">
-                <a class="nav-link d-flex flex-row" data-bs-toggle="tab" data-bs-target="#usuariosZonas"  aria-current="usuariosZonas" role="tablist" aria-controls="usuariosZonas" aria-selected="true" href="#">
-                  <div class="icono-sidenav"><i class="bi bi-person h6"></i></div>
-                  <p>Usuarios</p>
+                <a class="nav-link " data-bs-toggle="tab" data-bs-target="#usuariosZonas"  aria-current="usuariosZonas" role="tablist" aria-controls="usuariosZonas" aria-selected="true" href="#" style="text-align: right;">
+                  {# <div class="icono-sidenav"><i class="bi bi-person h6"></i></div> #}
+                  <p style="margin-right: 20px;">Registro y modificación de Usuarios</p>
+                  <div style="width: 79%; height: 0.2em; background-image: linear-gradient(to right, #5310fd, #dfd8f7);  right: 0; margin-left: 20px;" class="mb-5"></div>
                 </a>
               </li>
               <li class="nav-item" id="cargarcuotas-tab" role="presentation">
-                <a class="nav-link d-flex flex-row" data-bs-toggle="tab" data-bs-target="#cargarcuotas"  aria-current="cargarcuotas" role="tablist" aria-controls="cargarcuotas" aria-selected="true" href="#">
-                  <div class="icono-sidenav"><i class="bi bi-person h6"></i></div>
-                  <p>Cargar Anticipo</p>
+                <a class="nav-link " data-bs-toggle="tab" data-bs-target="#cargarcuotas"  aria-current="cargarcuotas" role="tablist" aria-controls="cargarcuotas" aria-selected="true" href="#" style="text-align: right;">
+                  {#<div class="icono-sidenav"> <i class="bi bi-person h6"> </i></div>#}
+                  <p style="margin-right: 20px;">Cargar Anticipos zonas</p>
+                  <div style="width: 79%; height: 0.2em; background-image: linear-gradient(to right, #5310fd, #dfd8f7);  right: 0; margin-left: 20px;" class="mb-5"></div>
                 </a>
               </li>
               <li class="nav-item" id="registro-tab" role="presentation">
-                <a class="nav-link d-flex flex-row" data-bs-toggle="tab" data-bs-target="#cargarcompra"  aria-current="cargarcompra" role="tablist" aria-controls="cargarcompra" aria-selected="true" href="#">
-                  <div class="icono-sidenav"><i class="bi bi-person h6"></i></div>
-                  <p>Cargar Compra</p>
+                <a class="nav-link" data-bs-toggle="tab" data-bs-target="#cargarcompra"  aria-current="cargarcompra" role="tablist" aria-controls="cargarcompra" aria-selected="true" href="#">
+                  {# <div class="icono-sidenav"><i class="bi bi-person h6"></i></div> #}
+                  <p style="margin-right: 20px;">Cargar Consumo auditores</p>
+                  <div style="width: 79%; height: 0.2em; background-image: linear-gradient(to right, #5310fd, #dfd8f7);  right: 0; margin-left: 15px;" class="mb-5"></div>
                 </a>
               </li>
               <li class="nav-item" id="registro-tab" role="presentation"  onclick="cargartabla()">
-                <a class="nav-link d-flex flex-row" data-bs-toggle="tab" data-bs-target="#registros"  aria-current="registros" role="tablist" aria-controls="registros" aria-selected="true" href="#">
-                  <div class="icono-sidenav"><i class="bi bi-person h6"></i></div>
-                  <p>Registros</p>
+                <a class="nav-link " data-bs-toggle="tab" data-bs-target="#registros"  aria-current="registros" role="tablist" aria-controls="registros" aria-selected="true" href="#">
+                  {#<div class="icono-sidenav"> <i class="bi bi-person h6"></i></div> #}
+                  <p style="margin-right: 20px;">Registros</p>
+                  <div style="width: 79%; height: 0.2em; background-image: linear-gradient(to right, #5310fd, #9c81f8);  right: 0; margin-left: 15px;"></div>
                 </a>
               </li>
             </ul>
@@ -66,21 +71,22 @@
         </nav>
         </aside>
       </div>
-      <div class=" col-md-10 " >
+      <div class="col-md-2"></div>
+      <div class=" col-md-10 " style="background-image: linear-gradient(#f8f9fa, white);">
         <div class="tab-content" >
-          <div class="tab-pane columna2" style="height: 100vh;" id="cuotasZonas" role="tabpanel" aria-labelledby="cuotasZonas-tab">
+          <div class="tab-pane  columna2" style="height: 100vh;" id="cuotasZonas" role="tabpanel" aria-labelledby="cuotasZonas-tab">
             {% include "partes/cuotasZonas.html"%}
           </div>
-          <div class="tab-pane" style="height: 90vh;" id="usuariosZonas" role="tabpanel" aria-labelledby="usuariosZonas-tab">
+          <div class="tab-pane " style="height: 90vh;" id="usuariosZonas" role="tabpanel" aria-labelledby="usuariosZonas-tab">
             {% include "partes/usuariosZonas.html"%}
           </div>
           <div class="tab-pane " style="height: 100vh;" id="cargarcuotas" role="tabpanel" aria-labelledby="cargarcuotas-tab">
             {% include "partes/cargarcuotas.html"%}
           </div>
-          <div class="tab-pane active" style="height: 100vh;" id="cargarcompra" role="tabpanel" aria-labelledby="cargarcompra-tab">
+          <div class="tab-pane " style="height: 100vh;" id="cargarcompra" role="tabpanel" aria-labelledby="cargarcompra-tab">
             {% include "partes/registro.html"%}
           </div>
-          <div class="tab-pane " style="height: 100vh;" id="registros" role="tabpanel" aria-labelledby="registros-tab">
+          <div class="tab-pane active" style="height: 100vh;" id="registros" role="tabpanel" aria-labelledby="registros-tab">
             {% include "partes/registros.html"%}
           </div>
        </div>

@@ -1,18 +1,17 @@
-<h3 class="mt-3 ms-5 titulo-usuarios mb-4">Cargar Anticipo</h3>
-<div class="row mt-4 mb-4">
+ <h3 class="mt-5 ms-5 titulo-usuarios mb-5">Cargar Anticipo</h3>
+  <div class="row mt-4 mb-4">
     <div class="col-md-4 ms-4" style="text-align: left;">
-        <h4 class="monserrat-text mt-3 ms-3">1. Anticipo</h4>
+        <h5 class="monserrat-text mt-3 ms-3 text-secondary">1. Anticipo</h5>
         <div class="ms-3 mt-3">
            <label for="valor" class="form-label">Valor</label>
            <input type="number" class="form-control" id="valor_cargarcuotas">
            <div class="form-text">Ingrese los valores sin puntos ni comas.</div>
         </div>
-        
     </div>
     <div class="col-md-7" >
         <div class="me-5  ms-3 d-flex flex-column">
           <div class="text mt-3  ms-4">
-            <h4 class="monserrat-text">2. Periodo</h4>
+            <h5 class="monserrat-text text-secondary">2. Periodo</h5>
             <div class="ms-3 mt-2">
                 <label for="mes" class="form-label">Mes</label>
                 <div class="d-flex flex-md-row flex-wrap meses">
@@ -32,7 +31,7 @@
   <div class="row mt-4">
     <div class="col-md-12">
       <div class="text mt-3  ms-4">
-        <h4 class="monserrat-text ">3. Zona</h4>
+        <h5 class="monserrat-text text-secondary">3. Zona</h5>
         <div class="d-flex flex-md-row  flex-wrap mt-5" id="div_zonas">
           {% for zona in zonas %}
           <div class="card me-2 mb-2" style="width: 240px;">

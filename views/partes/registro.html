@@ -1,12 +1,12 @@
-<h3 class="mt-3 ms-5 titulo-usuarios mb-3">Cargar Compra</h3>
+<h3 class="mt-5 ms-5 titulo-usuarios mb-3">Cargar Compra</h3>
 <div class="row mt-4">
-   <div class="col-md-6">
+  <div class="col-md-6">
      <div class="ms-5 mt-3 mb-5">
-      <label for="valor" class="form-label">Valor</label>
-      <input type="number" class="form-control" id="valor_gasto">
+        <label for="valor" class="form-label">Valor</label>
+        <input type="number" class="form-control w-75" id="valor_gasto">
       <div class="form-text">Ingrese los valores sin puntos ni comas.</div>
      </div>
-     <h4 class="monserrat-text mt-3 ms-5 fs-6">1. Categoria </h4>
+     <h4 class="Urbanist mt-3 ms-5 fs-6">1. Categoria</h4>
      <div class="categorias ms-5 mt-5 d-flex flex-md-row flex-wrap" id="categorias">
       {% for categoria in categorias %}
       <div class="cuadro-categoria" onclick="seleccionCategoria('{{categoria.id_categoria}}')" id="{{categoria.id_categoria}}">
@@ -14,47 +14,51 @@
         <img  width="65px" data-imagen={{categoria.imagen}}>
         <span>{{categoria.nombre}}</span>
         </div>
-    </div>
+      </div>
       {% endfor %}
-       </div>
-        
-   </div>
-   <div class="col-md-6" style="margin-top: 140px;">
-    <h4 class="monserrat-text mt-3 ms-5 fs-6 mb-5">2. Subcategoria</h4>
-       <div  class="subcategorias" id="subcategorias" style="overflow: auto; width: 285px; height: 280px">
-        {% for subcategoria in subcategorias %}
-          <div class="item-subcategoria" onclick="SeleccionSubcategoria('{{subcategoria.id_subcategoria}}')" id="{{subcategoria.id_subcategoria}}">
-            <img width="35px" data-imagen={{subcategoria.imagen}}>
-            <span style="color: rgb(122, 120, 120);">{{subcategoria.nombre}}</span>
-          </div>
-        {% endfor %}
-
+     </div>
+  </div>
+  <div class="col-md-6 ">
+    <div class="segundacolumna">
+      <h4 class="Urbanist mt-3 ms-4 fs-6 mb-5">2. Subcategoria</h4>
+        <div  class="subcategorias" id="subcategorias" style="overflow: auto; width: 310px; height: 280px">
+          {% for subcategoria in subcategorias %}
+            <div class="item-subcategoria" onclick="SeleccionSubcategoria('{{subcategoria.id_subcategoria}}')" id="{{subcategoria.id_subcategoria}}">
+              <img width="35px" data-imagen={{subcategoria.imagen}}>
+              <span style="color: rgb(122, 120, 120);">{{subcategoria.nombre}}</span>
+            </div>
+          {% endfor %}
+        </div>
     </div>
-      
-   </div>
+  </div>
 </div>
 <div class="row">
-    <div class="col-md-7">
-        <div class="form-group ms-5">
-            <div class="col-md-8 inputGroupContainer">
-              <div class="input-group mb-3">
-                <span class="input-group-text" id="basic-addon1"><img src="/assets/images/ubicacion.jpg" width="25px"></span>
-                <input type="text" class="form-control" placeholder="Origen" aria-label="Username" aria-describedby="basic-addon1" id="ciudad_origen">
-              </div>
-              <div class="input-group mb-3">
-                <span class="input-group-text" id="basic-addon1"><img src="/assets/images/ubicacion.jpg" width="25px"></span>
-                <input type="text" class="form-control" placeholder="Destino" aria-label="Username" aria-describedby="basic-addon1" id="ciudad_destino">
-              </div>
-              <div class="mb-3 mt-5">
-                <label for="formFile" class="form-label">Cargar Archivo Soporte</label>
-                <input class="form-control" type="file" id="file_soporte">
-              </div>
+  <div class="col-md-7">
+      <div class="form-group  datos-registrogasto">
+          <div class="col-md-8 inputGroupContainer">
+            <label for="valor" class="form-label Urbanist">3. Periodo</label>
+            <input type="month" name="fecha" id="periodo_gasto" class="form-control  mb-5">
+
+            <div class="input-group mb-3">
+              <span class="input-group-text" id="basic-addon1"><img src="/assets/images/ubicacion.jpg" width="25px"></span>
+              <input type="text" class="form-control" placeholder="Origen" aria-label="Username" aria-describedby="basic-addon1" id="ciudad_origen" autocomplete="off">
+            </div>
+            <div class="input-group mb-3">
+              <span class="input-group-text" id="basic-addon1"><img src="/assets/images/ubicacion.jpg" width="25px"></span>
+              <input type="text" class="form-control" placeholder="Destino" aria-label="Username" aria-describedby="basic-addon1" id="ciudad_destino" autocomplete="off">
+            </div>
+            <div class="mb-3 mt-5">
+              <label for="formFile" class="form-label">Cargar Archivo Soporte</label>
+              <input class="form-control" type="file" id="file_soporte">
+            </div>
+            <div class="mb-3 mt-5">
+              <label for="valor" class="form-label ">Observacion(opcional)</label>
+              <input  class="form-control" id="observacion_registros" autocomplete="off">
+              <button type="button" class="btn btn-primary mt-4 mb-2" onclick="guardarCompra()">Guardar</button>
             </div>
           </div>
-
-        <label for="valor" class="form-label ms-5">Observacion(opcional)</label>
-        <input type="text" class="form-control ms-5" id="observacion_registros">
-        <button type="button" class="btn btn-primary mt-4 ms-5 mb-2" onclick="guardarCompra()">Guardar</button>
-    </div>
+        </div>
+        
+  </div>
 </div>
 

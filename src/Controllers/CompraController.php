@@ -33,6 +33,17 @@ class CompraController
             ->withStatus(200);
     }
 
+    public function setAprobacion(Request $request, Response $response, $arg)
+    {   
+        $datos=(array)$request->getParsedBody();
+        $C = new CompraModel();
+        $response->getBody()->write(json_encode($C->setAprobacion($datos,)));
+        return $response
+            ->withHeader('Access-Control-Allow-Origin', "*")
+            ->withHeader('Content-Type', 'application/json')
+            ->withStatus(200);
+    }
+
 
 
     
