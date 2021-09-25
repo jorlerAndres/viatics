@@ -5,6 +5,7 @@ const div_subcategorias=document.getElementById("subcategorias");
 var zonabusqueda=document.getElementById('zona_busqueda');
 var usuariobusqueda=document.getElementById('usuario_busqueda');
 var formularioUsuario=document.getElementById('formulario_usuario');
+var formularioAutorizacion=document.getElementById('formulario_autorizacion');
 var fecharegistro=document.getElementById('fecha_registro');
 var anticipoglobal=document.getElementById('anticipo_global');
 var gastoaprobado=document.getElementById('gasto_aprobado');
@@ -129,6 +130,7 @@ console.log(zona);
    else{
     var formData = new FormData();
     formData.append("zona", zona.id); 
+
     formData.append("mes", mes.id); 
     formData.append("valor", document.getElementById('valor_cargarcuotas').value); 
     formData.append("ano", new Date().getFullYear()); 
@@ -139,12 +141,12 @@ console.log(zona);
     })
     .then(response => response.json())
     .then(data => {
-  
+      swal('Registro Exitoso',data['mensaje'],data['tipo_mensaje']);
     })
     .catch(function(error) {
       return error;
     }) 
-    swal('Registro Exitoso','el anticipo ha sido adicionado','success');
+    
 
    }
 
@@ -168,6 +170,7 @@ function guardarCompra(){
     formData.append("periodo", document.getElementById('periodo_gasto').value); 
     formData.append("mes", periodo[1])
     formData.append("ano", periodo[0]);
+    formData.append("zona", zona_usuario);
     formData.append("file", fileUP.files[0]);
     formData.append("nombre_archivo", fileUP.files[0].name); 
     fetch(host+'/api/compra/set',{
@@ -177,13 +180,15 @@ function guardarCompra(){
     })
     .then(response => response.json())
     .then(data => {
-    
+      console.log(data);
+      swal('Registro Exitoso',data['mensaje'],data['tipo_mensaje']);
 
     })
     .catch(function(error) {
-      return error;
+
+      swal('Ocurrio un error al guardar el registro'); 
     }) 
-    swal('Registro Exitoso','La Compra ha sido adicionada','success'); 
+    //swal('Registro Exitoso','La Compra ha sido adicionada','success'); 
   }
 }
 function cargarzonas(){
@@ -278,6 +283,21 @@ formularioUsuario.onsubmit = async (e) => {
 
   //alert(result.message);
 };
+
+formularioAutorizacion.onsubmit = async (e) => {
+  e.preventDefault();
+
+  let response = await fetch(host+'/api/autorizacion/set', {
+    method: 'POST',
+    body: new FormData(formularioAutorizacion)
+  });
+
+  let result = await response.json();
+
+  swal('Registro',result['mensaje'],result['tipo_mensaje']);
+  //alert(result.message);
+};
+
 async function guardarAprobacion(e){
 
   var formData = new FormData();
@@ -348,7 +368,7 @@ function rangeVisible(){
 
   var range=document.querySelectorAll(".range");
   range.forEach(element => {
-
+    console.log("jj"+element.disabled);
     element.addEventListener('change', function(){
 
       var popover=document.getElementById("popover_"+element.id);
@@ -364,6 +384,18 @@ function rangeVisible(){
         popover.style.display="none";
       }
     })
+    if(element.disabled){
+      element.parentNode.addEventListener('mouseover', function(){
+        console.log("wwwwwwwwww");
+        var popover=document.getElementById("popover_"+element.id);
+          if(element.value==0){
+            popover.style.display="block";
+          }
+          else{
+            popover.style.display="none";
+          }
+        })
+    }
 
   });
 }

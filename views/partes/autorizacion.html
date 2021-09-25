@@ -1,0 +1,40 @@
+
+<div class="container">
+    <div class="row justify-content-between">
+       <div class="col-md-4">
+            <h3 class="mt-5 ms-5 titulo-usuarios">Autorizacion</h3>
+       </div>
+       <div class="col-md-6">
+         <div class="me-5 mt-3 ms-3  d-flex flex-column  subtitulo-autorizacion">
+            <div class="text mt-3  ms-4">
+                <h5 class="text-secondary Urbanist">Periodo</h5>
+                <p class="numero-usuarios-texto fs-6">Es el mes que se va autorizar</p>
+                <div class="d-flex flex-column">
+                    <h6 class="text-secondary Urbanist">Limite</h6>
+                    <p class="text-secondary fs-6">Dia limite de la autorizacion</p>
+                </div>
+            </div>
+          </div>
+        </div>
+    </div>
+    <div class="row">
+      <form id="formulario_autorizacion">
+       <div class="col-md-7">
+        <div class="d-flex flex-md-row flex-sm-column  mb-5 ms-5">
+          <div class="me-4">
+            <label for="valor" class="form-label urbanist text-secondary">Periodo</label>
+            <input type="month" name="periodo_autorizacion" id="periodo_autorizacion" class="form-control" required>
+          </div>
+          <div>
+            <label for="valor" class="form-label urbanist text-secondary">Fecha Limite</label>
+            <input type="date" name="fecha_limite" id="fecha_limite" class="form-control" required>
+          </div>
+        </div>
+        <button type="submit" id="guardarAutorizacion" class="btn btn-primary ms-5 ms-1 mt-3" >Guardar</button>
+      </div>
+    </form>
+    </div>
+</div>
+
+
+

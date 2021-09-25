@@ -8,7 +8,6 @@ if(!isset($_SESSION))
 use Psr\Container\ContainerInterface;
 use App\Models\BaseModel;
 use DateTime;
-use App\Models\UsuarioModel;
 use App\Models\CuotasModel;
 use Psr\Http\Message\UploadedFileInterface;
 
@@ -19,6 +18,8 @@ class CompraModel extends BaseModel
    
     public function getCompra($datos)
     {   
+      try {
+        
         $data='';
         $res=array();
         $res['total_anticipo']=0;
@@ -40,97 +41,73 @@ class CompraModel extends BaseModel
         ";
 
         $where=$this->getWhere($datos);
-       
+        
         $sql.=$where['where'];
         $resData= $this->query($sql,$where['array']);
-        for ($i=0; $i <sizeof($resData) ; $i++) { 
+        $data=$this->getData($resData);
 
-            $data.='<tr>
-            <td>
-              <div class="row contenido-registro">
-                <div class="col-md-4">
-                  <div class="d-flex flex-row">
-                    <div class="d-flex flex-row datos-usuario ps-4"> 
-                      <p class=" monserrat-text pe-2 fs-5">'.$resData[$i]['DIA'].'</p>
-                      <div class="d-flex flex-column"> 
-                      <span class="monserrat-text pe-4 text-secondary">'.$resData[$i]['MES'].'</span>
-                      <span class="ms-5 text-primary">2021</span>
-                      </div>
-                     
-                    </div>
-                    <div class="nombre-usuario d-flex flex-row">
-                      <i class="bi bi-person-circle text-secondary fs-4 pb-5 me-2"></i>
-                      <div class="d-flex flex-column">
-                        <span class="fs-6 fw-bold">'.$resData[$i]['USUARIO'].'</span>
-                        <span class="text-secondary">'.$resData[$i]['ZONA'].'</span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="col-md-4 " >
-                  <div class=" d-flex flex-column datos-gasto mt-3">
-                    <span class="ms-2 mt-2 fs-6">'.$resData[$i]['SUBCATEGORIA'].'</span>
-                    <div class="d-flex flex-row datos-destino">
-                     
-                    </div>
-                  </div>
-                </div>
-                <div class="col-md-4">
-                  <div class="d-flex flex-row justify-content-end mt-2">
-                    <p class="mt-3 ms-3 me-5">'.$resData[$i]['OBSERVACION'].'</p>
-                    <div class="d-flex flex-column">
-                      <h6>$'.$resData[$i]['VALOR'].'</h6>
-                      <p><a href="#" style="text-decoration:none; color: black;">soporte</a> </p>';
-
-                      if ($_SESSION['id_rol']==1) {
-
-                          $data.='<input type="range" min="0" max="1" class="range" id="'.$resData[$i]['ID_REGISTRO'].'" value="'.$resData[$i]['APROBADO'].'" onchange="guardarAprobacion(event)"/>
-                          <div id="popover_'.$resData[$i]['ID_REGISTRO'].'" style="width: 220px; height:150px; background-color: white; position: absolute; left:70%; box-shadow: 0 5px 10px 5px rgb(218, 216, 216); display:none; border-radius: 10px; border: 1px rgb(214, 213, 213) solid;" class="mt-5 " >
-                          <p class="m-2"> Observacion</p>
-                          <textarea class="form-control  m-2 me-2" id="exampleFormControlTextarea1" rows="3"   style="font-size:11px; width:200px;">'.$resData[$i]['OBSERVACION_APROBACION'].'</textarea>
-                          <button type="button" id="button_'.$resData[$i]['ID_REGISTRO'].'" class="btn btn-primary btn-sm ms-2 mt-2" style="font-size:11px;" data-registro="'.$resData[$i]['ID_REGISTRO'].'" onclick="aceptarObservacion('.'button_'.$resData[$i]['ID_REGISTRO'].')"><img src="/assets/images/chulo.png" width="19px"></button>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </td>
-              </tr>';
-                      }
-        }
         
         $res['total_anticipo']=number_format($this->getTotalAnticipo($datos));
         $res['total_gasto']=number_format($this->getTotalAprobado($datos)); 
         $res['saldo']=number_format($this->getTotalAnticipo($datos) - $this->getTotalAprobado($datos));
         $res['datos']=$data;
-       
+        
         return $res;
+
+      } catch (\Throwable $th) {
+        //throw $th;
+      }
     }
     public function setCompra($datos,$datafile)
     {   
-      $user=new UsuarioModel();
+      $respuesta=array();
       $cuotas=new CuotasModel();
-      $dataSaldo=array();
-      $dataUser= $user->getResumeUser();
-      $extencion=$this->obtenerExtencion($datafile['file']);
-      $fechaActual= new DateTime('NOW'); 
-      $ruta="assets/soportes/";
-      
-      $nombre=$_SESSION['id_usuario']."_".$datos['mes']."_".$datos['ano'].".".$extencion;
-      
-      
-      $sql = "
-        INSERT into registro_gasto (ID_USUARIO,ID_CATEGORIA,ID_SUBCATEGORIA,ID_ZONA,PERIODO,ID_MES,ID_ANO,VALOR,IMAGEN,APROBADO,ESTADO,OBSERVACION,FECHA_CREACION,HORA_CREACION,FECHA_MODIFICACION,HORA_MODIFICACION) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);";
+      try {
+           
+          if (!$this->validaFechaCompra($datos)) {
 
-        $resultado = $this->query($sql, array($_SESSION['id_usuario'],$datos['categoria'],$datos['subcategoria'],$dataUser['id_zona'],$datos['mes'],$datos['mes'], $datos['ano'], $datos['valor'],$ruta.$nombre,1,1,$datos['observacion'],$fechaActual->format('y-m-d'),$fechaActual->format('H:m:s'),$fechaActual->format('y-m-d'),$fechaActual->format('H:m:s')));  
+              $respuesta['mensaje']='Se esta ingresando una compra en un periodo vencido';
+              $respuesta['tipo_mensaje']='warning';
 
-        $dataSaldo['zona']=$dataUser['id_zona'];
-        $dataSaldo['ano']=$datos['ano'];
-        $dataSaldo['mes']=$datos['mes'];
-        $dataSaldo['valor']=$datos['valor'];
+          }
+          else if(!$cuotas->validaCuota($datos)){
 
-        $cuotas->insertSaldo($dataSaldo);
-        $sucess=$this->moveUploadedFile($ruta,$datafile['file'],$nombre);
+            $respuesta['mensaje']='El periodo no tiene anticipo registrado';
+            $respuesta['tipo_mensaje']='warning';
+
+          }
+          else {
+            $dataSaldo=array();
+            $extencion=$this->obtenerExtencion($datafile['file']);
+            $fechaActual= new DateTime('NOW');
+            $ruta="assets/soportes/";
+            
+            $nombre=$_SESSION['id_usuario']."_".$datos['mes']."_".$datos['ano'].".".$extencion;
+            
+            
+            $sql = "
+              INSERT into registro_gasto (ID_USUARIO,ID_CATEGORIA,ID_SUBCATEGORIA,ID_ZONA,PERIODO,ID_MES,ID_ANO,VALOR,IMAGEN,APROBADO,ESTADO,OBSERVACION,FECHA_CREACION,HORA_CREACION,FECHA_MODIFICACION,HORA_MODIFICACION) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);";
+
+            $resultado = $this->query($sql, array($_SESSION['id_usuario'],$datos['categoria'],$datos['subcategoria'],$datos['zona'],$datos['mes'],$datos['mes'], $datos['ano'], $datos['valor'],$ruta.$nombre,1,1,$datos['observacion'],$fechaActual->format('y-m-d'),$fechaActual->format('H:m:s'),$fechaActual->format('y-m-d'),$fechaActual->format('H:m:s')));
+
+            $dataSaldo['zona']=$datos['zona'];
+            $dataSaldo['ano']=$datos['ano'];
+            $dataSaldo['mes']=$datos['mes'];
+            $dataSaldo['valor']=$datos['valor'];
+
+            $cuotas->insertSaldo($dataSaldo);
+            $sucess=$this->moveUploadedFile($ruta, $datafile['file'], $nombre);
+            if ($sucess) {
+                $respuesta['mensaje']='La compra ha sido guardada';
+                $respuesta['tipo_mensaje']='success';
+            }
+          }
+
+      } catch (\Throwable $th) {
+        $respuesta['mensaje']='Error al momento de guardar';
+        $respuesta['tipo_mensaje']='warning';
+      }
+      return $respuesta;
     }
 
 
@@ -149,21 +126,23 @@ class CompraModel extends BaseModel
     }
     public function getWhere($datos){
        
-        
-          $array=array($datos['mes'],$datos['ano']);
-          $where=" AND rg.id_mes=? and rg.id_ano=?";
-          if (strlen(trim($datos['usuario']))> 0) {
-              $where.=" AND U.PRIMER_NOMBRE LIKE ? ";
-              array_push($array, "".$datos['usuario']."%");
-          }
-          if (strlen(trim($datos['zona']))> 0) {
-              $where.=" AND z.ID_ZONA=?";
-              array_push($array, $datos['zona']);
-          }
-          if ($_SESSION['id_rol']==3) {
-            $where.=" AND u.ID_USUARIO=?";
-              array_push($array, $_SESSION['id_usuario']);
-          }
+      $array=array($datos['mes'],$datos['ano']);
+      $where=" AND rg.id_mes=? and rg.id_ano=?";
+      if (strlen(trim($datos['usuario']))> 0) {
+
+          $where.=" AND U.PRIMER_NOMBRE LIKE ? ";
+          array_push($array, "".$datos['usuario']."%");
+      }
+      if (strlen(trim($datos['zona']))> 0) {
+
+          $where.=" AND z.ID_ZONA=?";
+          array_push($array, $datos['zona']);
+      }
+      if ($_SESSION['id_rol']==3) {
+
+        $where.=" AND u.ID_USUARIO=?";
+          array_push($array, $_SESSION['id_usuario']);
+      }
      
       $consulta=array();
       $consulta['where']= $where;
@@ -222,6 +201,91 @@ class CompraModel extends BaseModel
     $resData= $this->query($sql,array($datos['observacion_aprobacion'],$datos['id_registro']));
     return $resData;
     
+  }
+  public function validaFechaCompra($datos){
+
+    if($datos['mes'] >= date('m')){
+       return true;
+    }
+    else{
+      $sql="SELECT ID_AUTORIZACION 
+      FROM autorizacion
+      WHERE ID_MES=? and ID_ANO=? and FECHA_LIMITE > current_date";
+      $resData= $this->query($sql,array($datos['mes'],$datos['ano']));
+      
+      if($resData){
+        return true;
+      }
+      else{
+        return false;
+      }
+
+    }
+
+  }
+  
+  public function getData($resData){
+
+    $data='';
+    $disabled='';
+    if ($_SESSION['id_rol']==3 ){ $disabled='disabled';}
+
+    for ($i=0; $i <sizeof($resData) ; $i++) { 
+      $data.='<tr>
+              <td>
+                <div class="row contenido-registro">
+                  <div class="col-md-4">
+                    <div class="d-flex flex-row">
+                      <div class="d-flex flex-row datos-usuario ps-4"> 
+                        <p class=" monserrat-text pe-2 fs-5">'.$resData[$i]['DIA'].'</p>
+                        <div class="d-flex flex-column"> 
+                        <span class="monserrat-text pe-4 text-secondary">'.$resData[$i]['MES'].'</span>
+                        <span class="ms-5 text-primary">2021</span>
+                        </div>
+                        
+                      </div>
+                      <div class="nombre-usuario d-flex flex-row">
+                        <i class="bi bi-person-circle text-secondary fs-4 pb-5 me-2"></i>
+                        <div class="d-flex flex-column">
+                          <span class="fs-6 fw-bold">'.$resData[$i]['USUARIO'].'</span>
+                          <span class="text-secondary">'.$resData[$i]['ZONA'].'</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-4 " >
+                    <div class=" d-flex flex-column datos-gasto mt-3">
+                      <span class="ms-2 mt-2 fs-6">'.$resData[$i]['SUBCATEGORIA'].'</span>
+                      <div class="d-flex flex-row datos-destino">
+                        
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-4">
+                    <div class="d-flex flex-row justify-content-end mt-2">
+                      <p class="mt-3 ms-3 me-5">'.$resData[$i]['OBSERVACION'].'</p>
+                      <div class="d-flex flex-column">
+                        <h6>$'.$resData[$i]['VALOR'].'</h6>
+                        <p><a href="#" style="text-decoration:none; color: black;">soporte</a> </p>';
+
+
+
+        $data.='
+        <div height:20px; width:20px; background-color:red;><input type="range" min="0" max="1" class="range" id="'.$resData[$i]['ID_REGISTRO'].'" value="'.$resData[$i]['APROBADO'].'" onchange="guardarAprobacion(event)" '.$disabled.'/></div>
+
+              <div id="popover_'.$resData[$i]['ID_REGISTRO'].'" style="width: 220px; height:150px; background-color: white; position: absolute; left:70%; box-shadow: 0 5px 10px 5px rgb(218, 216, 216); display:none; border-radius: 10px; border: 1px rgb(214, 213, 213) solid;" class="mt-5 " >
+
+              <p class="m-2"> Observacion</p>
+
+             <textarea class="form-control  m-2 me-2" id="exampleFormControlTextarea1" rows="3"       style="font-size:11px; width:200px;" '.$disabled.'>'.$resData[$i]['OBSERVACION_APROBACION'].'
+            </textarea>
+
+            <button type="button" id="button_'.$resData[$i]['ID_REGISTRO'].'" class="btn btn-primary btn-sm   ms-2 mt-2" style="font-size:11px;" data-registro="'.$resData[$i]['ID_REGISTRO'].'" onclick="aceptarObservacion('.'button_'.$resData[$i]['ID_REGISTRO'].')">
+            <img src="/assets/images/chulo.png" width="19px">
+            </button></div></div></div></div></div></td></tr>';
+      
+    }
+      return $data;
   }
   
 }

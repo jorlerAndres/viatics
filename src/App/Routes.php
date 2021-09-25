@@ -25,6 +25,7 @@ $app->group('/api', function (RouteCollectorProxy $group) {
     $group->post('/compra/setAprobacion', 'App\Controllers\CompraController:setAprobacion')->setName('setAprobacion');
     $group->post('/compra/setObservacion', 'App\Controllers\CompraController:setObservacion')->setName('setObservacion');
     
+    $group->post('/autorizacion/set', 'App\Controllers\AutorizacionController:setAutorizacion')->setName('setAutorizacion');
     $group->post('/usuario/set', 'App\Controllers\UsuarioController:setUser')->setName('setUser');
     $group->post('/usuario/get', 'App\Controllers\UsuarioController:getUser')->setName('getUser');
    
