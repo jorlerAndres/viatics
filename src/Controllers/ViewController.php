@@ -45,6 +45,8 @@ class ViewController
             'categorias'=>$this->getCategorias(),
             'subcategorias'=>$this->getSubcategorias(),
             'cuotasZonas'=>$this->getCuotasZonas(),
+            'conteousuarios'=>$this->getCountUsers(),
+            'rol'=>$_SESSION['id_rol'],
             'meses'=>$this->getMeses()
             
             ])
@@ -56,6 +58,11 @@ class ViewController
         $user=new UsuarioModel();
         return $user->getResumeUser();
     }
+    public function getCountUsers(){
+        $user=new UsuarioModel();
+        return $user->getCountUsers(); 
+    }
+
     public function getZonas(){
         $zonas=new ZonasModel();
         return $zonas->getZonas();

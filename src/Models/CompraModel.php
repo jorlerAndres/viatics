@@ -27,7 +27,8 @@ class CompraModel extends BaseModel
         $sql = "
         SELECT RG.ID_REGISTRO, Z.NOMBRE as ZONA, CA.SALDO, RG.VALOR,CONCAT(U.PRIMER_NOMBRE, ' ' , U.PRIMER_APELLIDO) as USUARIO,
         C.NOMBRE as CATEGORIA,S.NOMBRE as SUBCATEGORIA,RG.FECHA_CREACION AS FECHA_COMPRA,format(RG.VALOR,0)as VALOR,RG.IMAGEN,
-        CASE WHEN RG.OBSERVACION IS NULL THEN 'Sin Observacion'  ELSE RG.OBSERVACION END as OBSERVACION, M.NOMBRE as MES, EXTRACT(DAY FROM RG.FECHA_CREACION) AS DIA,EXTRACT(YEAR FROM RG.FECHA_CREACION) AS ANO,(select valor from cuota_anticipo where id_cuota=ca.id_cuota) as TOTAL_ANTICIPO
+        CASE WHEN RG.OBSERVACION IS NULL THEN 'Sin Observacion'  ELSE RG.OBSERVACION END as OBSERVACION, M.NOMBRE as MES, EXTRACT(DAY FROM RG.FECHA_CREACION) AS DIA,EXTRACT(YEAR FROM RG.FECHA_CREACION) AS ANO,
+        RG.APROBADO,RG.OBSERVACION_APROBACION
         FROM registro_gasto rg 
         JOIN zonas z           on rg.id_zona=z.id_zona
         JOIN usuarios u        on u.id_usuario=rg.id_usuario
@@ -35,7 +36,7 @@ class CompraModel extends BaseModel
         JOIN subcategoria s    on s.id_subcategoria=rg.id_subcategoria
         JOIN meses m           on m.id_mes=rg.id_mes
         JOIN cuota_anticipo ca on ca.id_zona=rg.id_zona and ca.id_mes=rg.id_mes and ca.id_ano=rg.id_ano 
-        WHERE true
+        WHERE RG.ESTADO=1
         ";
 
         $where=$this->getWhere($datos);
@@ -79,17 +80,25 @@ class CompraModel extends BaseModel
                     <p class="mt-3 ms-3 me-5">'.$resData[$i]['OBSERVACION'].'</p>
                     <div class="d-flex flex-column">
                       <h6>$'.$resData[$i]['VALOR'].'</h6>
-                      <p><a href="#" style="text-decoration:none; color: black;">soporte</a> </p>
-                      <input type="range" min="0" max="1" class="range" id="'.$resData[$i]['ID_REGISTRO'].'"/>
+                      <p><a href="#" style="text-decoration:none; color: black;">soporte</a> </p>';
+
+                      if ($_SESSION['id_rol']==1) {
+
+                          $data.='<input type="range" min="0" max="1" class="range" id="'.$resData[$i]['ID_REGISTRO'].'" value="'.$resData[$i]['APROBADO'].'" onchange="guardarAprobacion(event)"/>
+                          <div id="popover_'.$resData[$i]['ID_REGISTRO'].'" style="width: 220px; height:150px; background-color: white; position: absolute; left:70%; box-shadow: 0 5px 10px 5px rgb(218, 216, 216); display:none; border-radius: 10px; border: 1px rgb(214, 213, 213) solid;" class="mt-5 " >
+                          <p class="m-2"> Observacion</p>
+                          <textarea class="form-control  m-2 me-2" id="exampleFormControlTextarea1" rows="3"   style="font-size:11px; width:200px;">'.$resData[$i]['OBSERVACION_APROBACION'].'</textarea>
+                          <button type="button" id="button_'.$resData[$i]['ID_REGISTRO'].'" class="btn btn-primary btn-sm ms-2 mt-2" style="font-size:11px;" data-registro="'.$resData[$i]['ID_REGISTRO'].'" onclick="aceptarObservacion('.'button_'.$resData[$i]['ID_REGISTRO'].')"><img src="/assets/images/chulo.png" width="19px"></button>
+                          </div>
+                        </div>
+                      </div>
                     </div>
                   </div>
-                </div>
-              </div>
-            </td>
-          </tr>';
-          $data.="";
+                </td>
+              </tr>';
+                      }
         }
-        $res['datos']=$data;
+        
         $res['total_anticipo']=number_format($this->getTotalAnticipo($datos));
         $res['total_gasto']=number_format($this->getTotalAprobado($datos)); 
         $res['saldo']=number_format($this->getTotalAnticipo($datos) - $this->getTotalAprobado($datos));
@@ -113,13 +122,13 @@ class CompraModel extends BaseModel
       $sql = "
         INSERT into registro_gasto (ID_USUARIO,ID_CATEGORIA,ID_SUBCATEGORIA,ID_ZONA,PERIODO,ID_MES,ID_ANO,VALOR,IMAGEN,APROBADO,ESTADO,OBSERVACION,FECHA_CREACION,HORA_CREACION,FECHA_MODIFICACION,HORA_MODIFICACION) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);";
 
-        $resultado = $this->query($sql, array($_SESSION['id_usuario'],$datos['categoria'],$datos['subcategoria'],$dataUser['id_zona'],$datos['mes'],$datos['mes'], $datos['ano'], $datos['valor'],$ruta.$nombre,'SI',1,$datos['observacion'],$fechaActual->format('y-m-d'),$fechaActual->format('H:m:s'),$fechaActual->format('y-m-d'),$fechaActual->format('H:m:s')));  
+        $resultado = $this->query($sql, array($_SESSION['id_usuario'],$datos['categoria'],$datos['subcategoria'],$dataUser['id_zona'],$datos['mes'],$datos['mes'], $datos['ano'], $datos['valor'],$ruta.$nombre,1,1,$datos['observacion'],$fechaActual->format('y-m-d'),$fechaActual->format('H:m:s'),$fechaActual->format('y-m-d'),$fechaActual->format('H:m:s')));  
 
         $dataSaldo['zona']=$dataUser['id_zona'];
         $dataSaldo['ano']=$datos['ano'];
         $dataSaldo['mes']=$datos['mes'];
         $dataSaldo['valor']=$datos['valor'];
-      
+
         $cuotas->insertSaldo($dataSaldo);
         $sucess=$this->moveUploadedFile($ruta,$datafile['file'],$nombre);
     }
@@ -139,20 +148,22 @@ class CompraModel extends BaseModel
         return $extension;
     }
     public function getWhere($datos){
-
-      
-      $array=array($datos['mes'],$datos['ano']);
-      $where=" AND rg.id_mes=? and rg.id_ano=?";
-      if( strlen(trim($datos['usuario']))> 0){
-
-        $where.=" AND U.PRIMER_NOMBRE LIKE ? ";
-        array_push($array,"".$datos['usuario']."%");
-      }
-       if( strlen(trim($datos['zona']))> 0){
-
-        $where.=" AND z.id_ZONA=?";
-        array_push($array,$datos['zona']);
-      }  
+       
+        
+          $array=array($datos['mes'],$datos['ano']);
+          $where=" AND rg.id_mes=? and rg.id_ano=?";
+          if (strlen(trim($datos['usuario']))> 0) {
+              $where.=" AND U.PRIMER_NOMBRE LIKE ? ";
+              array_push($array, "".$datos['usuario']."%");
+          }
+          if (strlen(trim($datos['zona']))> 0) {
+              $where.=" AND z.ID_ZONA=?";
+              array_push($array, $datos['zona']);
+          }
+          if ($_SESSION['id_rol']==3) {
+            $where.=" AND u.ID_USUARIO=?";
+              array_push($array, $_SESSION['id_usuario']);
+          }
      
       $consulta=array();
       $consulta['where']= $where;
@@ -165,7 +176,7 @@ class CompraModel extends BaseModel
           from registro_gasto rg
           join zonas z    on z.id_zona=rg.id_zona
           join usuarios u on u.id_usuario=rg.id_usuario 
-          WHERE true";
+          WHERE rg.aprobado=1 and rg.estado=1";
 
     $where=$this->getWhere($datos);
         
@@ -190,10 +201,27 @@ class CompraModel extends BaseModel
 
     $sql="UPDATE registro_gasto set aprobado=?
           WHERE id_registro=?";
-
-    $resData= $this->query($sql,array($datos['aprobacion'],$datos['id_registro']));
+    $res=array();
+    $this->query($sql,array($datos['aprobacion'],$datos['id_registro']));
     $cuotas=new CuotasModel();
     $cuotas->insertSaldo($datos);
+
+    $res['total_anticipo']=number_format($this->getTotalAnticipo($datos));
+    $res['total_gasto']=number_format($this->getTotalAprobado($datos)); 
+    $res['saldo']=number_format($this->getTotalAnticipo($datos) - $this->getTotalAprobado($datos));
+
+    return $res;
+
+  }
+
+  public function setObservacion($datos){
+
+    $sql="UPDATE registro_gasto set observacion_aprobacion=?
+          WHERE id_registro=?";
+
+    $resData= $this->query($sql,array($datos['observacion_aprobacion'],$datos['id_registro']));
+    return $resData;
+    
   }
   
 }

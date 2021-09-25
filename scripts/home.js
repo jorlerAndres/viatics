@@ -6,6 +6,12 @@ var zonabusqueda=document.getElementById('zona_busqueda');
 var usuariobusqueda=document.getElementById('usuario_busqueda');
 var formularioUsuario=document.getElementById('formulario_usuario');
 var fecharegistro=document.getElementById('fecha_registro');
+var anticipoglobal=document.getElementById('anticipo_global');
+var gastoaprobado=document.getElementById('gasto_aprobado');
+var saldo=document.getElementById('saldo');
+var div_zonausuario=document.getElementById('div_zonausuario');
+var zona_usuario=document.getElementById('usuario_zona').value;
+var rol_usuario=document.getElementById('usuario_rol').value;
 
 var zona='';
 var mes='';
@@ -14,11 +20,8 @@ var subcategoria='';
 
 document.addEventListener("DOMContentLoaded", function () {
   
-  
-  
   for (let i = 0; i < div_zonas.children.length; i++) {
        var div_zonaprueba=div_zonas.children[i].lastElementChild.firstElementChild;
-       console.log(div_zonaprueba);
        div_zonaprueba.style.backgroundImage=`url('${div_zonaprueba.getAttribute("data-imagen")}')`; 
   }
 
@@ -32,8 +35,14 @@ document.addEventListener("DOMContentLoaded", function () {
       var div_subcategoria=div_subcategorias.children[i].firstElementChild;
       div_subcategoria.setAttribute("src", div_subcategoria.getAttribute("data-imagen"));
   }
+  zonabusqueda.value = zona_usuario;
+  console.log(zonabusqueda.value);
+  if(rol_usuario == 3){
+    div_zonausuario.classList.add('invisible');
+  }
   ponerMesActual();
   cargarzonas();
+  cargartabla();
 })
 
 function ponerMesActual(){
@@ -61,7 +70,6 @@ function seleccionMes(e)
   mes=document.getElementById(e);
   mes.style.boxShadow="0 0 12px rgb(214, 216, 216)";
   mes.firstElementChild.style.color="blue";
-  console.log(mes);
 }
 
 function seleccionZona(e)
@@ -114,55 +122,69 @@ function SeleccionSubcategoria(e)
 
 
 function guardarAnticipo(e){
-  console.log("zona:"+zona.id);
-  var formData = new FormData();
-  formData.append("zona", zona.id); 
-  formData.append("mes", mes.id); 
-  formData.append("valor", document.getElementById('valor_cargarcuotas').value); 
-  formData.append("ano", new Date().getFullYear()); 
-   fetch(host+'/api/cuotas/set',{
-      
-    method: "POST",
-    body: formData,
-  })
-  .then(response => response.json())
-  .then(data => {
+console.log(zona);
+  if(zona == '' || mes == ''){
+    swal('Por favor registre todos los campos');
+   }
+   else{
+    var formData = new FormData();
+    formData.append("zona", zona.id); 
+    formData.append("mes", mes.id); 
+    formData.append("valor", document.getElementById('valor_cargarcuotas').value); 
+    formData.append("ano", new Date().getFullYear()); 
+     fetch(host+'/api/cuotas/set',{
+        
+      method: "POST",
+      body: formData,
+    })
+    .then(response => response.json())
+    .then(data => {
+  
+    })
+    .catch(function(error) {
+      return error;
+    }) 
+    swal('Registro Exitoso','el anticipo ha sido adicionado','success');
 
-  })
-  .catch(function(error) {
-    return error;
-  }) 
-  swal('Registro Exitoso','el anticipo ha sido adicionado','success');
+   }
+
 }
 
 function guardarCompra(){
+
   var periodo = document.getElementById('periodo_gasto').value.split('-',);
-
   var fileUP=document.getElementById('file_soporte')
-  var formData = new FormData();
-  formData.append("categoria", categoria.id); 
-  formData.append("subcategoria", subcategoria.id); 
-  formData.append("valor", document.getElementById('valor_gasto').value); 
-  formData.append("observacion", document.getElementById('observacion_registros').value);
-  formData.append("periodo", document.getElementById('periodo_gasto').value); 
-  formData.append("mes", periodo[1])
-  formData.append("ano", periodo[0]);
-  formData.append("file", fileUP.files[0]);
-  formData.append("nombre_archivo", fileUP.files[0].name); 
-   fetch(host+'/api/compra/set',{
-      
-    method: "POST",
-    body: formData,
-  })
-  .then(response => response.json())
-  .then(data => {
-   
 
-  })
-  .catch(function(error) {
-    return error;
-  }) 
-  swal('Registro Exitoso','La Compra ha sido adicionada','success'); 
+  if( fileUP.value=='' || categoria=='' || subcategoria =='' ){
+    swal('Por favor diligencie todos los campos'); 
+
+  }
+  else{
+    var formData = new FormData();
+    formData.append("categoria", categoria.id); 
+    formData.append("subcategoria", subcategoria.id); 
+    formData.append("valor", document.getElementById('valor_gasto').value); 
+    formData.append("observacion", document.getElementById('observacion_registros').value);
+    formData.append("periodo", document.getElementById('periodo_gasto').value); 
+    formData.append("mes", periodo[1])
+    formData.append("ano", periodo[0]);
+    formData.append("file", fileUP.files[0]);
+    formData.append("nombre_archivo", fileUP.files[0].name); 
+    fetch(host+'/api/compra/set',{
+        
+      method: "POST",
+      body: formData,
+    })
+    .then(response => response.json())
+    .then(data => {
+    
+
+    })
+    .catch(function(error) {
+      return error;
+    }) 
+    swal('Registro Exitoso','La Compra ha sido adicionada','success'); 
+  }
 }
 function cargarzonas(){
 
@@ -190,6 +212,11 @@ usuariobusqueda.addEventListener("keyup", function () {
 
 })
 
+fecharegistro.addEventListener("change", function () {
+  cargartabla();
+
+})
+
  async function cargartabla(){
   var tbody=document.getElementById('tbody');
   var periodo = document.getElementById('fecha_registro').value.split('-',);
@@ -206,20 +233,14 @@ usuariobusqueda.addEventListener("keyup", function () {
   .then(response => response.json())
   .then(data => {
     tbody.innerHTML=data['datos'];
-    console.log(data['total_anticipo']);
-    var anticipoglobal=document.getElementById('anticipo_global');
     anticipoglobal.innerText=data['total_anticipo'];
-
-    var gastoaprobado=document.getElementById('gasto_aprobado');
     gastoaprobado.innerText=data['total_gasto'];
-
-    var saldo=document.getElementById('saldo');
     saldo.innerText=data['saldo'];
   })
   .catch(function(error) {
     return error;
   }) 
- 
+  rangeVisible();
 }
 
 formulario_busquedausuario.onsubmit = async (e) => {
@@ -232,7 +253,6 @@ formulario_busquedausuario.onsubmit = async (e) => {
 
   let result = await response.json();
   
-  console.log(result['id_usuario']);
   document.getElementById('id_usuario').value=result['ID_USUARIO'];
   document.getElementById('nombres_usuario').value=result['PRIMER_NOMBRE']+" "+result['SEGUNDO_NOMBRE'];
   document.getElementById('apellidos_usuario').value=result['PRIMER_APELLIDO']+" "+result['SEGUNDO_APELLIDO'];
@@ -258,7 +278,7 @@ formularioUsuario.onsubmit = async (e) => {
 
   //alert(result.message);
 };
-function guardarAprobacion(e){
+async function guardarAprobacion(e){
 
   var formData = new FormData();
   var periodo = document.getElementById('fecha_registro').value.split('-',);
@@ -267,9 +287,50 @@ function guardarAprobacion(e){
   formData.append("usuario",usuariobusqueda.value); 
   formData.append("ano",periodo[0]); 
   formData.append("mes",periodo[1]);
-  formData.append("id_registro",e.getAttribute("data-registro"));
+  formData.append("id_registro",e.target.id);
+  formData.append("aprobacion",e.target.value);
+  let response = await fetch(host+'/api/compra/setAprobacion', {
+    method: 'POST',
+    body: formData
+  });
+  /* 
+   await fetch(host+'/api/compra/setAprobacion',{
+     
+    method: "POST",
+    body: formData,
+  })
+  .then(response => response.json())
+  .then(data => {
+   
+    anticipoglobal.innerText=data['total_anticipo'];
 
-   fetch(host+'/api/compra/aprobacion',{
+    gastoaprobado.innerText=data['total_gasto'];
+
+    saldo.innerText=data['saldo'];
+    console.log(saldo);
+  })
+  .catch(function(error) {
+    return error;
+  })  */
+  let result = await response.json();
+  anticipoglobal.innerText=result['total_anticipo'];
+  gastoaprobado.innerText=result['total_gasto'];
+  saldo.innerText=result['saldo'];
+  console.log(result);
+  rangeVisible();
+}
+
+function aceptarObservacion(e){
+
+  e.parentNode.style.display="none";
+
+  var formData = new FormData();
+  var periodo = document.getElementById('fecha_registro').value.split('-',);
+  var formData = new FormData();
+  formData.append("observacion_aprobacion",e.previousElementSibling.value); 
+  formData.append("id_registro",e.getAttribute("data-registro")); 
+
+  fetch(host+'/api/compra/setObservacion',{
       
     method: "POST",
     body: formData,
@@ -281,5 +342,28 @@ function guardarAprobacion(e){
   .catch(function(error) {
     return error;
   }) 
-  
+
+}
+function rangeVisible(){
+
+  var range=document.querySelectorAll(".range");
+  range.forEach(element => {
+
+    element.addEventListener('change', function(){
+
+      var popover=document.getElementById("popover_"+element.id);
+      popover.style.display="block";
+
+    })
+    element.addEventListener('mouseover', function(){
+    var popover=document.getElementById("popover_"+element.id);
+      if(element.value==0){
+        popover.style.display="block";
+      }
+      else{
+        popover.style.display="none";
+      }
+    })
+
+  });
 }

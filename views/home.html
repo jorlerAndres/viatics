@@ -32,6 +32,7 @@
             </button>
             <div class="collapse navbar-collapse menu" id="navbarSupportedContent">
             <ul class=" nav navbar-nav  flex-column me-auto mb-2 mb-lg-0 mt-1" role="tablist" >
+              {% if usuarios.id_rol != 3 %}
               <li class="nav-item" id="cuotasZonas-tab" role="presentation" onclick="cargarzonas()">
                 <a class="nav-link" data-bs-toggle="tab" data-bs-target="#cuotasZonas"  aria-current="cuotasZonas" role="tablist" aria-controls="cuotasZonas" aria-selected="true" href="#" style="text-align: right;">
                   <p style="margin-right: 20px;">Total de Anticipos por Zonas</p>
@@ -52,6 +53,7 @@
                   <div style="width: 79%; height: 0.2em; background-image: linear-gradient(to right, #5310fd, #dfd8f7);  right: 0; margin-left: 20px;" class="mb-5"></div>
                 </a>
               </li>
+              {% endif %}
               <li class="nav-item" id="registro-tab" role="presentation">
                 <a class="nav-link" data-bs-toggle="tab" data-bs-target="#cargarcompra"  aria-current="cargarcompra" role="tablist" aria-controls="cargarcompra" aria-selected="true" href="#">
                   {# <div class="icono-sidenav"><i class="bi bi-person h6"></i></div> #}

@@ -37,7 +37,18 @@ class CompraController
     {   
         $datos=(array)$request->getParsedBody();
         $C = new CompraModel();
-        $response->getBody()->write(json_encode($C->setAprobacion($datos,)));
+        $response->getBody()->write(json_encode($C->setAprobacion($datos)));
+        return $response
+            ->withHeader('Access-Control-Allow-Origin', "*")
+            ->withHeader('Content-Type', 'application/json')
+            ->withStatus(200);
+    }
+
+    public function setObservacion(Request $request, Response $response, $arg)
+    {   
+        $datos=(array)$request->getParsedBody();
+        $C = new CompraModel();
+        $response->getBody()->write(json_encode($C->setObservacion($datos)));
         return $response
             ->withHeader('Access-Control-Allow-Origin', "*")
             ->withHeader('Content-Type', 'application/json')

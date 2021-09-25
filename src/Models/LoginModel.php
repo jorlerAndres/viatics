@@ -19,14 +19,14 @@ class LoginModel extends BaseModel
         $fechaActual= new DateTime('NOW');
         $res = array();
         $sql = "
-        SELECT u.id_usuario FROM `usuarios` as u
+        SELECT u.ID_USUARIO,ID_ROL FROM `usuarios` as u
         where u.usuario=?  and u.password=?";
         //var_dump($datos);
         $resultado = $this->query($sql, array($datos['user'], $datos['contrasena']));
         if(sizeof($resultado)==1){
            
-            $_SESSION['ingreso_id'] = 1;
-            $_SESSION['id_usuario'] = $resultado[0]['id_usuario'];
+            $_SESSION['id_rol'] = $resultado[0]['ID_ROL'];
+            $_SESSION['id_usuario'] = $resultado[0]['ID_USUARIO'];
             $res["id"] = $_SESSION['id_usuario'];
             $res["alert"] = "success";
             $res["mensaje"] = "Te damos la bienvenida!";

@@ -90,7 +90,6 @@ class CuotasModel extends BaseModel
         UPDATE cuota_anticipo set SALDO = (valor - $saldo)
         where ID_ZONA=? and ID_ANO=? and ID_MES=? ";
         $resultado = $this->query($sql, array($datos['zona'],$datos['ano'],$datos['mes']));
-        var_dump($resultado);
         return $resultado; 
     }
 
@@ -100,7 +99,7 @@ class CuotasModel extends BaseModel
                 from registro_gasto 
                 where ID_ZONA=? and ID_ANO=? and ID_MES=? and APROBADO=? and ESTADO=? ";
 
-        $resultado = $this->query($sql, array($datos['zona'],$datos['ano'],$datos['mes'],"SI",1));
+        $resultado = $this->query($sql, array($datos['zona'],$datos['ano'],$datos['mes'],1,1));
         return $resultado[0]['valor'];
     }
 

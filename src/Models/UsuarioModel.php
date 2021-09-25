@@ -85,4 +85,16 @@ class UsuarioModel extends BaseModel
         
         return  $datos['telefono_usuario']; 
     }
+    public function getCountUsers() 
+    {  
+
+        $sql = "SELECT COUNT(ID_USUARIO) as TOTAL_USUARIOS,
+                (SELECT COUNT(ID_USUARIO) FROM usuarios WHERE ESTADO=1) as ACTIVOS,
+                (SELECT COUNT(ID_USUARIO) FROM usuarios WHERE ESTADO=0) as INACTIVOS
+                FROM usuarios";
+
+         $resUser= $this->query($sql); 
+        
+        return  $resUser[0]; 
+    }
 }

@@ -23,8 +23,10 @@
         <div class="card card-registros">
             <div class="card-header">
               <div class="d-flex flex-row">
-                <div class="col-md-7 mt-3 inputGroupContainer d-flex flex-row">
+                <div class="col-md-7 mt-3 inputGroupContainer d-flex flex-row" id="div_zonausuario">
                   <div class="input-group mb-3 me-3 w-50">
+                    <input type="hidden" value="{{usuarios.id_rol}}" id="usuario_rol">
+                    <input type="hidden" value="{{usuarios.id_zona}}" id="usuario_zona">
                     <span class="input-group-text" id="basic-addon1"><i class="bi bi-person text-secondary"></i></span>
                     <input type="text" class="form-control w-25" placeholder="Usuario" aria-label="Username" aria-describedby="basic-addon1" id="usuario_busqueda" autocomplete="off">
                   </div>
@@ -39,6 +41,7 @@
                    </select>
                   </div>
                 </div>
+                
                 <div class="mt-3" style="margin-left: 150px;">
                   <input type="month" name="fecha_registro" id="fecha_registro" class="form-control" value="2015-07">
                 </div>
