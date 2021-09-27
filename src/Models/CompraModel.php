@@ -29,7 +29,7 @@ class CompraModel extends BaseModel
         SELECT RG.ID_REGISTRO, Z.NOMBRE as ZONA, CA.SALDO, RG.VALOR,CONCAT(U.PRIMER_NOMBRE, ' ' , U.PRIMER_APELLIDO) as USUARIO,
         C.NOMBRE as CATEGORIA,S.NOMBRE as SUBCATEGORIA,RG.FECHA_CREACION AS FECHA_COMPRA,format(RG.VALOR,0)as VALOR,RG.IMAGEN,
         CASE WHEN RG.OBSERVACION IS NULL THEN 'Sin Observacion'  ELSE RG.OBSERVACION END as OBSERVACION, M.NOMBRE as MES, EXTRACT(DAY FROM RG.FECHA_CREACION) AS DIA,EXTRACT(YEAR FROM RG.FECHA_CREACION) AS ANO,
-        RG.APROBADO,RG.OBSERVACION_APROBACION
+        RG.APROBADO,RG.OBSERVACION_APROBACION,RG.IMAGEN
         FROM registro_gasto rg 
         JOIN zonas z           on rg.id_zona=z.id_zona
         JOIN usuarios u        on u.id_usuario=rg.id_usuario
@@ -255,7 +255,8 @@ class CompraModel extends BaseModel
                   </div>
                   <div class="col-md-4 " >
                     <div class=" d-flex flex-column datos-gasto mt-3">
-                      <span class="ms-2 mt-2 fs-6">'.$resData[$i]['SUBCATEGORIA'].'</span>
+                    <span class="ms-2 mt-2 fs-6 fw-bold">'.$resData[$i]['CATEGORIA'].'</span>
+                      <span class="ms-2  fs-6">'.$resData[$i]['SUBCATEGORIA'].'</span>
                       <div class="d-flex flex-row datos-destino">
                         
                       </div>
@@ -266,7 +267,9 @@ class CompraModel extends BaseModel
                       <p class="mt-3 ms-3 me-5">'.$resData[$i]['OBSERVACION'].'</p>
                       <div class="d-flex flex-column">
                         <h6>$'.$resData[$i]['VALOR'].'</h6>
-                        <p><a href="#" style="text-decoration:none; color: black;">soporte</a> </p>';
+                        <button type="button" class="boton-soporte" data-imagen="'.$resData[$i]['IMAGEN'].'" onclick="mostrarImagen(event)">
+  soporte
+</button>';
 
 
 

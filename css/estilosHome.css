@@ -462,6 +462,27 @@ input[type=range]{
   letter-spacing: 0.1em; 
   color:rgb(192, 189, 189)
 }
+#imagen_modal{
+  max-width: 750px;
+}
+.boton-soporte{
+  width: 60px;
+  height: 20px;
+  background-color: white;
+  border:1px rgb(224, 221, 221) solid;
+  content: "Factura";
+  border-radius: 6px;
+  margin-bottom: 15px;
+ text-align: center;
+  color: #7263f8;
+  padding-bottom: 10px;
+  
+}
+.boton-soporte:hover{
+
+  background-color: #e4e0e0;
+  color:black;
+}
 @media (max-width: 600px) {
 
   .segundacolumna{

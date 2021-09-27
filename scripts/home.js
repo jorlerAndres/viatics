@@ -14,6 +14,7 @@ var div_zonausuario=document.getElementById('div_zonausuario');
 var zona_usuario=document.getElementById('usuario_zona').value;
 var rol_usuario=document.getElementById('usuario_rol').value;
 
+
 var zona='';
 var mes='';
 var categoria='';
@@ -362,6 +363,16 @@ function aceptarObservacion(e){
   .catch(function(error) {
     return error;
   }) 
+
+}
+
+function mostrarImagen(e){
+
+  var modal=new bootstrap.Modal(document.getElementById('myModal'))
+   imagen_modal=document.getElementById('imagen_modal');
+  imagen_modal.setAttribute("src", e.target.getAttribute("data-imagen")); 
+  modal.show();
+  console.log(modal);
 
 }
 function rangeVisible(){
