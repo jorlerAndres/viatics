@@ -60,7 +60,8 @@ class UsuarioModel extends BaseModel
     }
 
     public function insertUser($datos) 
-    {
+    {   
+        $respuesta=array();
         $fechaActual= new DateTime('NOW');
         $nombres=explode(' ',$datos['nombres_usuario']);
         $segundo_nombre = sizeof($nombres) > 1 ? $nombres[1] : '';
@@ -70,20 +71,25 @@ class UsuarioModel extends BaseModel
          INSERT INTO `usuarios` (ID_USUARIO,`CEDULA`, `PRIMER_NOMBRE`, `SEGUNDO_NOMBRE`, `PRIMER_APELLIDO`, `SEGUNDO_APELLIDO`, `EMAIL`, `TELEFONO`, `IMAGEN_PERFIL`, `ID_ZONA`, `ESTADO`, `VEHICULO`, `NUMERO_TARJETA_VIATICO`, `IMAGEN_TARJETA_VIATICO`, `USUARIO`, `PASSWORD`, `ID_ROL`, `HABILITADO`, `FECHA_CREACION`, `FECHA_MODIFICACION`) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 
 
-         $resUser= $this->query($sql,array( 1012,$datos['cedula_usuario'], $nombres[0],$segundo_nombre,$apellidos[0],$segundo_apellido,$datos['mail_usuario'],$datos['telefono_usuario'],'',$datos['zona_usuario'],$datos['estado_usuario'],$datos['vehiculo_usuario'],$datos['tarjeta_usuario'],'',$datos['cedula_usuario'],$datos['contrasena_usuario'],$datos['rol_usuario'],$datos['estado_usuario'],$fechaActual->format('y-m-d'),$fechaActual->format('y-m-d'))); 
+         $resUser= $this->query($sql,array( 1003,$datos['cedula_usuario'], $nombres[0],$segundo_nombre,$apellidos[0],$segundo_apellido,$datos['mail_usuario'],$datos['telefono_usuario'],'',$datos['zona_usuario'],$datos['estado_usuario'],$datos['vehiculo_usuario'],$datos['tarjeta_usuario'],'',$datos['cedula_usuario'],$datos['contrasena_usuario'],$datos['rol_usuario'],$datos['estado_usuario'],$fechaActual->format('y-m-d'),$fechaActual->format('y-m-d'))); 
         
-        return  $resUser; 
+         $respuesta['mensaje']='El usuario ha sido guardado';
+         $respuesta['tipo_mensaje']='success';
+        return  $respuesta; 
     }
 
     public function UpdateUser($datos) 
     {  
         $fechaActual= new DateTime('NOW');
-
+        
         $sql = "UPDATE  `usuarios` SET `CEDULA`=?,  `EMAIL`=?, `TELEFONO`=?, `IMAGEN_PERFIL`=?, `ID_ZONA`=?, `ESTADO`=?, `VEHICULO`=?, `NUMERO_TARJETA_VIATICO`=?, `IMAGEN_TARJETA_VIATICO`=?, `PASSWORD`=?, ID_ROL=?,`FECHA_MODIFICACION`=? WHERE ID_USUARIO=?";
 
          $resUser= $this->query($sql,array($datos['cedula_usuario'],$datos['mail_usuario'],$datos['telefono_usuario'],'',$datos['zona_usuario'],$datos['estado_usuario'],$datos['vehiculo_usuario'],$datos['tarjeta_usuario'],'',$datos['contrasena_usuario'],$datos['rol_usuario'],$fechaActual->format('y-m-d'),$datos['id_usuario'])); 
+
+         $respuesta['mensaje']='El usuario ha sido actualizado';
+         $respuesta['tipo_mensaje']='success';
         
-        return  $datos['telefono_usuario']; 
+        return  $respuesta; 
     }
     public function getCountUsers() 
     {  

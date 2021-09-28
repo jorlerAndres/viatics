@@ -16,7 +16,7 @@ class ZonasModel extends BaseModel
     {   
         $res='';
         $sql = "
-        SELECT id_zona,nombre,imagen
+        SELECT id_zona,nombre,imagen,departamento
         from zonas AS z";
         
         $resData= $this->query($sql,array());

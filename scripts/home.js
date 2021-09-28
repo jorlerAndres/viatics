@@ -35,10 +35,7 @@ document.addEventListener("DOMContentLoaded", function () {
       div_categoria.setAttribute("src", div_categoria.getAttribute("data-imagen"));
   }
 
-  for (let i = 0; i < div_subcategorias.children.length; i++) {
-      var div_subcategoria=div_subcategorias.children[i].firstElementChild;
-      div_subcategoria.setAttribute("src", div_subcategoria.getAttribute("data-imagen"));
-  }
+  
   zonabusqueda.value = zona_usuario;
   console.log(zonabusqueda.value);
   if(rol_usuario == 3){
@@ -47,6 +44,7 @@ document.addEventListener("DOMContentLoaded", function () {
   ponerMesActual();
   cargarzonas();
   cargartabla();
+  imagenSubcategorias();
 })
 
 function ponerMesActual(){
@@ -106,6 +104,40 @@ function seleccionCategoria(e)
   categoria.style.borderColor="rgba(35, 35, 248, 0.308)";
   categoria.style.boxShadow="0px 0px 0px 0px rgb(250, 249, 249)";
 
+  traerSubcategorias();
+}
+
+async function traerSubcategorias(e)
+{
+  var formData = new FormData();
+  formData.append("categoria", categoria.id); 
+
+   await fetch(host+'/api/subcategoria/get',{
+      
+    method: "POST",
+    body: formData,
+  })
+  .then(response => response.json())
+  .then(data => {
+    var div_subcategoria=document.getElementById('subcategorias');
+    div_subcategoria.innerHTML='';
+    div_subcategoria.innerHTML=data;
+    imagenSubcategorias();
+    
+  })
+  .catch(function(error) {
+    return error;
+  }) 
+
+}
+
+function imagenSubcategorias(){
+
+  for (let i = 0; i < div_subcategorias.children.length; i++) {
+    var div_subcategoria=div_subcategorias.children[i].firstElementChild;
+    div_subcategoria.setAttribute("src", div_subcategoria.getAttribute("data-imagen"));
+}
+
 }
 
 function SeleccionSubcategoria(e)
@@ -156,10 +188,11 @@ console.log(zona);
 }
 
 function guardarCompra(){
-
-  var periodo = document.getElementById('periodo_gasto').value.split('-',);
+ 
+  var fechagasto=document.getElementById('periodo_gasto').value;
+  var periodo = fechagasto.split('-',);
   var fileUP=document.getElementById('file_soporte')
-
+  
   if( fileUP.value=='' || categoria=='' || subcategoria ==''||
       origen.value=='' || destino.value==''){
     swal('Por favor diligencie todos los campos'); 
@@ -174,6 +207,7 @@ function guardarCompra(){
     formData.append("periodo", document.getElementById('periodo_gasto').value); 
     formData.append("mes", periodo[1])
     formData.append("ano", periodo[0]);
+    formData.append("fecha_gasto", fechagasto);
     formData.append("zona", zona_usuario);
     formData.append("origen", origen.value);
     formData.append("destino", destino.value);
@@ -247,6 +281,10 @@ fecharegistro.addEventListener("change", function () {
     anticipoglobal.innerText=data['total_anticipo'];
     gastoaprobado.innerText=data['total_gasto'];
     saldo.innerText=data['saldo'];
+    var botondescarga=document.getElementById('buttondescarga');
+    botondescarga.setAttribute('href','assets/archivo.xlsx');
+    botondescarga.setAttribute('download');
+
   })
   .catch(function(error) {
     return error;
@@ -286,11 +324,11 @@ formularioUsuario.onsubmit = async (e) => {
   });
 
   let result = await response.json();
-
-  //alert(result.message);
+  swal('Registro',result['mensaje'],result['tipo_mensaje']);
 };
 
 formularioAutorizacion.onsubmit = async (e) => {
+  console.log("eeee");
   e.preventDefault();
 
   let response = await fetch(host+'/api/autorizacion/set', {
@@ -301,8 +339,8 @@ formularioAutorizacion.onsubmit = async (e) => {
   let result = await response.json();
 
   swal('Registro',result['mensaje'],result['tipo_mensaje']);
-  //alert(result.message);
-};
+ //alert(result.message);
+}; 
 
 async function guardarAprobacion(e){
 
@@ -319,25 +357,7 @@ async function guardarAprobacion(e){
     method: 'POST',
     body: formData
   });
-  /* 
-   await fetch(host+'/api/compra/setAprobacion',{
-     
-    method: "POST",
-    body: formData,
-  })
-  .then(response => response.json())
-  .then(data => {
-   
-    anticipoglobal.innerText=data['total_anticipo'];
 
-    gastoaprobado.innerText=data['total_gasto'];
-
-    saldo.innerText=data['saldo'];
-    console.log(saldo);
-  })
-  .catch(function(error) {
-    return error;
-  })  */
   let result = await response.json();
   anticipoglobal.innerText=result['total_anticipo'];
   gastoaprobado.innerText=result['total_gasto'];
@@ -345,6 +365,31 @@ async function guardarAprobacion(e){
   console.log(result);
   rangeVisible();
 }
+
+async function eliminar(e){
+
+  var formData = new FormData();
+  var periodo = document.getElementById('fecha_registro').value.split('-',);
+  var formData = new FormData();
+  formData.append("zona",zonabusqueda.value); 
+  formData.append("usuario",usuariobusqueda.value); 
+  formData.append("ano",periodo[0]); 
+  formData.append("mes",periodo[1]);
+  formData.append("id_registro",e.target.id);
+  formData.append("aprobacion",e.target.value);
+  let response = await fetch(host+'/api/compra/delete', {
+    method: 'POST',
+    body: formData
+  });
+
+  let result = await response.json();
+  anticipoglobal.innerText=result['total_anticipo'];
+  gastoaprobado.innerText=result['total_gasto'];
+  saldo.innerText=result['saldo'];
+  console.log(result);
+}
+
+
 
 function aceptarObservacion(e){
 
@@ -404,7 +449,7 @@ function listaCiudad(e){
 
 }
 
-function exportExcel(e){
+async function exportExcel(e){
   
   var periodo = document.getElementById('fecha_registro').value.split('-',);
   var formData = new FormData();
@@ -413,14 +458,16 @@ function exportExcel(e){
   formData.append("ano",periodo[0]); 
   formData.append("mes",periodo[1]); 
   console.log(periodo[0]);
-  fetch(host+'/api/compra/download',{
+  await fetch(host+'/api/compra/download',{
       
     method: "POST",
     body: formData,
   })
   .then(response => response.json())
   .then(data=>{
-    e.target.nextElementSibling.innerHTML=data;
+    e.target.setAttribute('href','assets/archivo.xlsx');
+    e.target.setAttribute('download');
+    console.log(e.target);
   })
   .catch(function(error) {
     return error;

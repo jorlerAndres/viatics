@@ -10,6 +10,9 @@ use App\Models\BaseModel;
 use DateTime;
 use App\Models\CuotasModel;
 use Psr\Http\Message\UploadedFileInterface;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\IOFactory;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
 
 class CompraModel extends BaseModel
@@ -27,9 +30,11 @@ class CompraModel extends BaseModel
         $res['saldo']=0;
         $resultadoquery=$this->resultadoQuery($datos);
         $data=$this->getData($resultadoquery);
+        $this->download($datos);
         
         $res['total_anticipo']=number_format($this->getTotalAnticipo($datos));
         $res['total_gasto']=number_format($this->getTotalAprobado($datos)); 
+        $res['total_noaprobado']=number_format($this->getTotalNoaprobado($datos)); 
         $res['saldo']=number_format($this->getTotalAnticipo($datos) - $this->getTotalAprobado($datos));
         $res['datos']=$data;
         
@@ -67,9 +72,9 @@ class CompraModel extends BaseModel
             
             
             $sql = "
-              INSERT into registro_gasto (ID_USUARIO,ID_CATEGORIA,ID_SUBCATEGORIA,ID_ZONA,PERIODO,ID_MES,ID_ANO,CIUDAD_ORIGEN,CIUDAD_DESTINO,VALOR,IMAGEN,APROBADO,ESTADO,OBSERVACION,FECHA_CREACION,HORA_CREACION,FECHA_MODIFICACION,HORA_MODIFICACION) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);";
+              INSERT into registro_gasto (ID_USUARIO,ID_CATEGORIA,ID_SUBCATEGORIA,ID_ZONA,FECHA_GASTO,PERIODO,ID_MES,ID_ANO,CIUDAD_ORIGEN,CIUDAD_DESTINO,VALOR,IMAGEN,APROBADO,ESTADO,OBSERVACION,FECHA_CREACION,HORA_CREACION,FECHA_MODIFICACION,HORA_MODIFICACION) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);";
 
-            $resultado = $this->query($sql, array($_SESSION['id_usuario'],$datos['categoria'],$datos['subcategoria'],$datos['zona'],$datos['mes'],$datos['mes'], $datos['ano'],$datos['origen'],$datos['destino'], $datos['valor'],$ruta.$nombre,1,1,$datos['observacion'],$fechaActual->format('y-m-d'),$fechaActual->format('H:m:s'),$fechaActual->format('y-m-d'),$fechaActual->format('H:m:s')));
+            $resultado = $this->query($sql, array($_SESSION['id_usuario'],$datos['categoria'],$datos['subcategoria'],$datos['zona'],$datos['fecha_gasto'],$datos['mes'],$datos['mes'], $datos['ano'],$datos['origen'],$datos['destino'], $datos['valor'],$ruta.$nombre,1,1,$datos['observacion'],$fechaActual->format('y-m-d'),$fechaActual->format('H:m:s'),$fechaActual->format('y-m-d'),$fechaActual->format('H:m:s')));
 
             $dataSaldo['zona']=$datos['zona'];
             $dataSaldo['ano']=$datos['ano'];
@@ -145,6 +150,20 @@ class CompraModel extends BaseModel
     return $resData[0]['valor'];
   }
 
+  public function getTotalNoaprobado($datos){
+
+    $sql="select sum(rg.valor)as valor 
+          from registro_gasto rg
+          join zonas z    on z.id_zona=rg.id_zona
+          join usuarios u on u.id_usuario=rg.id_usuario 
+          WHERE rg.aprobado=0 and rg.estado=1";
+
+    $where=$this->getWhere($datos);
+        
+    $sql.=$where['where'];
+    $resData= $this->query($sql,$where['array']);
+    return $resData[0]['valor'];
+  } 
   public function getTotalAnticipo($datos){
 
     $sql="select SUM(VALOR) as valor
@@ -168,6 +187,25 @@ class CompraModel extends BaseModel
 
     $res['total_anticipo']=number_format($this->getTotalAnticipo($datos));
     $res['total_gasto']=number_format($this->getTotalAprobado($datos)); 
+    $res['total_noaprobado']=number_format($this->getTotalNoaprobado($datos)); 
+    $res['saldo']=number_format($this->getTotalAnticipo($datos) - $this->getTotalAprobado($datos));
+
+    return $res;
+
+  }
+
+  public function delete($datos){
+
+    $sql="UPDATE registro_gasto set estado=?
+          WHERE id_registro=?";
+    $res=array();
+    $this->query($sql,array(0,$datos['id_registro']));
+    $cuotas=new CuotasModel();
+    $cuotas->insertSaldo($datos);
+
+    $res['total_anticipo']=number_format($this->getTotalAnticipo($datos));
+    $res['total_gasto']=number_format($this->getTotalAprobado($datos)); 
+    $res['total_noaprobado']=number_format($this->getTotalNoaprobado($datos)); 
     $res['saldo']=number_format($this->getTotalAnticipo($datos) - $this->getTotalAprobado($datos));
 
     return $res;
@@ -209,8 +247,8 @@ class CompraModel extends BaseModel
 
     $sql = "
     SELECT RG.ID_REGISTRO, Z.NOMBRE as ZONA, CA.SALDO, RG.VALOR,CONCAT(U.PRIMER_NOMBRE, ' ' , U.PRIMER_APELLIDO) as USUARIO,
-    C.NOMBRE as CATEGORIA,S.NOMBRE as SUBCATEGORIA,RG.FECHA_CREACION AS FECHA_COMPRA,format(RG.VALOR,0)as VALOR,RG.IMAGEN,
-    CASE WHEN RG.OBSERVACION IS NULL THEN 'Sin Observacion'  ELSE RG.OBSERVACION END as OBSERVACION, M.NOMBRE as MES, EXTRACT(DAY FROM RG.FECHA_CREACION) AS DIA,EXTRACT(YEAR FROM RG.FECHA_CREACION) AS ANO,
+    C.NOMBRE as CATEGORIA,S.NOMBRE as SUBCATEGORIA,RG.FECHA_GASTO AS FECHA_COMPRA,format(RG.VALOR,0)as VALOR,RG.IMAGEN,
+    CASE WHEN RG.OBSERVACION IS NULL THEN 'Sin Observacion'  ELSE RG.OBSERVACION END as OBSERVACION, M.NOMBRE as MES, EXTRACT(DAY FROM RG.FECHA_GASTO) AS DIA,EXTRACT(YEAR FROM RG.FECHA_GASTO) AS ANO,
     RG.APROBADO,RG.OBSERVACION_APROBACION,RG.IMAGEN,RG.CIUDAD_ORIGEN,RG.CIUDAD_DESTINO
     FROM registro_gasto rg 
     JOIN zonas z           on rg.id_zona=z.id_zona
@@ -228,33 +266,49 @@ class CompraModel extends BaseModel
   }
 
   public function download($datos){
+    $ruta="assets/";
+    $file="archivo.xlsx";
+    $spreadsheet=new Spreadsheet();
+   //$spreadsheet=\PhpOffice\PhpSpreadsheet\IOFactory::load('assets/archivo.xlsx');
+     $sheet=$spreadsheet->getActiveSheet();
+     $sheet->setCellValue('A1','FECHA');
+     $sheet->setCellValue('B1','USUARIO');
+     $sheet->setCellValue('C1','ZONA');
+     $sheet->setCellValue('D1','CATEGORIA');
+     $sheet->setCellValue('E1','SUBCATEGORIA');
+     $sheet->setCellValue('F1','ORIGEN');
+     $sheet->setCellValue('G1','DESTINO');
+     $sheet->setCellValue('H1','VALOR');
+     $sheet->setCellValue('I1','OBSERVACION');
+     $sheet->setCellValue('J1','APROBADO');
+     $sheet->setCellValue('K1','OBSERVACION_APROBACION');
 
-    $resdata=$this->resultadoQuery($datos);
-    $download="<table>
-                <thead><th>Fecha</th><th>Usuario</th><th>Zona</th>
-                       <th>Categoria</th><th>Subcatgoria</th><th>Origen</th>
-                       <th>Destino</th>Valor<th>Observacion</th>
-                       <th>aprobado</th><th>Observacion sprobacion</th>
-                </thead>";
+     $resdata=$this->resultadoQuery($datos);
+    $fila=2;
+     for ($i=0; $i <sizeof($resdata) ; $i++) {
 
-    for ($i=0; $i <sizeof($resdata) ; $i++) {  
-      $download.="<tr>
-                  <td>".$resdata[$i]['FECHA_COMPRA']."</td><td>".$resdata[$i]['USUARIO']."</td>
-                  <td>".$resdata[$i]['ZONA']."</td><td>".$resdata[$i]['CATEGORIA']."</td>
-                  <td>".$resdata[$i]['SUBCATEGORIA']."</td><td>".$resdata[$i]['CIUDAD_ORIGEN']."</td>
-                  <td>".$resdata[$i]['CIUDAD_DESTINO']."</td><td>".$resdata[$i]['VALOR']."</td>
-                  <td>".$resdata[$i]['OBSERVACION']."</td><td>".$resdata[$i]['APROBADO']."</td>
-                  <td>".$resdata[$i]['OBSERVACION_APROBACION']."</td>
-                  </tr>";
-    }
-    $download.="</table>";
-    $filename="libro.xls";
-    header("Content-Type: application/vnd.ms-excel");
-    header("Content-Disposition: attachment; filename=".$filename);
-    header("Pragma: no-cache");
-    header("Expires: 0");
-    echo $download;
+      $sheet->setCellValue('A'.$fila,$resdata[$i]['FECHA_COMPRA']);
+      $sheet->setCellValue('B'.$fila,$resdata[$i]['USUARIO']);
+      $sheet->setCellValue('C'.$fila,$resdata[$i]['ZONA']);
+      $sheet->setCellValue('D'.$fila,$resdata[$i]['CATEGORIA']);
+      $sheet->setCellValue('E'.$fila,$resdata[$i]['SUBCATEGORIA']);
+      $sheet->setCellValue('F'.$fila,$resdata[$i]['CIUDAD_ORIGEN']);
+      $sheet->setCellValue('G'.$fila,$resdata[$i]['CIUDAD_DESTINO']);
+      $sheet->setCellValue('H'.$fila,$resdata[$i]['VALOR']);
+      $sheet->setCellValue('I'.$fila,$resdata[$i]['OBSERVACION']);
+      $sheet->setCellValue('J'.$fila,$resdata[$i]['APROBADO']);
+      $sheet->setCellValue('K'.$fila,$resdata[$i]['OBSERVACION_APROBACION']);
+      $fila++;
+
+     }  
+      $writer=new Xlsx($spreadsheet);
+      $file="archivo.xlsx";
+      $writer->save($ruta.$file);
+      return sizeof($resdata);
+     
   }
+
+  
   
   public function getData($resData){
 
@@ -269,10 +323,13 @@ class CompraModel extends BaseModel
                   <div class="col-md-4">
                     <div class="d-flex flex-row">
                       <div class="d-flex flex-row datos-usuario ps-4"> 
-                        <p class=" monserrat-text pe-2 fs-5">'.$resData[$i]['DIA'].'</p>
+                      <div class="d-flex flex-column"> 
+                        <span class=" monserrat-text pe-2 fs-5">'.$resData[$i]['DIA'].'</span>
+                        <span class="pb-5 mb-5">vfvfff</span>
+                        </div>
                         <div class="d-flex flex-column"> 
                         <span class="monserrat-text pe-4 text-secondary">'.$resData[$i]['MES'].'</span>
-                        <span class="ms-5 text-primary">2021</span>
+                        <span class="ms-5 text-dark fw-bolder">2021</span>
                         </div>
                         
                       </div>
@@ -296,7 +353,7 @@ class CompraModel extends BaseModel
                   </div>
                   <div class="col-md-4">
                     <div class="d-flex flex-row justify-content-end mt-2">
-                      <p class="mt-3 ms-3 me-5">'.$resData[$i]['OBSERVACION'].'</p>
+                      <p class="mt-2 ms-4 me-5">'.$resData[$i]['OBSERVACION'].'</p>
                       <div class="d-flex flex-column">
                         <h6>$'.$resData[$i]['VALOR'].'</h6>
                         <button type="button" class="boton-soporte" data-imagen="'.$resData[$i]['IMAGEN'].'" onclick="mostrarImagen(event)">

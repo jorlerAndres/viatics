@@ -20,6 +20,15 @@
     <header>
       <div class="border-bottom head">
         <img src="/assets/images/proimpo_blanco.png" width="200px" class="ms-3 mt-3">
+        <div class="d-flex flex-column usuario mb-3">
+          <div id="rectangle" class="d-flex flex-row">
+                <a data-bs-toggle="collapse" href="#cerrarSesion" role="button" aria-expanded="false" aria-controls="cerrarSesion"><img src="../../assets/images/usuario.png" id="imagen_usuario"></a>
+                <p id="usuario" class="ms-1">{{usuarios.nombre}}</p>
+          </div>
+          <div class="collapse mt-0" id="cerrarSesion">
+            <a href="/logout" style="color: white;" class="ps-5 text-decoration-none">Cerrar sesión</a>
+        </div>
+      </div>
       </div>
     </header>
     <div class="row">
@@ -83,7 +92,7 @@
           <div class="tab-pane  columna2" style="height: 100vh;" id="cuotasZonas" role="tabpanel" aria-labelledby="cuotasZonas-tab">
             {% include "partes/cuotasZonas.html"%}
           </div>
-          <div class="tab-pane active" style="height: 90vh;" id="usuariosZonas" role="tabpanel" aria-labelledby="usuariosZonas-tab">
+          <div class="tab-pane " style="height: 90vh;" id="usuariosZonas" role="tabpanel" aria-labelledby="usuariosZonas-tab">
             {% include "partes/usuariosZonas.html"%}
           </div>
           <div class="tab-pane " style="height: 100vh;" id="cargarcuotas" role="tabpanel" aria-labelledby="cargarcuotas-tab">
@@ -95,7 +104,7 @@
           <div class="tab-pane " style="height: 100vh;" id="cargarcompra" role="tabpanel" aria-labelledby="cargarcompra-tab">
             {% include "partes/registro.html"%}
           </div>
-          <div class="tab-pane " style="height: 100vh;" id="registros" role="tabpanel" aria-labelledby="registros-tab">
+          <div class="tab-pane active" style="height: 100vh;" id="registros" role="tabpanel" aria-labelledby="registros-tab">
             {% include "partes/registros.html"%}
           </div>
        </div>

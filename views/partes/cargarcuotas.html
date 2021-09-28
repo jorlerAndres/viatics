@@ -36,7 +36,7 @@
           {% for zona in zonas %}
           <div class="card me-2 mb-2" style="width: 240px;">
             <div class="card-header">
-              Zona
+              {{zona.departamento}}
             </div>
             <div class="card-body">
               <div class="div_zonaprueba m-1" data-imagen={{zona.imagen}} id="{{zona.id_zona}}" onclick="seleccionZona('{{zona.id_zona}}')">

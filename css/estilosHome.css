@@ -454,25 +454,48 @@ input[type=range]{
 .boton-soporte{
   width: 60px;
   height: 20px;
-  background-color: white;
+  background-color: #e4e0e0;
   border:1px rgb(224, 221, 221) solid;
   content: "Factura";
   border-radius: 6px;
   margin-bottom: 15px;
  text-align: center;
-  color: #7263f8;
+ color:black;
   padding-bottom: 10px;
   
 }
 .boton-soporte:hover{
 
-  background-color: #e4e0e0;
-  color:black;
+  background-color: white;
+  color: #7263f8;
 }
 #lista_ciudad_destino{
   position:absolute; 
   left:250px;
   /* overflow: auto; width: 310px; height: 351px; */
+}
+#buttondescarga{
+  list-style: none;
+  text-decoration: none;
+  width: 90px;
+  height: 24px;
+  background-color: rgb(7, 145, 64);
+  color: white;
+  border-radius: 10px;
+  text-align: center;
+  content: "Descargar";
+  margin-bottom: 24px;
+  position: absolute;
+  left: 23%;
+  top: 63%;
+  font-size: 14px;
+}
+#imagen_usuario{
+
+  width: 35px;
+  height: 25px;
+  padding-left: 5px;
+  margin-top: 3px;
 }
 
 @media (max-width: 600px) {
@@ -634,7 +657,12 @@ input[type=range]{
   #lista_ciudad_destino{
     position: absolute; left:14%;
   }
+  #buttondescarga{
 
+    left: 29%;
+    top: 69%;
+  
+  }
   
 
 }

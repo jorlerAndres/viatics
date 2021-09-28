@@ -13,8 +13,19 @@ class SubcategoriaController
     public function getSubcategorias(Request $request, Response $response, $arg)
     {   
         $datos=(array)$request->getParsedBody();
-        $U = new SubcategoriaModel();
-        $response->getBody()->write(json_encode($U->getSubcategorias($datos)));
+        $S = new SubcategoriaModel();
+        $response->getBody()->write(json_encode($S->getSubcategorias($datos)));
+        return $response
+            ->withHeader('Access-Control-Allow-Origin', "*")
+            ->withHeader('Content-Type', 'application/json')
+            ->withStatus(200);
+    }
+
+    public function getPorcategoria(Request $request, Response $response, $arg)
+    {   
+        $datos=(array)$request->getParsedBody();
+        $S = new SubcategoriaModel();
+        $response->getBody()->write(json_encode($S->getPorcategoria($datos)));
         return $response
             ->withHeader('Access-Control-Allow-Origin', "*")
             ->withHeader('Content-Type', 'application/json')
