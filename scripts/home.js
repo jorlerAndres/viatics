@@ -13,6 +13,8 @@ var saldo=document.getElementById('saldo');
 var div_zonausuario=document.getElementById('div_zonausuario');
 var zona_usuario=document.getElementById('usuario_zona').value;
 var rol_usuario=document.getElementById('usuario_rol').value;
+var origen=document.getElementById('ciudad_origen');
+var destino=document.getElementById('ciudad_destino');
 
 
 var zona='';
@@ -158,7 +160,8 @@ function guardarCompra(){
   var periodo = document.getElementById('periodo_gasto').value.split('-',);
   var fileUP=document.getElementById('file_soporte')
 
-  if( fileUP.value=='' || categoria=='' || subcategoria =='' ){
+  if( fileUP.value=='' || categoria=='' || subcategoria ==''||
+      origen.value=='' || destino.value==''){
     swal('Por favor diligencie todos los campos'); 
 
   }
@@ -172,6 +175,8 @@ function guardarCompra(){
     formData.append("mes", periodo[1])
     formData.append("ano", periodo[0]);
     formData.append("zona", zona_usuario);
+    formData.append("origen", origen.value);
+    formData.append("destino", destino.value);
     formData.append("file", fileUP.files[0]);
     formData.append("nombre_archivo", fileUP.files[0].name); 
     fetch(host+'/api/compra/set',{
@@ -374,6 +379,61 @@ function mostrarImagen(e){
   modal.show();
   console.log(modal);
 
+}
+
+function listaCiudad(e){
+  
+  origen=document.getElementById('ciudad_origen');
+  var formData = new FormData();
+  formData.append("nombre",e.target.value);
+  formData.append("campo",e.target.id); 
+  formData.append("zona",zona_usuario); 
+  console.log(e.target.id);
+  fetch(host+'/api/ciudad/get',{
+      
+    method: "POST",
+    body: formData,
+  })
+  .then(response => response.json())
+  .then(data=>{
+    e.target.nextElementSibling.innerHTML=data;
+  })
+  .catch(function(error) {
+    return error;
+  }) 
+
+}
+
+function exportExcel(e){
+  
+  var periodo = document.getElementById('fecha_registro').value.split('-',);
+  var formData = new FormData();
+  formData.append("zona",zonabusqueda.value); 
+  formData.append("usuario",usuariobusqueda.value); 
+  formData.append("ano",periodo[0]); 
+  formData.append("mes",periodo[1]); 
+  console.log(periodo[0]);
+  fetch(host+'/api/compra/download',{
+      
+    method: "POST",
+    body: formData,
+  })
+  .then(response => response.json())
+  .then(data=>{
+    e.target.nextElementSibling.innerHTML=data;
+  })
+  .catch(function(error) {
+    return error;
+  }) 
+
+}
+
+function setCiudad(e,campo){
+  console.log(e);
+ciudad=document.getElementById(campo);
+ciudad.value=e;
+lista=document.getElementById("lista_"+campo);
+lista.innerHTML='';
 }
 function rangeVisible(){
 

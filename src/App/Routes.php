@@ -22,6 +22,8 @@ $app->group('/api', function (RouteCollectorProxy $group) {
     $group->post('/cuotas/get', 'App\Controllers\CuotasController:getCuotas')->setName('getCuotas'); 
     $group->post('/compra/set', 'App\Controllers\CompraController:setCompra')->setName('setCompra');
     $group->post('/compra/get', 'App\Controllers\CompraController:getCompra')->setName('getCompra');
+    $group->post('/compra/download', 'App\Controllers\CompraController:download')->setName('download');
+    $group->post('/ciudad/get', 'App\Controllers\CiudadController:getCiudad')->setName('getCiudad');
     $group->post('/compra/setAprobacion', 'App\Controllers\CompraController:setAprobacion')->setName('setAprobacion');
     $group->post('/compra/setObservacion', 'App\Controllers\CompraController:setObservacion')->setName('setObservacion');
     

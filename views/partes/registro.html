@@ -1,6 +1,7 @@
-<h3 class="mt-5 ms-5 titulo-usuarios mb-3">Cargar Compra</h3>
-<div class="row mt-4">
-  <div class="col-md-6">
+
+<div class="row div_categoria_subcategoria mt-4">
+  <h3 class="mt-5 ms-5 titulo-usuarios mb-3">Cargar Compra</h3>
+  <div class=" div_categoria col-md-6">
      <div class="ms-5 mt-3 mb-5">
         <label for="valor" class="form-label">Valor</label>
         <input type="number" class="form-control w-75" id="valor_gasto">
@@ -34,18 +35,20 @@
 </div>
 <div class="row">
   <div class="col-md-7">
-      <div class="form-group  datos-registrogasto">
-          <div class="col-md-8 inputGroupContainer">
+      <div class="form-group  ">
+          <div class="col-md-8 datos-registrogasto inputGroupContainer">
             <label for="valor" class="form-label Urbanist">3. Periodo</label>
             <input type="month" name="fecha" id="periodo_gasto" class="form-control  mb-5">
 
-            <div class="input-group mb-3">
-              <span class="input-group-text" id="basic-addon1"><img src="/assets/images/ubicacion.jpg" width="25px"></span>
-              <input type="text" class="form-control" placeholder="Origen" aria-label="Username" aria-describedby="basic-addon1" id="ciudad_origen" autocomplete="off">
+            <div class=" mb-3">
+              <span><img src="/assets/images/ubicacion.jpg" width="25px">Origen</span>
+              <input  class="form-control" placeholder="Ciudad" id="ciudad_origen" autocomplete="off" onkeyup="listaCiudad(event)"> <ul class="list-group" id="lista_ciudad_origen"></ul>
             </div>
-            <div class="input-group mb-3">
-              <span class="input-group-text" id="basic-addon1"><img src="/assets/images/ubicacion.jpg" width="25px"></span>
-              <input type="text" class="form-control" placeholder="Destino" aria-label="Username" aria-describedby="basic-addon1" id="ciudad_destino" autocomplete="off">
+           
+            <div class="mb-3">
+             <span><img src="/assets/images/ubicacion.jpg" width="25px">Destino</span>
+              <input   class="form-control" placeholder="Ciudad"id="ciudad_destino" onkeyup="listaCiudad(event)">
+              <ul id="lista_ciudad_destino" ></ul>
             </div>
             <div class="mb-3 mt-5">
               <label for="formFile" class="form-label">Cargar Archivo Soporte</label>

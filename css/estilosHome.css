@@ -13,7 +13,7 @@
   
 } 
 :root{
-  --variable-height:150vh;
+  --variable-height:190vh;
   --variable-width:100vh;
   --variable-color: #88888a;
 }
@@ -24,23 +24,11 @@ body{
   /*  background-image: linear-gradient(to bottom,  #fefeff,#f6f7f8); */
 }
 .head{
- /* background-color: rgb(255, 255, 255); */
  background:linear-gradient(rgb(0, 0, 255,0.8), rgb(47, 27, 163,0.8));
  height: 80px;
- /* box-shadow: 0px 6px 2px 0px rgb(185, 184, 184); */
  
 }
-/*  .sidebar {
-  position: fixed;
-  width: 17%;
-  height: 100vh;
- box-shadow: 0px 8px 10px 5px rgb(206, 204, 204);
-  
-  background-image: linear-gradient(#ffffff, #f1f0ef);
-  float: left; 
-  min-width: 40px;
- 
-}  */
+
  
   .icono-sidenav{
     height: 25px;
@@ -90,13 +78,11 @@ body{
    }
    .navbar-collapse{
     width: 80%;
-    
-   }
- 
 
- .navbar-collapse ul li:hover{
-  /* background-image: linear-gradient(to bottom,  #fefeff,#e7f0fa); */
- }
+   }
+   .datos-registrogasto{
+    margin-left: 49px;;
+   }
  
  .columna1{
   height:var(--variable-height);
@@ -411,7 +397,7 @@ body{
   margin-top: 144px;
 }
 .datos-registrogasto{
-  margin-left: 55px;
+  padding-right: 23px;
 }
 input[type=range]{
   width: 30px;
@@ -483,15 +469,18 @@ input[type=range]{
   background-color: #e4e0e0;
   color:black;
 }
+#lista_ciudad_destino{
+  position:absolute; 
+  left:250px;
+  /* overflow: auto; width: 310px; height: 351px; */
+}
+
 @media (max-width: 600px) {
 
   .segundacolumna{
     margin-top: 14px;
   }
-  .datos-registrogasto{
-    margin-top: 54px;
-    margin-left: 15px;
-  }
+ 
   .item-subcategoria{
 
     margin-left: 20px;
@@ -505,12 +494,127 @@ input[type=range]{
   .registro-usuario{
    
      font-size: 14px;
-    
-     width: 250px;
-     height: 500px;
+     width: 200px;
+     height: 1200px;
      margin-left: 1px;
+  }
+  .registro-usuario input[type=text]{
+   
+    width: 75%;
+  }
+
+  input[type=email]{
+   
+  width: 75%;
+ }
+  input[type=number]{
+    
+    width: 75%;
+  }
+  input[type=text]{
+    
+    width: 75%;
+  }
+  input[type=date]{
+    
+    width: 75%;
+  }
+  input[type=month]{
+    
+    width: 90%;
+  }
+  .div_autorizacion{
+    width: 50%;
+  }
+  .diseno-tab{
+    width: 70%; 
+    background-image: linear-gradient(to right, #5310fd, #f6f5f7);  
+    margin-left: 5px;
+  }
+  .nav-link{
+    text-align: center;
+  }
+  .div_areazonas{
+    width: 90%;
+    padding-left: 40px;
+  }
+  .div_zonaprueba{
+    width: 90%
+  }
+  .datos-registros{
+    display: none;
+    background-color: yellow;
+  }
+  .div_categoria_subcategoria{
+    padding-right: 10px;
+    
+  }
+  #formulario_busquedausuario{
+    width: 70%;
+    margin-left: 30px;
+  }
+  .datos-registrogasto{
+
+    width: 80%;
+    padding-left: 40px;
+    margin-top: 54px;
+    margin-left: 15px;
+  }
+  .segundacolumna{
+    width: 80%;
+    margin-left: 40px;
+  }
+  #formulario_autorizacion{
+    width: 90%;
+    padding-top: 50px;
+  }
+  .item-subcategoria{
+    width: 60%;
+    font-size: 12px;
+    height: 40px;
+    
   
   }
+  .subcategorias{
+    width: 70%;
+  }
+  .div_categoria{
+    margin-left: 20px;
+  } 
+
+  .registro-usuario select{
+    
+    width: 75%;
+  }
+  .columna1{
+    height: 1px;
+  }
+  .sidebar{
+    width: 70px;
+    position: fixed;
+    font-size: 11px;
+    float: left;
+    background:linear-gradient(to left,white,rgb(245, 244, 244));
+    box-shadow: 0px 8px 10px 5px rgb(206, 204, 204);
+    top: 12%;
+    height: 100%;
+    
+    /* background-color: white; */
+  }
+
+  .menu{
+    margin-top: 20px;
+  }
+  .tab-content{
+  
+    margin-top: 10px;
+    margin-left: 40px;
+    padding-right: 10px;
+  }
+  .palabra-menu, .icono-sidenav{
+  visibility: hidden;
+  }
+
   .registro-usuario h3{
     font-size: 22px;
     margin-left: 30px;
@@ -521,12 +625,14 @@ input[type=range]{
   }
   input[type='text']{
     width: 50px;
-   
+    
   }
   .categorias{
     width: 134px; 
     height: 700px;
-    
+  }
+  #lista_ciudad_destino{
+    position: absolute; left:14%;
   }
 
   

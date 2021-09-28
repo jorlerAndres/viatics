@@ -25,27 +25,8 @@ class CompraModel extends BaseModel
         $res['total_anticipo']=0;
         $res['total_gasto']=0; 
         $res['saldo']=0;
-        $sql = "
-        SELECT RG.ID_REGISTRO, Z.NOMBRE as ZONA, CA.SALDO, RG.VALOR,CONCAT(U.PRIMER_NOMBRE, ' ' , U.PRIMER_APELLIDO) as USUARIO,
-        C.NOMBRE as CATEGORIA,S.NOMBRE as SUBCATEGORIA,RG.FECHA_CREACION AS FECHA_COMPRA,format(RG.VALOR,0)as VALOR,RG.IMAGEN,
-        CASE WHEN RG.OBSERVACION IS NULL THEN 'Sin Observacion'  ELSE RG.OBSERVACION END as OBSERVACION, M.NOMBRE as MES, EXTRACT(DAY FROM RG.FECHA_CREACION) AS DIA,EXTRACT(YEAR FROM RG.FECHA_CREACION) AS ANO,
-        RG.APROBADO,RG.OBSERVACION_APROBACION,RG.IMAGEN
-        FROM registro_gasto rg 
-        JOIN zonas z           on rg.id_zona=z.id_zona
-        JOIN usuarios u        on u.id_usuario=rg.id_usuario
-        JOIN categorias c      on c.id_categoria=rg.id_categoria
-        JOIN subcategoria s    on s.id_subcategoria=rg.id_subcategoria
-        JOIN meses m           on m.id_mes=rg.id_mes
-        JOIN cuota_anticipo ca on ca.id_zona=rg.id_zona and ca.id_mes=rg.id_mes and ca.id_ano=rg.id_ano 
-        WHERE RG.ESTADO=1
-        ";
-
-        $where=$this->getWhere($datos);
-        
-        $sql.=$where['where'];
-        $resData= $this->query($sql,$where['array']);
-        $data=$this->getData($resData);
-
+        $resultadoquery=$this->resultadoQuery($datos);
+        $data=$this->getData($resultadoquery);
         
         $res['total_anticipo']=number_format($this->getTotalAnticipo($datos));
         $res['total_gasto']=number_format($this->getTotalAprobado($datos)); 
@@ -86,9 +67,9 @@ class CompraModel extends BaseModel
             
             
             $sql = "
-              INSERT into registro_gasto (ID_USUARIO,ID_CATEGORIA,ID_SUBCATEGORIA,ID_ZONA,PERIODO,ID_MES,ID_ANO,VALOR,IMAGEN,APROBADO,ESTADO,OBSERVACION,FECHA_CREACION,HORA_CREACION,FECHA_MODIFICACION,HORA_MODIFICACION) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);";
+              INSERT into registro_gasto (ID_USUARIO,ID_CATEGORIA,ID_SUBCATEGORIA,ID_ZONA,PERIODO,ID_MES,ID_ANO,CIUDAD_ORIGEN,CIUDAD_DESTINO,VALOR,IMAGEN,APROBADO,ESTADO,OBSERVACION,FECHA_CREACION,HORA_CREACION,FECHA_MODIFICACION,HORA_MODIFICACION) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);";
 
-            $resultado = $this->query($sql, array($_SESSION['id_usuario'],$datos['categoria'],$datos['subcategoria'],$datos['zona'],$datos['mes'],$datos['mes'], $datos['ano'], $datos['valor'],$ruta.$nombre,1,1,$datos['observacion'],$fechaActual->format('y-m-d'),$fechaActual->format('H:m:s'),$fechaActual->format('y-m-d'),$fechaActual->format('H:m:s')));
+            $resultado = $this->query($sql, array($_SESSION['id_usuario'],$datos['categoria'],$datos['subcategoria'],$datos['zona'],$datos['mes'],$datos['mes'], $datos['ano'],$datos['origen'],$datos['destino'], $datos['valor'],$ruta.$nombre,1,1,$datos['observacion'],$fechaActual->format('y-m-d'),$fechaActual->format('H:m:s'),$fechaActual->format('y-m-d'),$fechaActual->format('H:m:s')));
 
             $dataSaldo['zona']=$datos['zona'];
             $dataSaldo['ano']=$datos['ano'];
@@ -222,6 +203,57 @@ class CompraModel extends BaseModel
 
     }
 
+  }
+
+  public function resultadoQuery($datos){
+
+    $sql = "
+    SELECT RG.ID_REGISTRO, Z.NOMBRE as ZONA, CA.SALDO, RG.VALOR,CONCAT(U.PRIMER_NOMBRE, ' ' , U.PRIMER_APELLIDO) as USUARIO,
+    C.NOMBRE as CATEGORIA,S.NOMBRE as SUBCATEGORIA,RG.FECHA_CREACION AS FECHA_COMPRA,format(RG.VALOR,0)as VALOR,RG.IMAGEN,
+    CASE WHEN RG.OBSERVACION IS NULL THEN 'Sin Observacion'  ELSE RG.OBSERVACION END as OBSERVACION, M.NOMBRE as MES, EXTRACT(DAY FROM RG.FECHA_CREACION) AS DIA,EXTRACT(YEAR FROM RG.FECHA_CREACION) AS ANO,
+    RG.APROBADO,RG.OBSERVACION_APROBACION,RG.IMAGEN,RG.CIUDAD_ORIGEN,RG.CIUDAD_DESTINO
+    FROM registro_gasto rg 
+    JOIN zonas z           on rg.id_zona=z.id_zona
+    JOIN usuarios u        on u.id_usuario=rg.id_usuario
+    JOIN categorias c      on c.id_categoria=rg.id_categoria
+    JOIN subcategoria s    on s.id_subcategoria=rg.id_subcategoria
+    JOIN meses m           on m.id_mes=rg.id_mes
+    JOIN cuota_anticipo ca on ca.id_zona=rg.id_zona and ca.id_mes=rg.id_mes and ca.id_ano=rg.id_ano 
+    WHERE RG.ESTADO=1
+    ";
+    $where=$this->getWhere($datos);
+    $sql.=$where['where'];
+    $resData= $this->query($sql,$where['array']);
+    return $resData;
+  }
+
+  public function download($datos){
+
+    $resdata=$this->resultadoQuery($datos);
+    $download="<table>
+                <thead><th>Fecha</th><th>Usuario</th><th>Zona</th>
+                       <th>Categoria</th><th>Subcatgoria</th><th>Origen</th>
+                       <th>Destino</th>Valor<th>Observacion</th>
+                       <th>aprobado</th><th>Observacion sprobacion</th>
+                </thead>";
+
+    for ($i=0; $i <sizeof($resdata) ; $i++) {  
+      $download.="<tr>
+                  <td>".$resdata[$i]['FECHA_COMPRA']."</td><td>".$resdata[$i]['USUARIO']."</td>
+                  <td>".$resdata[$i]['ZONA']."</td><td>".$resdata[$i]['CATEGORIA']."</td>
+                  <td>".$resdata[$i]['SUBCATEGORIA']."</td><td>".$resdata[$i]['CIUDAD_ORIGEN']."</td>
+                  <td>".$resdata[$i]['CIUDAD_DESTINO']."</td><td>".$resdata[$i]['VALOR']."</td>
+                  <td>".$resdata[$i]['OBSERVACION']."</td><td>".$resdata[$i]['APROBADO']."</td>
+                  <td>".$resdata[$i]['OBSERVACION_APROBACION']."</td>
+                  </tr>";
+    }
+    $download.="</table>";
+    $filename="libro.xls";
+    header("Content-Type: application/vnd.ms-excel");
+    header("Content-Disposition: attachment; filename=".$filename);
+    header("Pragma: no-cache");
+    header("Expires: 0");
+    echo $download;
   }
   
   public function getData($resData){
