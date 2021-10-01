@@ -1,6 +1,20 @@
 
 <div class="row div_categoria_subcategoria mt-4">
-  <h3 class="mt-5 ms-5 titulo-usuarios mb-3">Cargar Compra</h3>
+  <div class="d-flex flex-md-row flex-sm-column">
+    <h3 class="mt-5 ms-5 titulo-usuarios mb-3">Cargar Compra</h3>
+    <div class="me-5 mt-3 d-flex flex-column  subtitulo-cargarcompra">
+      <div class="text mt-3  ms-4">
+          <h5 class="text-secondary Urbanist">2.Subcategoria</h5>
+          <p class="texto-subcategoria text-secondary fs-6">Opcionables segun categoria</p>
+          
+          <div class="d-flex flex-column">
+              <h6 class="text-secondary Urbanist">3.Fecha</h6>
+              <p class="text-secondary fs-6">Fecha de realizacion de compra</p>
+          </div>
+      </div>
+    </div>
+
+  </div>
   <div class=" div_categoria col-md-6">
      <div class="ms-5 mt-3 mb-5">
         <label for="valor" class="form-label">Valor</label>
@@ -21,7 +35,7 @@
   </div>
   <div class="col-md-6 ">
     <div class="segundacolumna">
-      <h4 class="Urbanist mt-3 ms-4 fs-6 mb-5">2. Subcategoria</h4>
+      <h4 class="Urbanist mt-5 ms-4 fs-6 mb-5">2. Subcategoria</h4>
         <div  class="subcategorias" id="subcategorias" style="overflow: auto; width: 310px; height: 280px">
           {% for subcategoria in subcategorias %}
             <div class="item-subcategoria" onclick="SeleccionSubcategoria('{{subcategoria.id_subcategoria}}')" id="{{subcategoria.id_subcategoria}}">
@@ -37,18 +51,24 @@
   <div class="col-md-7">
       <div class="form-group  ">
           <div class="col-md-8 datos-registrogasto inputGroupContainer">
-            <label for="valor" class="form-label Urbanist">3. Fecha de Compra</label>
+            <label for="valor" class="form-label Urbanist">3. Fecha</label>
             <input type="date" name="fecha" id="periodo_gasto" class="form-control  mb-5">
 
-            <div class=" mb-3">
-              <span><img src="/assets/images/ubicacion.jpg" width="25px">Origen</span>
+            <div class="mb-3">
+              <span>Origen</span>
+              <div class="d-flex flex-row">
+                <div class="border inputGroup"><img src="/assets/images/ubicacion_input.png" width="25px"></div>
               <input  class="form-control" placeholder="Ciudad" id="ciudad_origen" autocomplete="off" onkeyup="listaCiudad(event)"> <ul class="list-group" id="lista_ciudad_origen"></ul>
+            </div>
             </div>
            
             <div class="mb-3">
-             <span><img src="/assets/images/ubicacion.jpg" width="25px">Destino</span>
-              <input   class="form-control" placeholder="Ciudad"id="ciudad_destino" autocomplete="off"  onkeyup="listaCiudad(event)">
-              <ul id="lista_ciudad_destino" ></ul>
+             <span>Destino</span>
+             <div class="d-flex flex-row">
+              <div class="border inputGroup"><img src="/assets/images/ubicacion_input.png" width="25px"></div>
+              <input class="form-control" placeholder="Ciudad" id="ciudad_destino" autocomplete="off"  onkeyup="listaCiudad(event)"> <ul class="list-group" id="lista_ciudad_destino"></ul>
+             </div>
+             
             </div>
             <div class="mb-3 mt-5">
               <label for="formFile" class="form-label">Cargar Archivo Soporte</label>

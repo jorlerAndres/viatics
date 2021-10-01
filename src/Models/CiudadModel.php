@@ -26,7 +26,7 @@ class CiudadModel extends BaseModel
             for ($i=0; $i <sizeof($resultado) ; $i++) { 
               
 
-                $res.='<li   onclick="setCiudad(\'' .$resultado[$i]['NOMBRE']."".  '\' ,\'' .$datos['campo']."".  '\')" class="list-group-item list-group-item-action">'.$resultado[$i]['NOMBRE'].'</li>';
+                $res.='<li   onclick="setCiudad(\'' .$resultado[$i]['NOMBRE']."".  '\' ,\'' .$datos['campo']."".  '\')" class="list-group-item list-group-item-action" style="cursor:pointer;">'.$resultado[$i]['NOMBRE'].'</li>';
             }
             
         } catch (\Throwable $th) {

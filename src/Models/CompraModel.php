@@ -29,7 +29,7 @@ class CompraModel extends BaseModel
         $res['total_gasto']=0; 
         $res['saldo']=0;
         $resultadoquery=$this->resultadoQuery($datos);
-        $data=$this->getData($resultadoquery);
+        $data=$this->getData($resultadoquery['resultado_consulta']);
         $this->download($datos);
         
         $res['total_anticipo']=number_format($this->getTotalAnticipo($datos));
@@ -37,6 +37,9 @@ class CompraModel extends BaseModel
         $res['total_noaprobado']=number_format($this->getTotalNoaprobado($datos)); 
         $res['saldo']=number_format($this->getTotalAnticipo($datos) - $this->getTotalAprobado($datos));
         $res['datos']=$data;
+        $res['limit']=number_format($resultadoquery['limit']);
+        $res['count']=sizeof($resultadoquery['resultado_consulta']);
+        
         
         return $res;
 
@@ -54,12 +57,14 @@ class CompraModel extends BaseModel
 
               $respuesta['mensaje']='Se esta ingresando una compra en un periodo vencido';
               $respuesta['tipo_mensaje']='warning';
+              $respuesta['alert']='Atencion';
 
           }
           else if(!$cuotas->validaCuota($datos)){
 
             $respuesta['mensaje']='El periodo no tiene anticipo registrado';
             $respuesta['tipo_mensaje']='warning';
+            $respuesta['alert']='Atencion';
 
           }
           else {
@@ -86,12 +91,14 @@ class CompraModel extends BaseModel
             if ($sucess) {
                 $respuesta['mensaje']='La compra ha sido guardada';
                 $respuesta['tipo_mensaje']='success';
+                $respuesta['alert']='Registro exitoso';
             }
           }
 
       } catch (\Throwable $th) {
         $respuesta['mensaje']='Error al momento de guardar';
         $respuesta['tipo_mensaje']='warning';
+        $respuesta['alert']='Algo anda mal';
       }
       return $respuesta;
     }
@@ -229,7 +236,7 @@ class CompraModel extends BaseModel
     else{
       $sql="SELECT ID_AUTORIZACION 
       FROM autorizacion
-      WHERE ID_MES=? and ID_ANO=? and FECHA_LIMITE > current_date";
+      WHERE ID_MES=? and ID_ANO=? and FECHA_LIMITE >= current_date";
       $resData= $this->query($sql,array($datos['mes'],$datos['ano']));
       
       if($resData){
@@ -245,6 +252,9 @@ class CompraModel extends BaseModel
 
   public function resultadoQuery($datos){
 
+    $offset=6;
+    $resultado=array();
+    $limit=($datos['limit'] -1) * $offset;
     $sql = "
     SELECT RG.ID_REGISTRO, Z.NOMBRE as ZONA, CA.SALDO, RG.VALOR,CONCAT(U.PRIMER_NOMBRE, ' ' , U.PRIMER_APELLIDO) as USUARIO,
     C.NOMBRE as CATEGORIA,S.NOMBRE as SUBCATEGORIA,RG.FECHA_GASTO AS FECHA_COMPRA,format(RG.VALOR,0)as VALOR,RG.IMAGEN,
@@ -260,9 +270,13 @@ class CompraModel extends BaseModel
     WHERE RG.ESTADO=1
     ";
     $where=$this->getWhere($datos);
-    $sql.=$where['where'];
+    $sql.=$where['where']; $sql.=" limit $limit, 6";
     $resData= $this->query($sql,$where['array']);
-    return $resData;
+    $resultado['resultado_consulta']=$resData;
+    $resultado['limit']=$datos['limit'];
+    
+
+    return $resultado;
   }
 
   public function download($datos){
@@ -284,6 +298,7 @@ class CompraModel extends BaseModel
      $sheet->setCellValue('K1','OBSERVACION_APROBACION');
 
      $resdata=$this->resultadoQuery($datos);
+     $resdata=$resdata['resultado_consulta'];
     $fila=2;
      for ($i=0; $i <sizeof($resdata) ; $i++) {
 
@@ -325,7 +340,6 @@ class CompraModel extends BaseModel
                       <div class="d-flex flex-row datos-usuario ps-4"> 
                       <div class="d-flex flex-column"> 
                         <span class=" monserrat-text pe-2 fs-5">'.$resData[$i]['DIA'].'</span>
-                        <span class="pb-5 mb-5">vfvfff</span>
                         </div>
                         <div class="d-flex flex-column"> 
                         <span class="monserrat-text pe-4 text-secondary">'.$resData[$i]['MES'].'</span>

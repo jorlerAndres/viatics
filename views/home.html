@@ -20,7 +20,7 @@
     <header>
       <div class="border-bottom head">
         <img src="/assets/images/proimpo_blanco.png" width="200px" class="ms-3 mt-3">
-        <div class="d-flex flex-column usuario mb-3">
+        <div class="d-flex flex-column usuario">
           <div id="rectangle" class="d-flex flex-row">
                 <a data-bs-toggle="collapse" href="#cerrarSesion" role="button" aria-expanded="false" aria-controls="cerrarSesion"><img src="../../assets/images/usuario.png" id="imagen_usuario"></a>
                 <p id="usuario" class="ms-1">{{usuarios.nombre}}</p>
@@ -50,32 +50,32 @@
                   <div  class="diseno-tab mb-5"></div>
                 </a>
               </li>
-              <li class="nav-item" id="usuariosZonas-tab" role="presentation">
+              <li class="nav-item" id="usuariosZonas-tab" role="presentation" onclick="heightUsuarios()">
                 <a class="nav-link " data-bs-toggle="tab" data-bs-target="#usuariosZonas"  aria-current="usuariosZonas" role="tablist" aria-controls="usuariosZonas" aria-selected="true" href="#">
                   <p class="titulo-tab titulo-tabusuarios">Registro y modificación de Usuarios</p>
                   <div class="diseno-tab mb-5"></div>
                 </a>
               </li>
-              <li class="nav-item" id="cargarcuotas-tab" role="presentation">
+              <li class="nav-item" id="cargarcuotas-tab" role="presentation" onclick="heightAnticipos()">
                 <a class="nav-link " data-bs-toggle="tab" data-bs-target="#cargarcuotas"  aria-current="cargarcuotas" role="tablist" aria-controls="cargarcuotas" aria-selected="true" href="#">
                   <p class="titulo-tab titulo-tabanticipos">Cargar Anticipos zonas</p>
                   <div class=" diseno-tab mb-5"></div>
                 </a>
               </li>
-              <li class="nav-item" id="autorizacion-tab" role="presentation">
+              <li class="nav-item" id="autorizacion-tab" role="presentation" onclick="heightAutorizacion()">
                 <a class="nav-link " data-bs-toggle="tab" data-bs-target="#autorizacion"  aria-current="autorizacion" role="tablist" aria-controls="autorizacion" aria-selected="true" href="#" >
                   <p class="titulo-tab titulo-tabautorizaacion">Autorizacion registros</p>
                   <div class="diseno-tab mb-5"></div>
                 </a>
               </li>
               {% endif %}
-              <li class="nav-item" id="registro-tab" role="presentation">
+              <li class="nav-item" id="registro-tab" role="presentation" onclick="heightCompras()">
                 <a class="nav-link" data-bs-toggle="tab" data-bs-target="#cargarcompra"  aria-current="cargarcompra" role="tablist" aria-controls="cargarcompra" aria-selected="true" href="#">
                   <p class="titulo-tab titulo-tabconsumo">Cargar Consumo auditores</p>
                   <div class="diseno-tab mb-5"></div>
                 </a>
               </li>
-              <li class="nav-item" id="registro-tab" role="presentation"  onclick="cargartabla()">
+              <li class="nav-item" id="registro-tab" role="presentation"  onclick="cargartabla(event)">
                 <a class="nav-link " data-bs-toggle="tab" data-bs-target="#registros"  aria-current="registros" role="tablist" aria-controls="registros" aria-selected="true" href="#">
                   <p class="titulo-tab titulo-tabregistros">Registros</p>
                   <div class="diseno-tab"></div>
@@ -89,7 +89,8 @@
       <div class="col-md-2 "></div>
       <div class=" col-md-10 " style="background-image: linear-gradient(#f8f9fa, white);">
         <div class="tab-content" >
-          <div class="tab-pane  columna2" style="height: 100vh;" id="cuotasZonas" role="tabpanel" aria-labelledby="cuotasZonas-tab">
+          
+          <div class="tab-pane {% if usuarios.id_rol != 3 %} active {% endif %} columna2" style="height: 100vh;" id="cuotasZonas" role="tabpanel" aria-labelledby="cuotasZonas-tab">
             {% include "partes/cuotasZonas.html"%}
           </div>
           <div class="tab-pane " style="height: 90vh;" id="usuariosZonas" role="tabpanel" aria-labelledby="usuariosZonas-tab">
@@ -101,13 +102,30 @@
           <div class="tab-pane " style="height: 100vh;" id="autorizacion" role="tabpanel" aria-labelledby="autorizacion-tab">
             {% include "partes/autorizacion.html"%}
           </div>
-          <div class="tab-pane " style="height: 100vh;" id="cargarcompra" role="tabpanel" aria-labelledby="cargarcompra-tab">
+          <div class="tab-pane {% if usuarios.id_rol == 3 %} active {% endif %}" style="height: 100vh;" id="cargarcompra" role="tabpanel" aria-labelledby="cargarcompra-tab">
             {% include "partes/registro.html"%}
           </div>
-          <div class="tab-pane active" style="height: 100vh;" id="registros" role="tabpanel" aria-labelledby="registros-tab">
+          <div class="tab-pane" style="height: 100vh;" id="registros" role="tabpanel" aria-labelledby="registros-tab">
             {% include "partes/registros.html"%}
           </div>
        </div>
+       <div class="footer text-secondary" id="footer">
+         <img src="assets/images/logo2.jpg" width="130px">
+         <p>2020 © Todos los derechos reservados</p>
+         <div class="d-flex flex-row">
+          <div class="footer-ciudades">
+            <p><b>Bogota:</b></p>
+            <p><b>Cali:</b></p>
+            <p><b>Medellín:</b></p>
+           </div>
+           <div class="footer-tels ms-5">
+             <p>(571) 675 03 34</p>
+             <p>(572) 665 89 92</p>
+              <p>(574) 498 48 13</p>
+             </p>
+           </div>
+         </div>
+      </div>
      </div>
     </div>
     <div class="modal fade" id="myModal"tabindex="-1" aria-labelledby="moda_informelLabel" aria-hidden="true">

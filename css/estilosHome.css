@@ -13,9 +13,10 @@
   
 } 
 :root{
-  --variable-height:190vh;
+  --variable-height:235vh;
   --variable-width:100vh;
   --variable-color: #88888a;
+  --margin-footer:680px;
 }
 
 body{
@@ -471,8 +472,13 @@ input[type=range]{
 }
 #lista_ciudad_destino{
   position:absolute; 
-  left:250px;
-  /* overflow: auto; width: 310px; height: 351px; */
+  left:304px;
+  top:159%;
+}
+#lista_ciudad_origen{
+  position: absolute; 
+  left: 23%;
+  top:147%;
 }
 #buttondescarga{
   list-style: none;
@@ -487,7 +493,7 @@ input[type=range]{
   margin-bottom: 24px;
   position: absolute;
   left: 23%;
-  top: 63%;
+  top: 58%;
   font-size: 14px;
 }
 #imagen_usuario{
@@ -496,6 +502,92 @@ input[type=range]{
   height: 25px;
   padding-left: 5px;
   margin-top: 3px;
+}
+#imagen_usuario{
+
+  width: 35px;
+  height: 25px;
+  padding-left: 5px;
+  margin-top: 3px;
+  border-radius: 16px;
+}
+#rectangle{
+  width:200px;
+  height:31px;
+  background-color: white;
+  border-radius: 8px;
+}
+#usuario{
+  padding-top: 3px;
+  padding-left: 15px;
+  margin-left: 40px;
+}
+.usuario{
+  position: absolute;   
+  left: 80%;
+  right: 0%;
+  top:4%;
+  
+}
+.subtitulo-cargarcompra{
+  width: 300px; 
+  height:150px;
+  border-left: 1px rgb(170, 166, 166) solid;;
+  line-height : 8px;
+  margin-left: 250px;
+}
+.texto-subcategoria{
+  color: #aaa9a9;
+  padding-bottom: 25px;
+  border-bottom: 1px rgb(206, 203, 203) solid;
+  width: 250px;
+}
+.inputGroup{
+
+  width:35px; 
+  height:38px; 
+  background-color:rgb(243, 239, 239);
+  border-radius: 7px 0px 0px 7px;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.footer{
+  position: absolute; 
+  margin-top:var(--margin-footer); 
+  left:29%;
+  text-align: center;
+  font-family: 'urbanist thin';
+  
+  height: 140px;
+  width: 800px;
+  padding-top: 20px;
+  border-top: 1px rgb(224, 222, 222) solid;
+}
+.footer-ciudades{
+  text-align: left;
+  line-height: 9px;
+  font-family: 'urbanist thin';
+  margin-left: 290px;
+}
+.footer-tels{
+  text-align: left;
+  line-height: 9px;
+  font-family: 'urbanist thin';
+}
+#tbody{
+  overflow: auto; height:80px;
+}
+.datos-tabla::-webkit-scrollbar{
+  width: 5px;
+}
+.datos-tabla::-webkit-scrollbar-thumb{
+  background-color: rgb(238, 235, 235);
+  border-radius: 5px;
+}
+.pagination-list{
+  cursor: pointer;
 }
 
 @media (max-width: 600px) {
@@ -614,12 +706,12 @@ input[type=range]{
   }
   .sidebar{
     width: 70px;
-    position: fixed;
+     position: absolute; 
     font-size: 11px;
     float: left;
     background:linear-gradient(to left,white,rgb(245, 244, 244));
     box-shadow: 0px 8px 10px 5px rgb(206, 204, 204);
-    top: 12%;
+    top: 6%;
     height: 100%;
     
     /* background-color: white; */
@@ -657,11 +749,50 @@ input[type=range]{
   #lista_ciudad_destino{
     position: absolute; left:14%;
   }
+  #lista_ciudad_origen{
+    position: absolute; 
+  }
   #buttondescarga{
 
     left: 29%;
     top: 69%;
   
+  }
+  .usuario{
+    position: absolute;   
+    left: 3%;
+    top:8%;
+  }
+  #rectangle{
+    width:150px;
+    height:21px;
+    background-color: white;
+    border-radius: 8px;
+  }
+  #usuario{
+    padding-top: 0px;
+    padding-left: 5px;
+    margin-left: 40px;
+  }
+  #imagen_usuario{
+
+    width: 27px;
+    height: 17px;
+    padding-left: 5px;
+    margin-top: 3px;
+    border-radius: 16px;
+  }
+  .footer{
+
+   position: absolute;
+   left: -46%;
+   margin-top:880px;
+   display: "false"; 
+  }
+  #cerrarSesion{
+    position: absolute;
+    top:0.7%;
+    left: 27%;
   }
   
 

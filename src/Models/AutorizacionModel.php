@@ -24,6 +24,7 @@ class AutorizacionModel extends BaseModel
             if(!$cuotas->validaCuotaAutorizacion(array('mes'=>$periodo[1],'ano'=>$periodo[0]))){
                 $respuesta['mensaje']='El periodo no tiene anticipo registrado';
                 $respuesta['tipo_mensaje']='warning';
+                $respuesta['alert']='Atención';
             }
             else{
                 $fechaActual= new DateTime('NOW');
@@ -37,11 +38,13 @@ class AutorizacionModel extends BaseModel
 
                 $respuesta['mensaje']='La autorizacion ha sido guardada';
                 $respuesta['tipo_mensaje']='success';
+                $respuesta['alert']='Registro Exitoso';
                 return $respuesta;
             }
         } catch (\Throwable $th) {
             $respuesta['mensaje']='La autorizacion NO ha sido guardada';
             $respuesta['tipo_mensaje']='warning';
+            $respuesta['alert']='Algo anda mal';
         }
         return $respuesta; 
     }

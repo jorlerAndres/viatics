@@ -15,8 +15,11 @@ var zona_usuario=document.getElementById('usuario_zona').value;
 var rol_usuario=document.getElementById('usuario_rol').value;
 var origen=document.getElementById('ciudad_origen');
 var destino=document.getElementById('ciudad_destino');
+var next=document.getElementById('next');
+var previous=document.getElementById('previous');
+var root = document.querySelector(':root');
 
-
+var limit=1;
 var zona='';
 var mes='';
 var categoria='';
@@ -37,14 +40,12 @@ document.addEventListener("DOMContentLoaded", function () {
 
   
   zonabusqueda.value = zona_usuario;
-  console.log(zonabusqueda.value);
-  if(rol_usuario == 3){
-    div_zonausuario.classList.add('invisible');
-  }
+  
   ponerMesActual();
   cargarzonas();
-  cargartabla();
+  //cargartabla();
   imagenSubcategorias();
+  cargarHeight();
 })
 
 function ponerMesActual(){
@@ -158,7 +159,6 @@ function SeleccionSubcategoria(e)
 
 
 function guardarAnticipo(e){
-console.log(zona);
   if(zona == '' || mes == ''){
     swal('Por favor registre todos los campos');
    }
@@ -221,7 +221,7 @@ function guardarCompra(){
     .then(response => response.json())
     .then(data => {
       console.log(data);
-      swal('Registro Exitoso',data['mensaje'],data['tipo_mensaje']);
+      swal(data['alert'],data['mensaje'],data['tipo_mensaje']);
 
     })
     .catch(function(error) {
@@ -246,8 +246,34 @@ function cargarzonas(){
   .catch(function(error) {
     return error;
   }) 
+  root.style.setProperty('--variable-height', '170vh');
+  root.style.setProperty('--margin-footer', '200px');
 }
 
+function heightUsuarios(){
+  root.style.setProperty('--variable-height', '182vh');
+  root.style.setProperty('--margin-footer', '400px');
+}
+function heightAutorizacion(){
+  root.style.setProperty('--variable-height', '170vh');
+  root.style.setProperty('--margin-footer', '200px');
+}
+
+function heightAnticipos(){
+  root.style.setProperty('--variable-height', '193vh');
+  root.style.setProperty('--margin-footer', '400px');
+}
+
+function heightCompras(){
+
+  root.style.setProperty('--variable-height', '235vh');
+  root.style.setProperty('--margin-footer', '680');
+}
+function heightRegistros(){
+
+  root.style.setProperty('--variable-height', '235vh');
+  root.style.setProperty('--margin-footer', '680');
+}
 zonabusqueda.addEventListener("change", function () {
   cargartabla();
 
@@ -262,14 +288,16 @@ fecharegistro.addEventListener("change", function () {
 
 })
 
- async function cargartabla(){
+ async function cargartabla(e){
+
   var tbody=document.getElementById('tbody');
   var periodo = document.getElementById('fecha_registro').value.split('-',);
   var formData = new FormData();
   formData.append("zona",zonabusqueda.value); 
   formData.append("usuario",usuariobusqueda.value); 
   formData.append("ano",periodo[0]); 
-  formData.append("mes",periodo[1]); 
+  formData.append("mes",periodo[1]);
+  formData.append("limit",limit); 
   await fetch(host+'/api/compra/get',{
       
     method: "POST",
@@ -277,19 +305,44 @@ fecharegistro.addEventListener("change", function () {
   })
   .then(response => response.json())
   .then(data => {
+   
     tbody.innerHTML=data['datos'];
     anticipoglobal.innerText=data['total_anticipo'];
     gastoaprobado.innerText=data['total_gasto'];
     saldo.innerText=data['saldo'];
     var botondescarga=document.getElementById('buttondescarga');
     botondescarga.setAttribute('href','assets/archivo.xlsx');
+    next.setAttribute("data-item",parseInt(data['limit']) + 1);
+    previous.setAttribute("data-item", parseInt(data['limit']) - 1);
+    if(data['limit']== 1){
+     
+      previous.parentNode.classList.add('disabled');
+    } 
+    else{
+      previous.parentNode.classList.remove('disabled');
+    }
+    if(data['count'] < 6 ){
+     
+      next.parentNode.classList.add('disabled');
+    } 
+    else{
+      next.parentNode.classList.remove('disabled');
+    }
     botondescarga.setAttribute('download');
-
+    
+    console.log(next);
   })
   .catch(function(error) {
     return error;
   }) 
   rangeVisible();
+
+}
+function cargarItem(e){
+
+   console.log(e.target.getAttribute("data-item")); 
+   limit=e.target.getAttribute("data-item");
+      cargartabla();
 }
 
 formulario_busquedausuario.onsubmit = async (e) => {
@@ -338,7 +391,7 @@ formularioAutorizacion.onsubmit = async (e) => {
 
   let result = await response.json();
 
-  swal('Registro',result['mensaje'],result['tipo_mensaje']);
+  swal(result['alert'],result['mensaje'],result['tipo_mensaje']);
  //alert(result.message);
 }; 
 
@@ -486,7 +539,6 @@ function rangeVisible(){
 
   var range=document.querySelectorAll(".range");
   range.forEach(element => {
-    console.log("jj"+element.disabled);
     element.addEventListener('change', function(){
 
       var popover=document.getElementById("popover_"+element.id);
@@ -504,7 +556,6 @@ function rangeVisible(){
     })
     if(element.disabled){
       element.parentNode.addEventListener('mouseover', function(){
-        console.log("wwwwwwwwww");
         var popover=document.getElementById("popover_"+element.id);
           if(element.value==0){
             popover.style.display="block";
@@ -516,4 +567,16 @@ function rangeVisible(){
     }
 
   });
+}
+function cargarHeight(){
+
+  if(rol_usuario == 3){
+    div_zonausuario.classList.add('invisible');
+    root.style.setProperty('--variable-height', '235vh');
+    root.style.setProperty('--margin-footer', '680px');
+  }
+  else{
+    root.style.setProperty('--variable-height', '170vh');
+    root.style.setProperty('--margin-footer', '200px');
+  }
 }
