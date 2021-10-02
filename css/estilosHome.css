@@ -348,6 +348,7 @@ body{
   margin-left: 10px;
   padding-left: 10px;
   margin-bottom: 10px;
+  transition: all 1s;
 
 }
 .contenido-registro{
@@ -492,7 +493,7 @@ input[type=range]{
   content: "Descargar";
   margin-bottom: 24px;
   position: absolute;
-  left: 23%;
+  left: 32%;
   top: 58%;
   font-size: 14px;
 }
@@ -589,6 +590,25 @@ input[type=range]{
 .pagination-list{
   cursor: pointer;
 }
+.button-eliminar{
+  height:20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  border-radius: 5px;
+  background-color: white;
+  border:1px rgb(119, 118, 118) solid;
+  color: rgb(153, 129, 129);
+ 
+  
+}
+.button-eliminar:hover{
+  background-color: rgb(238, 5, 5);
+  color:white;
+  border-color: white;
+}
+
 
 @media (max-width: 600px) {
 
@@ -783,11 +803,7 @@ input[type=range]{
     border-radius: 16px;
   }
   .footer{
-
-   position: absolute;
-   left: -46%;
-   margin-top:880px;
-   display: "false"; 
+    display: none;
   }
   #cerrarSesion{
     position: absolute;

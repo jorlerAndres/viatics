@@ -51,6 +51,9 @@ class CompraModel extends BaseModel
     {   
       $respuesta=array();
       $cuotas=new CuotasModel();
+      $fechaActual= new DateTime('NOW');
+      $ruta='';
+      $nombre='';
       try {
            
           if (!$this->validaFechaCompra($datos)) {
@@ -69,12 +72,14 @@ class CompraModel extends BaseModel
           }
           else {
             $dataSaldo=array();
-            $extencion=$this->obtenerExtencion($datafile['file']);
-            $fechaActual= new DateTime('NOW');
-            $ruta="assets/soportes/";
-            
-            $nombre=$_SESSION['id_usuario']."_".$datos['mes']."_".$datos['ano'].".".$extencion;
-            
+            if($datafile){
+              $extencion=$this->obtenerExtencion($datafile['file']);
+              $ruta="assets/soportes/";
+              $nombre=date('d')."-".date('H')."_".date('i')."_".date('s').".".$extencion;
+              $this->moveUploadedFile($ruta, $datafile['file'], $nombre);
+              $this->resize($ruta,$nombre);
+
+            }
             
             $sql = "
               INSERT into registro_gasto (ID_USUARIO,ID_CATEGORIA,ID_SUBCATEGORIA,ID_ZONA,FECHA_GASTO,PERIODO,ID_MES,ID_ANO,CIUDAD_ORIGEN,CIUDAD_DESTINO,VALOR,IMAGEN,APROBADO,ESTADO,OBSERVACION,FECHA_CREACION,HORA_CREACION,FECHA_MODIFICACION,HORA_MODIFICACION) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);";
@@ -85,14 +90,12 @@ class CompraModel extends BaseModel
             $dataSaldo['ano']=$datos['ano'];
             $dataSaldo['mes']=$datos['mes'];
             $dataSaldo['valor']=$datos['valor'];
-
+           
             $cuotas->insertSaldo($dataSaldo);
-            $sucess=$this->moveUploadedFile($ruta, $datafile['file'], $nombre);
-            if ($sucess) {
-                $respuesta['mensaje']='La compra ha sido guardada';
-                $respuesta['tipo_mensaje']='success';
-                $respuesta['alert']='Registro exitoso';
-            }
+            $respuesta['mensaje']='La compra ha sido guardada';
+            $respuesta['tipo_mensaje']='success';
+            $respuesta['alert']='Registro exitoso';
+            $respuesta['width']=$datos;
           }
 
       } catch (\Throwable $th) {
@@ -105,12 +108,37 @@ class CompraModel extends BaseModel
 
 
     function moveUploadedFile(string $directory, UploadedFileInterface $uploadedFile,$file='')
-    {
+    { 
+      
         if (!file_exists($directory)) {	
             mkdir($directory, 0755, true);
         }
         $uploadedFile->moveTo($directory . DIRECTORY_SEPARATOR . $file);
+        $file=$uploadedFile->getSize();
+        
         return $file;
+    }
+
+    function resize($ruta,$nombre)
+    { 
+      $fileIMG = $ruta.$nombre;
+      if (file_exists($fileIMG)) {
+
+        list($width, $height) = getimagesize($fileIMG);
+        $porcentaje = 0.75;
+
+          $newWidth = $width * $porcentaje;
+          $newHeight = $height * $porcentaje;
+
+          //Crea una nueva imagen
+          $tmp = imagecreatetruecolor($newWidth, $newHeight);
+          $original = imagecreatefromjpeg($fileIMG);
+          
+          imagecopyresized($tmp, $original, 0, 0, 0, 0, $newWidth, $newHeight, $width, $height);
+          // Con la sgte linea puedo almacenar la imagen en una ubicacion.
+          imagejpeg($tmp, $fileIMG);
+        
+      }
     }
 
     public function obtenerExtencion(UploadedFileInterface $uploadedFile){
@@ -185,10 +213,10 @@ class CompraModel extends BaseModel
 
   public function setAprobacion($datos){
 
-    $sql="UPDATE registro_gasto set aprobado=?
+    $sql="UPDATE registro_gasto set aprobado=?, usuario_aprobacion=?
           WHERE id_registro=?";
     $res=array();
-    $this->query($sql,array($datos['aprobacion'],$datos['id_registro']));
+    $this->query($sql,array($datos['aprobacion'],$_SESSION['id_usuario'],$datos['id_registro']));
     $cuotas=new CuotasModel();
     $cuotas->insertSaldo($datos);
 
@@ -203,18 +231,25 @@ class CompraModel extends BaseModel
 
   public function delete($datos){
 
-    $sql="UPDATE registro_gasto set estado=?
-          WHERE id_registro=?";
-    $res=array();
-    $this->query($sql,array(0,$datos['id_registro']));
-    $cuotas=new CuotasModel();
-    $cuotas->insertSaldo($datos);
+      if (!$this->validaFechaCompra($datos)) {
+          $res['mensaje']='El periodo se encuentra vencido';
+          $res['tipo_mensaje']='warning';
+          $res['alert']='Atencion';
+      } 
+      else {
+        
+        $sql="UPDATE registro_gasto set estado=?
+            WHERE id_registro=?";
+        $res=array();
+        $this->query($sql, array(0,$datos['id_registro']));
+        $cuotas=new CuotasModel();
+        $cuotas->insertSaldo($datos);
 
-    $res['total_anticipo']=number_format($this->getTotalAnticipo($datos));
-    $res['total_gasto']=number_format($this->getTotalAprobado($datos)); 
-    $res['total_noaprobado']=number_format($this->getTotalNoaprobado($datos)); 
-    $res['saldo']=number_format($this->getTotalAnticipo($datos) - $this->getTotalAprobado($datos));
-
+        $res['total_anticipo']=number_format($this->getTotalAnticipo($datos));
+        $res['total_gasto']=number_format($this->getTotalAprobado($datos));
+        $res['total_noaprobado']=number_format($this->getTotalNoaprobado($datos));
+        $res['saldo']=number_format($this->getTotalAnticipo($datos) - $this->getTotalAprobado($datos));
+      }
     return $res;
 
   }
@@ -329,66 +364,67 @@ class CompraModel extends BaseModel
 
     $data='';
     $disabled='';
-    if ($_SESSION['id_rol']==3 ){ $disabled='disabled';}
+    
+    $disabled= $_SESSION['id_rol']==3 ? 'disabled' : '';
+    $display= $_SESSION['id_rol']==1 ? "none" : "block";
 
     for ($i=0; $i <sizeof($resData) ; $i++) { 
       $data.='<tr>
-              <td>
-                <div class="row contenido-registro">
-                  <div class="col-md-4">
-                    <div class="d-flex flex-row">
-                      <div class="d-flex flex-row datos-usuario ps-4"> 
-                      <div class="d-flex flex-column"> 
-                        <span class=" monserrat-text pe-2 fs-5">'.$resData[$i]['DIA'].'</span>
-                        </div>
+                <td>
+                  <div class="row contenido-registro" id="contenido_'.$resData[$i]['ID_REGISTRO'].'">
+                    <div class="col-md-4">
+                      <div class="d-flex flex-row">
+                      <button type="button" class="button-eliminar  mt-2" data-registro="'.$resData[$i]['ID_REGISTRO'].'"  onclick="eliminar(event)" style="display: '.$display.'">
+                      Eliminar</button>
+                        <div class="d-flex flex-row datos-usuario ps-4"> 
                         <div class="d-flex flex-column"> 
-                        <span class="monserrat-text pe-4 text-secondary">'.$resData[$i]['MES'].'</span>
-                        <span class="ms-5 text-dark fw-bolder">2021</span>
+                          <span class=" monserrat-text pe-2 fs-5">'.$resData[$i]['DIA'].'</span>
+                          </div>
+                          <div class="d-flex flex-column"> 
+                          <span class="monserrat-text pe-4 text-secondary">'.$resData[$i]['MES'].'</span>
+                          <span class="ms-5 text-dark fw-bolder">2021</span>
+                          </div>
+                          
                         </div>
-                        
+                        <div class="nombre-usuario d-flex flex-row">
+                          <i class="bi bi-person-circle text-secondary fs-4 pb-5 me-2"></i>
+                          <div class="d-flex flex-column">
+                            <span class="fs-6 fw-bold">'.$resData[$i]['USUARIO'].'</span>
+                            <span class="text-secondary">'.$resData[$i]['ZONA'].'</span>
+                          </div>
+                        </div>
                       </div>
-                      <div class="nombre-usuario d-flex flex-row">
-                        <i class="bi bi-person-circle text-secondary fs-4 pb-5 me-2"></i>
+                    </div>
+                    <div class="col-md-4 " >
+                      <div class=" d-flex flex-column datos-gasto mt-3">
+                      <span class="ms-2 mt-2 fs-6 fw-bold">'.$resData[$i]['CATEGORIA'].'</span>
+                        <span class="ms-2  fs-6">'.$resData[$i]['SUBCATEGORIA'].'</span>
+                        <div class="d-flex flex-row datos-destino">
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-4">
+                      <div class="d-flex flex-row justify-content-end mt-2">
+                        <p class="mt-2 ms-4 me-5">'.$resData[$i]['OBSERVACION'].'</p>
                         <div class="d-flex flex-column">
-                          <span class="fs-6 fw-bold">'.$resData[$i]['USUARIO'].'</span>
-                          <span class="text-secondary">'.$resData[$i]['ZONA'].'</span>
+                          <h6>$'.$resData[$i]['VALOR'].'</h6>
+                          <button type="button" class="boton-soporte" data-imagen="'.$resData[$i]['IMAGEN'].'" onclick="mostrarImagen(event)">soporte</button>
+                          <div height:20px; width:20px; background-color:red;><input type="range" min="0" max="1" class="range" id="'.$resData[$i]['ID_REGISTRO'].'" value="'.$resData[$i]['APROBADO'].'" onchange="guardarAprobacion(event)" '.$disabled.'/>
+                        </div>
+                        <div id="popover_'.$resData[$i]['ID_REGISTRO'].'" style="width: 220px; height:150px;    background-color: white; position: absolute; left:70%; box-shadow: 0 5px 10px 5px rgb(218, 216, 216); display:none; border-radius: 10px; border: 1px rgb(214, 213, 213) solid;" class="mt-5 " >
+                              <p class="m-2"> Observacion</p>
+                              <textarea class="form-control  m-2 me-2" id="exampleFormControlTextarea1" rows="3"        style="font-size:11px; width:200px;" '.$disabled.'>'.$resData[$i]['OBSERVACION_APROBACION'].'
+                            </textarea>
+                            <button type="button" id="button_'.$resData[$i]['ID_REGISTRO'].'" class="btn btn-primary btn-sm   ms-2 mt-2" style="font-size:11px;" data-registro="'.$resData[$i]['ID_REGISTRO'].'" onclick="aceptarObservacion('.'button_'.$resData[$i]['ID_REGISTRO'].')">
+                            <img src="/assets/images/chulo.png" width="19px">
+                            </button>
                         </div>
                       </div>
                     </div>
                   </div>
-                  <div class="col-md-4 " >
-                    <div class=" d-flex flex-column datos-gasto mt-3">
-                    <span class="ms-2 mt-2 fs-6 fw-bold">'.$resData[$i]['CATEGORIA'].'</span>
-                      <span class="ms-2  fs-6">'.$resData[$i]['SUBCATEGORIA'].'</span>
-                      <div class="d-flex flex-row datos-destino">
-                        
-                      </div>
-                    </div>
                   </div>
-                  <div class="col-md-4">
-                    <div class="d-flex flex-row justify-content-end mt-2">
-                      <p class="mt-2 ms-4 me-5">'.$resData[$i]['OBSERVACION'].'</p>
-                      <div class="d-flex flex-column">
-                        <h6>$'.$resData[$i]['VALOR'].'</h6>
-                        <button type="button" class="boton-soporte" data-imagen="'.$resData[$i]['IMAGEN'].'" onclick="mostrarImagen(event)">
-  soporte
-</button>';
-
-
-
-        $data.='
-        <div height:20px; width:20px; background-color:red;><input type="range" min="0" max="1" class="range" id="'.$resData[$i]['ID_REGISTRO'].'" value="'.$resData[$i]['APROBADO'].'" onchange="guardarAprobacion(event)" '.$disabled.'/></div>
-
-              <div id="popover_'.$resData[$i]['ID_REGISTRO'].'" style="width: 220px; height:150px; background-color: white; position: absolute; left:70%; box-shadow: 0 5px 10px 5px rgb(218, 216, 216); display:none; border-radius: 10px; border: 1px rgb(214, 213, 213) solid;" class="mt-5 " >
-
-              <p class="m-2"> Observacion</p>
-
-             <textarea class="form-control  m-2 me-2" id="exampleFormControlTextarea1" rows="3"       style="font-size:11px; width:200px;" '.$disabled.'>'.$resData[$i]['OBSERVACION_APROBACION'].'
-            </textarea>
-
-            <button type="button" id="button_'.$resData[$i]['ID_REGISTRO'].'" class="btn btn-primary btn-sm   ms-2 mt-2" style="font-size:11px;" data-registro="'.$resData[$i]['ID_REGISTRO'].'" onclick="aceptarObservacion('.'button_'.$resData[$i]['ID_REGISTRO'].')">
-            <img src="/assets/images/chulo.png" width="19px">
-            </button></div></div></div></div></div></td></tr>';
+                </td>
+              </tr>';
       
     }
       return $data;

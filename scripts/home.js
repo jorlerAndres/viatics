@@ -189,11 +189,14 @@ function guardarAnticipo(e){
 
 function guardarCompra(){
  
+  var nombre='';
   var fechagasto=document.getElementById('periodo_gasto').value;
   var periodo = fechagasto.split('-',);
   var fileUP=document.getElementById('file_soporte')
-  
-  if( fileUP.value=='' || categoria=='' || subcategoria ==''||
+  if(fileUP.value !=''){
+    nombre=fileUP.files[0].name;
+  }
+  if( categoria=='' || subcategoria ==''||
       origen.value=='' || destino.value==''){
     swal('Por favor diligencie todos los campos'); 
 
@@ -212,7 +215,7 @@ function guardarCompra(){
     formData.append("origen", origen.value);
     formData.append("destino", destino.value);
     formData.append("file", fileUP.files[0]);
-    formData.append("nombre_archivo", fileUP.files[0].name); 
+    formData.append("nombre_archivo", nombre); 
     fetch(host+'/api/compra/set',{
         
       method: "POST",
@@ -251,7 +254,7 @@ function cargarzonas(){
 }
 
 function heightUsuarios(){
-  root.style.setProperty('--variable-height', '182vh');
+  root.style.setProperty('--variable-height', '192vh');
   root.style.setProperty('--margin-footer', '400px');
 }
 function heightAutorizacion(){
@@ -266,12 +269,12 @@ function heightAnticipos(){
 
 function heightCompras(){
 
-  root.style.setProperty('--variable-height', '235vh');
+  root.style.setProperty('--variable-height', '245vh');
   root.style.setProperty('--margin-footer', '680');
 }
 function heightRegistros(){
 
-  root.style.setProperty('--variable-height', '235vh');
+  root.style.setProperty('--variable-height', '245vh');
   root.style.setProperty('--margin-footer', '680');
 }
 zonabusqueda.addEventListener("change", function () {
@@ -288,7 +291,7 @@ fecharegistro.addEventListener("change", function () {
 
 })
 
- async function cargartabla(e){
+ async function cargartabla(){
 
   var tbody=document.getElementById('tbody');
   var periodo = document.getElementById('fecha_registro').value.split('-',);
@@ -336,6 +339,7 @@ fecharegistro.addEventListener("change", function () {
     return error;
   }) 
   rangeVisible();
+  heightRegistros();
 
 }
 function cargarItem(e){
@@ -428,7 +432,7 @@ async function eliminar(e){
   formData.append("usuario",usuariobusqueda.value); 
   formData.append("ano",periodo[0]); 
   formData.append("mes",periodo[1]);
-  formData.append("id_registro",e.target.id);
+  formData.append("id_registro",e.target.getAttribute('data-registro'));
   formData.append("aprobacion",e.target.value);
   let response = await fetch(host+'/api/compra/delete', {
     method: 'POST',
@@ -439,6 +443,16 @@ async function eliminar(e){
   anticipoglobal.innerText=result['total_anticipo'];
   gastoaprobado.innerText=result['total_gasto'];
   saldo.innerText=result['saldo'];
+  if(result['mensaje']){
+     swal(result['alert'],result['mensaje'],result['tipo_mensaje']);
+  }
+  else{
+    var contenido=document.getElementById("contenido_"+e.target.getAttribute('data-registro') );
+    contenido.style.transform='scale(0.5)';
+   
+    setTimeout(function(){cargartabla()}, 1000);
+  }
+ 
   console.log(result);
 }
 
@@ -579,4 +593,8 @@ function cargarHeight(){
     root.style.setProperty('--variable-height', '170vh');
     root.style.setProperty('--margin-footer', '200px');
   }
+}
+function subirArchivo(){
+
+  console.log("trtrt");
 }
