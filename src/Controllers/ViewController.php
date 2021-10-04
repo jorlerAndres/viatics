@@ -76,12 +76,12 @@ class ViewController
         return $zonas->getSubcategorias();
     }
     public function getCuotasZonas(){
-        $cuotas=new CuotasModel();
-        return $cuotas->getCuotas();
+     $cuotas=new CuotasModel();
+     return $cuotas->getCuotas();
     }
     public function getMeses(){
-        $user=new UsuarioModel();
-        return $user->getMeses();
+       $user=new UsuarioModel();
+       return $user->getMeses();
     }
      
    
