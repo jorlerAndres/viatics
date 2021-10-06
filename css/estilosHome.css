@@ -34,13 +34,12 @@ body{
  top:3%;
  position: absolute;
  background: -webkit-linear-gradient(left top, rgb(250, 248, 248), rgb(65, 64, 64));
-  background: linear-gradient(to bottom right, rgb(119, 118, 118), rgb(248, 248, 246));
-  -webkit-background-clip: text;  
-  -webkit-text-fill-color: transparent; 
-  opacity: 0.7;
-  text-shadow: 1px 1px 19px rgb(224, 222, 222);
-
-   
+ background: linear-gradient(to bottom right, rgb(119, 118, 118), rgb(248, 248, 246));
+ -webkit-background-clip: text;  
+ -webkit-text-fill-color: transparent; 
+ opacity: 0.7;
+ text-shadow: 1px 1px 19px rgb(224, 222, 222);
+ 
 }
 
   .icono-sidenav{
@@ -548,6 +547,7 @@ input[type=range]{
   border-left: 1px rgb(170, 166, 166) solid;;
   line-height : 8px;
   margin-left: 250px;
+  display: none;
 }
 .texto-subcategoria{
   color: #aaa9a9;
@@ -620,7 +620,12 @@ input[type=range]{
   color:white;
   border-color: white;
 }
+.subcategorias{
 
+  overflow: auto; 
+  width: 290px; 
+  height: 280px
+}
 
 @media (max-width: 600px) {
 
@@ -641,9 +646,9 @@ input[type=range]{
   .registro-usuario{
    
      font-size: 14px;
-     width: 200px;
+     width: 250px;
      height: 1200px;
-     margin-left: 1px;
+     margin-left: 100px;
   }
   .registro-usuario input[type=text]{
    
@@ -723,10 +728,10 @@ input[type=range]{
   
   }
   .subcategorias{
-    width: 70%;
+    width: 290px;
   }
   .div_categoria{
-    margin-left: 20px;
+    margin-left: 50px;
   } 
 
   .registro-usuario select{
@@ -779,15 +784,19 @@ input[type=range]{
     height: 700px;
   }
   #lista_ciudad_destino{
-    position: absolute; left:14%;
-  }
-  #lista_ciudad_origen{
     position: absolute; 
-  }
+    left: 30%;
+    top:392%;  
+ }
+ #lista_ciudad_origen{
+   position: absolute; 
+   left: 27%;
+   top:377%;
+ } 
   #buttondescarga{
 
     left: 29%;
-    top: 69%;
+    top: 53%;
   
   }
   .usuario{
@@ -822,6 +831,19 @@ input[type=range]{
     top:0.7%;
     left: 27%;
   }
+  .subtitulo-cargarcompra{ 
+    display: none;
+  }
+  .titulo{
+   font-size: 10px;
+   left: 28%;
+   top:1.5%;
+  }
+
+  .zonas{
+    margin-left:50px;
+  }
+ 
   
 
 }

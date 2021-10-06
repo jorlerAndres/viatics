@@ -374,14 +374,23 @@ formulario_busquedausuario.onsubmit = async (e) => {
 
 formularioUsuario.onsubmit = async (e) => {
   e.preventDefault();
+  if(document.getElementById('cedula_usuario').value== '' || 
+     document.getElementById('nombres_usuario').value== '' ||
+     document.getElementById('contrasena_usuario').value== '' ||
+     document.getElementById('tarjeta_usuario').value== ''){
 
-  let response = await fetch(host+'/api/usuario/set', {
-    method: 'POST',
-    body: new FormData(formularioUsuario)
-  });
+     swal('Atención','Por favor ingrese todos los campos','warning');
+  }
+  else{
 
-  let result = await response.json();
-  swal('Registro',result['mensaje'],result['tipo_mensaje']);
+    let response = await fetch(host+'/api/usuario/set', {
+      method: 'POST',
+      body: new FormData(formularioUsuario)
+    });
+  
+    let result = await response.json();
+    swal('Registro',result['mensaje'],result['tipo_mensaje']);
+  }
 };
 
 formularioAutorizacion.onsubmit = async (e) => {

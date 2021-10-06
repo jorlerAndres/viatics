@@ -2,14 +2,14 @@
 <div class="row div_categoria_subcategoria mt-4">
   <div class="d-flex flex-md-row flex-sm-column">
     <h3 class="mt-5 ms-5 titulo-usuarios mb-3">Cargar Compra</h3>
-    <div class="me-5 mt-3 d-flex flex-column  subtitulo-cargarcompra">
+    <div class="me-5 mt-3 subtitulo-cargarcompra" >
       <div class="text mt-3  ms-4">
           <h5 class="text-secondary Urbanist">2.Subcategoria</h5>
           <p class="texto-subcategoria text-secondary fs-6">Opcionables segun categoria</p>
           
           <div class="d-flex flex-column">
               <h6 class="text-secondary Urbanist">3.Fecha</h6>
-              <p class="text-secondary fs-6">Fecha de realizacion de compra</p>
+              <p class="text-secondary fs-6">Fecha de realización de compra</p>
           </div>
       </div>
     </div>
@@ -36,7 +36,7 @@
   <div class="col-md-6 ">
     <div class="segundacolumna">
       <h4 class="Urbanist mt-5 ms-4 fs-6 mb-5">2. Subcategoria</h4>
-        <div  class="subcategorias" id="subcategorias" style="overflow: auto; width: 310px; height: 280px">
+        <div  class="subcategorias" id="subcategorias">
           {% for subcategoria in subcategorias %}
             <div class="item-subcategoria" onclick="SeleccionSubcategoria('{{subcategoria.id_subcategoria}}')" id="{{subcategoria.id_subcategoria}}">
               <img width="35px" data-imagen={{subcategoria.imagen}}>
