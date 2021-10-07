@@ -485,12 +485,12 @@ input[type=range]{
 #lista_ciudad_destino{
   position:absolute; 
   left:304px;
-  top:163%;
+  top:148%;
 }
 #lista_ciudad_origen{
   position: absolute; 
   left: 23%;
-  top:150%;
+  top:137%;
 }
 #buttondescarga{
   list-style: none;
