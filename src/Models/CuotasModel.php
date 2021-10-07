@@ -64,6 +64,7 @@ class CuotasModel extends BaseModel
             }
             else{
                 $this->insertarCuota($datos);
+                (new Logs())->regLog(3, 'Se ingresa valor de anticipo por :'.$datos['valor'].'','cargar anticipo');
             }
 
             $respuesta['mensaje']='El anticipo ha sido guardado';
