@@ -219,7 +219,7 @@ class CompraModel extends BaseModel
     $this->query($sql,array($datos['aprobacion'],$_SESSION['id_usuario'],$datos['id_registro']));
     $cuotas=new CuotasModel();
     $cuotas->insertSaldo($datos);
-
+    (new Logs())->regLog(7, 'Se cambia el estado de aprobacion del registro :'.$datos['id_registro'].' por :'.$datos['aprobacion'].'','Registros');
     $res['total_anticipo']=number_format($this->getTotalAnticipo($datos));
     $res['total_gasto']=number_format($this->getTotalAprobado($datos)); 
     $res['total_noaprobado']=number_format($this->getTotalNoaprobado($datos)); 
@@ -244,7 +244,7 @@ class CompraModel extends BaseModel
         $this->query($sql, array(0,$datos['id_registro']));
         $cuotas=new CuotasModel();
         $cuotas->insertSaldo($datos);
-
+        (new Logs())->regLog(6, 'Se cambia el estado de registro:'.$datos['id_registro'].' por : Eliminado','Registros');
         $res['total_anticipo']=number_format($this->getTotalAnticipo($datos));
         $res['total_gasto']=number_format($this->getTotalAprobado($datos));
         $res['total_noaprobado']=number_format($this->getTotalNoaprobado($datos));

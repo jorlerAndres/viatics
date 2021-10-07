@@ -60,6 +60,7 @@ class CuotasModel extends BaseModel
             if($resultado){
 
                 $this->actualizarCuota($datos,$resultado[0]['id_cuota']);
+                (new Logs())->regLog(3, 'Se ingresa valor de anticipo por :'.$datos['valor'].'','cargar anticipo');
             }
             else{
                 $this->insertarCuota($datos);

@@ -68,6 +68,13 @@ class UsuarioModel extends BaseModel
         $apellidos=explode(' ',$datos['apellidos_usuario']);
         $segundo_apellido = sizeof($apellidos) > 1 ? $apellidos[1] : ''; 
         $id_usuario=$this->traerId();
+        $usuarioexistente=$this->validarRegistro($datos);
+
+        if($usuarioexistente) {
+            $respuesta['mensaje']='El usuario YA ha sido guardado anteriormente';
+            $respuesta['tipo_mensaje']='warning';
+            return  $respuesta; 
+        }
          $sql = "
          INSERT INTO `usuarios` (ID_USUARIO,`CEDULA`, `PRIMER_NOMBRE`, `SEGUNDO_NOMBRE`, `PRIMER_APELLIDO`, `SEGUNDO_APELLIDO`, `EMAIL`, `TELEFONO`, `IMAGEN_PERFIL`, `ID_ZONA`, `ESTADO`, `VEHICULO`, `NUMERO_TARJETA_VIATICO`, `IMAGEN_TARJETA_VIATICO`, `USUARIO`, `PASSWORD`, `ID_ROL`, `HABILITADO`, `FECHA_CREACION`, `FECHA_MODIFICACION`) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 
@@ -84,6 +91,21 @@ class UsuarioModel extends BaseModel
         $sql = "select max(id_usuario) as maximo from usuarios";
         $resUser= $this->query($sql); 
         return $resUser[0]['maximo'];
+
+    }
+
+    public function validarRegistro($datos) 
+    {
+        $sql = "select id_usuario from usuarios where cedula=? or PASSWORD=?";
+        $resUser= $this->query($sql,array($datos['cedula_usuario'],$datos['contrasena_usuario'])); 
+        //var_dump($resUser[0]['id_usuario']);
+        if(sizeof($resUser)>0){
+            return true;
+        }
+        else{
+            return false;
+        }
+       
 
     }
     public function UpdateUser($datos) 

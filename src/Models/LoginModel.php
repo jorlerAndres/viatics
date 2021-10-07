@@ -20,7 +20,7 @@ class LoginModel extends BaseModel
         $res = array();
         $sql = "
         SELECT u.ID_USUARIO,ID_ROL FROM `usuarios` as u
-        where u.usuario=?  and u.password=?";
+        where u.usuario=?  and u.password=? and estado=1";
         //var_dump($datos);
         $resultado = $this->query($sql, array($datos['user'], $datos['contrasena']));
         if(sizeof($resultado)==1){
@@ -30,7 +30,7 @@ class LoginModel extends BaseModel
             $res["id"] = $_SESSION['id_usuario'];
             $res["alert"] = "success";
             $res["mensaje"] = "Te damos la bienvenida!";
-            //(new Logs())->regLog(1, 'Ingreso','Login');
+            (new Logs())->regLog(1, 'Ingreso','Login');
         }else{
 
             $res["alert"] = "danger";
