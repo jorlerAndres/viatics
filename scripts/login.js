@@ -35,7 +35,7 @@ async function validar(userForm,passwordForm){
     }
 }
 
-function mostrarAlert(data){
+function mostrarAlert(data){ 
   swal('Ingreso','Por favor Revise las credenciales','warning');
 
 }
